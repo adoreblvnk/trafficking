@@ -1,5 +1,35 @@
 # trafficking
 
+## Installing
+
+Linux
+
+```bash
+# install Pipewire
+sudo apt install pipewire-audio-client-libraries libspa-0.2-modules
+systemctl --user start pipewire pipewire-pulse
+# build & run
+./gradlew lwjgl3:jar && java -jar lwjgl3/build/libs/trafficking*.jar
+# or just run
+./gradlew lwjgl3:run
+```
+
+## GDX Liftoff Setup
+
+- Project Name: Trafficking
+- Package: com.sit.trafficking
+- Main Class: Main
+- Platforms Selected:
+  - Core
+  - Desktop (LWJGL3)
+- Extensions:
+  - Box2D
+  - Box2D Lights
+  - Freetype
+- Template: Game
+- libGDX Version: 1.14.0
+- Java Version: 21
+
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
 This project was generated with a template including simple application launchers and a main class extending `Game` that sets the first screen.
