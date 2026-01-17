@@ -59,9 +59,7 @@ public class DynamicEntity extends Entity implements ICollidable {
         if (TimeUtils.timeSinceMillis(lastSoundTime) > 150) {
             lastSoundTime = TimeUtils.millis();
 
-            // Intensity (Impulse) needs different scaling than velocity.
-            // Impulse ~10-100 is a decent hit.
-            SoundManager.getInstance().playSound(intensity / 5f); // Scale down to match previous 0-20 range expectation
+            SoundManager.getInstance().playSound();
             
             flashColor = Color.YELLOW; // Major collision color
         }
