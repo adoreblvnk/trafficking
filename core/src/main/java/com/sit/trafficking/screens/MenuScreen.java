@@ -39,9 +39,9 @@ public class MenuScreen extends AbstractScreen {
             }
         });
 
-        table.add(startBtn).pad(10).row();
-        table.add(settingsBtn).pad(10).row();
-        table.add(exitBtn).pad(10).row();
+        table.add(startBtn).size(400, 80).pad(15).row();
+        table.add(settingsBtn).size(400, 80).pad(15).row();
+        table.add(exitBtn).size(400, 80).pad(15).row();
 
         stage.addActor(table);
     }
