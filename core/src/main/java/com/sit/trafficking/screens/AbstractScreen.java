@@ -27,6 +27,8 @@ public abstract class AbstractScreen implements Screen {
     protected Label.LabelStyle labelStyle;
     protected BitmapFont fontRegular;
     protected BitmapFont fontBold;
+    
+    protected boolean isOverlay = false;
 
     public AbstractScreen() {
         this.viewport = new FitViewport(1280, 720);
@@ -75,9 +77,11 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // Clear screen black
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        // Clear screen black only if not an overlay
+        if (!isOverlay) {
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        }
 
         stage.act(delta);
         stage.draw();

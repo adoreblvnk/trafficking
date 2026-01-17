@@ -49,8 +49,8 @@ public final class SceneManager {
     // but using Game.setScreen allows LibGDX to handle resize/pause/resume events correctly.
     // However, for the "render(dt)" requirement peeking at stack:
     public void render(float dt) {
-        if (!screens.isEmpty()) {
-            screens.peek().render(dt);
+        for (Screen screen : screens) {
+            screen.render(dt);
         }
     }
 }

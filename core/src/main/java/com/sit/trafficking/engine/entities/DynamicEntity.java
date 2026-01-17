@@ -14,6 +14,8 @@ public class DynamicEntity extends Entity implements ICollidable {
     private float width;
     private float height;
     private long lastSoundTime = 0;
+    private float hitFlashTimer = 0f;
+    private Color flashColor = Color.WHITE;
 
     public DynamicEntity(Body body, float width, float height) {
         super(body);
@@ -24,7 +26,12 @@ public class DynamicEntity extends Entity implements ICollidable {
 
     @Override
     public void render(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(color);
+        if (hitFlashTimer > 0) {
+            hitFlashTimer -= Gdx.graphics.getDeltaTime();
+            shapeRenderer.setColor(flashColor);
+        } else {
+            shapeRenderer.setColor(color);
+        }
 
         float w = width * Constants.PPM;
         float h = height * Constants.PPM;
@@ -44,11 +51,19 @@ public class DynamicEntity extends Entity implements ICollidable {
 
     @Override
     public void onCollision(Entity other, float intensity) {
-        if (TimeUtils.timeSinceMillis(lastSoundTime) < 150) return;
-        lastSoundTime = TimeUtils.millis();
+        if (intensity < 1.0f) return; // Ignore resting interactions
+        
+        hitFlashTimer = 0.1f;
+        flashColor = Color.WHITE; // Default collision color
 
-        // Intensity (Impulse) needs different scaling than velocity.
-        // Impulse ~10-100 is a decent hit.
-        SoundManager.getInstance().playSound(intensity / 5f); // Scale down to match previous 0-20 range expectation
+        if (TimeUtils.timeSinceMillis(lastSoundTime) > 150) {
+            lastSoundTime = TimeUtils.millis();
+
+            // Intensity (Impulse) needs different scaling than velocity.
+            // Impulse ~10-100 is a decent hit.
+            SoundManager.getInstance().playSound(intensity / 5f); // Scale down to match previous 0-20 range expectation
+            
+            flashColor = Color.YELLOW; // Major collision color
+        }
     }
 }

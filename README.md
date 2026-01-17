@@ -1,6 +1,6 @@
 # trafficking
 
-## Installing
+pcat core/src/main/java/com/sit/trafficking/ lwjgl3/src/main/java/com/sit/trafficking/lwjgl3/ assets/levels/  build.gradle
 
 Linux
 
@@ -9,9 +9,9 @@ Linux
 sudo apt install pipewire-audio-client-libraries libspa-0.2-modules
 systemctl --user start pipewire pipewire-pulse
 # build & run
-./gradlew lwjgl3:jar && java -jar lwjgl3/build/libs/trafficking*.jar
+./gradlew lwjgl3:jar && ALSOFT_DRIVERS=pulse java -jar lwjgl3/build/libs/trafficking*.jar
 # or just run
-./gradlew lwjgl3:run
+ALSOFT_DRIVERS=pulse ./gradlew lwjgl3:run
 ```
 
 ## GDX Liftoff Setup

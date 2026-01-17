@@ -15,6 +15,8 @@ import com.sit.trafficking.engine.managers.SceneManager;
 public class PauseScreen extends AbstractScreen {
 
     public PauseScreen() {
+        this.isOverlay = true;
+        
         // Semi-transparent background
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 0.5f);
@@ -61,16 +63,5 @@ public class PauseScreen extends AbstractScreen {
         table.add(exitBtn).size(300, 60).pad(10).row();
 
         stage.addActor(table);
-    }
-
-    @Override
-    public void render(float delta) {
-        // Keep the black background clear to prevent artifacts, 
-        // though strictly we'd want to render the underlying screen for "transparency".
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        stage.act(delta);
-        stage.draw();
     }
 }
