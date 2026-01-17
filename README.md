@@ -14,6 +14,12 @@ systemctl --user start pipewire pipewire-pulse
 ALSOFT_DRIVERS=pulse ./gradlew lwjgl3:run
 ```
 
+Windows
+
+```
+.\gradlew.bat lwjgl3:run
+```
+
 ## GDX Liftoff Setup
 
 - Project Name: Trafficking
