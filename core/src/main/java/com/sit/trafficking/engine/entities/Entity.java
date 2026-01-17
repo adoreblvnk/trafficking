@@ -29,7 +29,7 @@ public abstract class Entity {
     public abstract void render(ShapeRenderer shapeRenderer);
 
     public void dispose() {
-        PhysicsManager.getInstance().getWorld().destroyBody(body);
+        PhysicsManager.getInstance().destroyBody(body);
     }
 
     public boolean isMarkedForDelete() {

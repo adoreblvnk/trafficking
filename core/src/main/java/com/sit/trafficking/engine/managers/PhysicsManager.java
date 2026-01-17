@@ -1,16 +1,17 @@
 package com.sit.trafficking.engine.managers;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
-/**
- * Singleton manager for the Box2D physics world.
- * Wraps com.badlogic.gdx.physics.box2d.World.
- */
 public final class PhysicsManager implements Disposable {
     private static PhysicsManager instance;
     private final World world;
+    
+    // Safety Queue for removing bodies
+    private final Array<Body> bodiesToDestroy = new Array<>();
 
     // Simulation constants
     private static final float TIME_STEP = 1 / 60f;
@@ -21,15 +22,9 @@ public final class PhysicsManager implements Disposable {
     private float timeScale = 1.0f;
 
     private PhysicsManager() {
-        // Default to no gravity (top-down view) as implied by "Trafficking" context.
-        // Sleep is allowed for performance.
         this.world = new World(new Vector2(0, 0), true);
     }
 
-    /**
-     * Returns the singleton instance of PhysicsManager.
-     * @return The instance.
-     */
     public static synchronized PhysicsManager getInstance() {
         if (instance == null) {
             instance = new PhysicsManager();
@@ -37,10 +32,6 @@ public final class PhysicsManager implements Disposable {
         return instance;
     }
 
-    /**
-     * Accessor for the underlying Box2D World.
-     * @return The Box2D World object.
-     */
     public World getWorld() {
         return world;
     }
@@ -48,14 +39,17 @@ public final class PhysicsManager implements Disposable {
     public void setTimeScale(float scale) {
         this.timeScale = scale;
     }
-
+    
     /**
-     * Steps the physics simulation using a fixed time step.
-     * @param deltaTime Time elapsed since the last frame.
+     * Safely queues a body to be destroyed after the physics step.
      */
+    public void destroyBody(Body body) {
+        if (!bodiesToDestroy.contains(body, true)) {
+            bodiesToDestroy.add(body);
+        }
+    }
+
     public void update(float deltaTime) {
-        // Cap frame time to prevent "spiral of death" on slow frames
-        // Apply time scale for slow-mo
         float logicTime = Math.min(deltaTime, 0.25f) * timeScale;
         accumulator += logicTime;
 
@@ -63,12 +57,19 @@ public final class PhysicsManager implements Disposable {
             world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
             accumulator -= TIME_STEP;
         }
+        
+        // SAFE DESTRUCTION PHASE
+        if (bodiesToDestroy.size > 0) {
+            for (Body b : bodiesToDestroy) {
+                if(b != null) world.destroyBody(b);
+            }
+            bodiesToDestroy.clear();
+        }
     }
 
     @Override
     public void dispose() {
         world.dispose();
-        // Reset instance to ensure a fresh World is created if the game restarts in the same JVM context
         instance = null;
     }
 }
