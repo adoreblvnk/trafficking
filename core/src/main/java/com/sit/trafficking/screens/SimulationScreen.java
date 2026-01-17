@@ -24,6 +24,10 @@ public class SimulationScreen extends AbstractScreen {
 
     private final Box2DDebugRenderer debugRenderer;
     private final InputMultiplexer inputMultiplexer;
+    
+    // Explosion Visuals
+    private Vector2 explosionPos = new Vector2();
+    private boolean drawExplosion = false;
 
     public SimulationScreen() {
         super();
@@ -42,6 +46,9 @@ public class SimulationScreen extends AbstractScreen {
                 if (button == Input.Buttons.LEFT) {
                     spawnDynamicEntity(screenX, screenY);
                     return true;
+                } else if (button == Input.Buttons.RIGHT) {
+                    triggerExplosion(screenX, screenY);
+                    return true;
                 }
                 return false;
             }
@@ -52,9 +59,54 @@ public class SimulationScreen extends AbstractScreen {
                     SceneManager.getInstance().pushScreen(new PauseScreen());
                     return true;
                 }
+                if (keycode == Input.Keys.SPACE) {
+                    PhysicsManager.getInstance().setTimeScale(0.1f);
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean keyUp(int keycode) {
+                if (keycode == Input.Keys.SPACE) {
+                    PhysicsManager.getInstance().setTimeScale(1.0f);
+                    return true;
+                }
                 return false;
             }
         });
+    }
+
+    private void triggerExplosion(int screenX, int screenY) {
+        // Convert Screen -> World
+        Vector3 worldPos = viewport.getCamera().unproject(new Vector3(screenX, screenY, 0));
+        float worldX = worldPos.x / Constants.PPM;
+        float worldY = worldPos.y / Constants.PPM;
+        
+        final Vector2 epicenter = new Vector2(worldX, worldY);
+        final float radius = 3.0f;
+        final float force = 1000.0f; // Strong impulse
+
+        // For Visuals
+        explosionPos.set(worldX * Constants.PPM, worldY * Constants.PPM);
+        drawExplosion = true;
+
+        // Query Box2D World
+        PhysicsManager.getInstance().getWorld().QueryAABB(fixture -> {
+            Body body = fixture.getBody();
+            if (body.getType() == BodyDef.BodyType.DynamicBody) {
+                Vector2 bodyPos = body.getPosition();
+                float dist = bodyPos.dst(epicenter);
+                
+                if (dist <= radius) {
+                    Vector2 direction = bodyPos.cpy().sub(epicenter).nor();
+                    // Falloff: Stronger at center
+                    float strength = (1 - (dist / radius)) * force;
+                    body.applyLinearImpulse(direction.scl(strength), bodyPos, true);
+                }
+            }
+            return true; // Keep querying
+        }, worldX - radius, worldY - radius, worldX + radius, worldY + radius);
     }
 
     @Override
@@ -106,6 +158,14 @@ public class SimulationScreen extends AbstractScreen {
         shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
         shapeRenderer.begin(ShapeType.Filled);
         EntityManager.getInstance().render(shapeRenderer);
+        
+        // Draw Explosion (1 Frame)
+        if (drawExplosion) {
+            shapeRenderer.setColor(Color.YELLOW);
+            shapeRenderer.circle(explosionPos.x, explosionPos.y, 50); // 50 pixel radius
+            drawExplosion = false;
+        }
+        
         shapeRenderer.end();
 
         // Optional Debug Renderer

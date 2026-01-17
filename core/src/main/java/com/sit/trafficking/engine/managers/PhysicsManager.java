@@ -18,6 +18,7 @@ public final class PhysicsManager implements Disposable {
     private static final int POSITION_ITERATIONS = 2;
 
     private float accumulator = 0f;
+    private float timeScale = 1.0f;
 
     private PhysicsManager() {
         // Default to no gravity (top-down view) as implied by "Trafficking" context.
@@ -44,14 +45,19 @@ public final class PhysicsManager implements Disposable {
         return world;
     }
 
+    public void setTimeScale(float scale) {
+        this.timeScale = scale;
+    }
+
     /**
      * Steps the physics simulation using a fixed time step.
      * @param deltaTime Time elapsed since the last frame.
      */
     public void update(float deltaTime) {
         // Cap frame time to prevent "spiral of death" on slow frames
-        float frameTime = Math.min(deltaTime, 0.25f);
-        accumulator += frameTime;
+        // Apply time scale for slow-mo
+        float logicTime = Math.min(deltaTime, 0.25f) * timeScale;
+        accumulator += logicTime;
 
         while (accumulator >= TIME_STEP) {
             world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);

@@ -5,12 +5,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.sit.trafficking.engine.managers.SoundManager;
 import com.sit.trafficking.utils.Constants;
 
 public class DynamicEntity extends Entity implements ICollidable {
 
     private float width;
     private float height;
+    private long lastSoundTime = 0;
 
     public DynamicEntity(Body body, float width, float height) {
         super(body);
@@ -40,7 +43,12 @@ public class DynamicEntity extends Entity implements ICollidable {
     }
 
     @Override
-    public void onCollision(Entity other) {
-        Gdx.app.log("DynamicEntity", "Collision Detected!");
+    public void onCollision(Entity other, float intensity) {
+        if (TimeUtils.timeSinceMillis(lastSoundTime) < 150) return;
+        lastSoundTime = TimeUtils.millis();
+
+        // Intensity (Impulse) needs different scaling than velocity.
+        // Impulse ~10-100 is a decent hit.
+        SoundManager.getInstance().playSound(intensity / 5f); // Scale down to match previous 0-20 range expectation
     }
 }
