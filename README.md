@@ -1,6 +1,6 @@
 # trafficking
 
-pcat core/src/main/java/com/sit/trafficking/ lwjgl3/src/main/java/com/sit/trafficking/lwjgl3/ assets/levels/  build.gradle
+pcat core/src/main/java/com/sit/trafficking/ lwjgl3/src/main/java/com/sit/trafficking/lwjgl3/ assets/levels/ build.gradle
 
 Linux
 
@@ -18,6 +18,12 @@ Windows
 
 ```
 .\gradlew.bat lwjgl3:run
+```
+
+Mac
+
+```
+./gradlew lwjgl3:run
 ```
 
 ## GDX Liftoff Setup
