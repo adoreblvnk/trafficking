@@ -5,9 +5,6 @@ pcat core/src/main/java/com/sit/trafficking/ lwjgl3/src/main/java/com/sit/traffi
 Linux
 
 ```bash
-# install Pipewire
-sudo apt install pipewire-audio-client-libraries libspa-0.2-modules
-systemctl --user start pipewire pipewire-pulse
 # build & run
 ./gradlew lwjgl3:jar && ALSOFT_DRIVERS=pulse java -jar lwjgl3/build/libs/trafficking*.jar
 # or just run
