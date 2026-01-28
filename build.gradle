@@ -16,6 +16,14 @@ allprojects {
   apply plugin: 'eclipse'
   apply plugin: 'idea'
 
+  // NOTE: force Java 21
+  apply plugin: 'java'
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(21)
+    }
+  }
+
   // This allows you to "Build and run using IntelliJ IDEA", an option in IDEA's Settings.
   idea {
     module {
