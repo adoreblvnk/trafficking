@@ -4,12 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.sit.trafficking.engine.interfaces.ICollidable;
+import com.sit.trafficking.engine.interfaces.Movable;
 
 /**
  * Base abstract class for all entities in the simulation.
  * Enforces strict OOP inheritance and encapsulation of core properties.
  */
-public abstract class AbstractEntity {
+public abstract class AbstractEntity implements Movable, ICollidable {
     
     protected final String id;
     protected final Vector2 position;
@@ -40,7 +42,7 @@ public abstract class AbstractEntity {
      * @param dt Delta time.
      */
     public void update(float dt) {
-        position.mulAdd(velocity, dt);
+        updatePosition(dt);
     }
 
     /**
@@ -55,6 +57,26 @@ public abstract class AbstractEntity {
      */
     public Rectangle getBounds() {
         return new Rectangle(position.x, position.y, width, height);
+    }
+
+    @Override
+    public void updatePosition(float dt) {
+        position.mulAdd(velocity, dt);
+    }
+
+    @Override
+    public boolean isStatic() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrigger() {
+        return false;
+    }
+
+    @Override
+    public void onCollision(ICollidable other) {
+        // Default no-op
     }
 
     // Getters and Setters

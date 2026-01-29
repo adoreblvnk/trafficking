@@ -1,18 +1,20 @@
 package com.sit.trafficking.engine.managers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SoundManager {
     
     private static SoundManager instance;
-    private AssetManager assetManager;
-    private static final String HIT_SOUND = "sounds/car_crash_1.wav";
+    private final AssetManager assetManager;
+    private final Map<String, String> soundBank;
     private float volume = 1.0f;
 
     private SoundManager() {
         assetManager = new AssetManager();
+        soundBank = new HashMap<>();
     }
 
     public static SoundManager getInstance() {
@@ -22,16 +24,13 @@ public class SoundManager {
         return instance;
     }
 
-    public void load() {
-        // Debug Check: Does the file actually exist?
-        if (!Gdx.files.internal(HIT_SOUND).exists()) {
-            Gdx.app.error("SoundManager", "CRITICAL ERROR: Sound file NOT FOUND at: " + HIT_SOUND);
-            Gdx.app.error("SoundManager", "Please check your 'assets' folder structure.");
-            return;
+    public void loadSound(String id, String internalPath) {
+        if (!soundBank.containsKey(id)) {
+            soundBank.put(id, internalPath);
         }
-
-        assetManager.load(HIT_SOUND, Sound.class);
-        Gdx.app.log("SoundManager", "Queued sound for loading: " + HIT_SOUND);
+        if (!assetManager.isLoaded(internalPath)) {
+            assetManager.load(internalPath, Sound.class);
+        }
     }
 
     public boolean update() {
@@ -50,19 +49,16 @@ public class SoundManager {
         return volume;
     }
 
-    public void playImpact(float intensity) {
-        if (assetManager.isLoaded(HIT_SOUND)) {
-            // Check cooldown
-            if (intensity < 20f) return;
+    public void playSound(String id, float pitch, float pan) {
+        String path = soundBank.get(id);
+        if (path == null || !assetManager.isLoaded(path)) {
+            return;
+        }
 
-            Sound sound = assetManager.get(HIT_SOUND, Sound.class);
-            
-            // no pitch or pan, WSL does not support it
-            long id = sound.play(volume);
-            
-            if (id == -1) {
-                Gdx.app.error("SoundManager", "Sound Failed (ID -1)");
-            }
+        Sound sound = assetManager.get(path, Sound.class);
+        long soundId = sound.play(volume, pitch, pan);
+        if (soundId == -1) {
+            return;
         }
     }
     

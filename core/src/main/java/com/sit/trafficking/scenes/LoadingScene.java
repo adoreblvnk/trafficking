@@ -17,7 +17,7 @@ public class LoadingScene extends AbstractScene {
     @Override
     public void create() {
         // Start loading assets
-        SoundManager.getInstance().load();
+        SoundManager.getInstance().loadSound("impact_heavy", "sounds/car_crash_1.wav");
     }
 
     @Override

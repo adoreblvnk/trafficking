@@ -3,6 +3,7 @@ package com.sit.trafficking.engine.scenes;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.sit.trafficking.engine.managers.CollisionManager;
 import com.sit.trafficking.engine.managers.EntityManager;
+import com.sit.trafficking.engine.managers.InputManager;
 
 /**
  * Base class for all game scenes.
@@ -12,11 +13,13 @@ public abstract class AbstractScene {
     
     protected final EntityManager entityManager;
     protected final CollisionManager collisionManager;
+    protected final InputManager inputManager;
     protected final ShapeRenderer shapeRenderer;
 
     public AbstractScene() {
         this.entityManager = new EntityManager();
         this.collisionManager = new CollisionManager();
+        this.inputManager = new InputManager();
         this.shapeRenderer = new ShapeRenderer();
     }
 
@@ -45,5 +48,9 @@ public abstract class AbstractScene {
 
     public EntityManager getEntityManager() {
         return entityManager;
+    }
+
+    public InputManager getInputManager() {
+        return inputManager;
     }
 }

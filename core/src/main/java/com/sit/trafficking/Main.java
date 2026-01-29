@@ -1,10 +1,10 @@
 package com.sit.trafficking;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.sit.trafficking.engine.managers.SoundManager;
 import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.scenes.LoadingScene;
-import com.sit.trafficking.utils.TimeManager;
 
 /**
  * Main entry point for the LibGDX application.
@@ -20,9 +20,8 @@ public class Main extends Game {
 
     @Override
     public void render() {
-        // Update TimeManager if it needed explicit updates, but it pulls from Gdx.
         // Update and Render Scene Stack
-        SceneManager.getInstance().render(TimeManager.getInstance().getDeltaTime());
+        SceneManager.getInstance().render(Gdx.graphics.getDeltaTime());
     }
 
     @Override

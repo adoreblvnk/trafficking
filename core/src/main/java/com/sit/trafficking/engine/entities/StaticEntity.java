@@ -23,6 +23,11 @@ public class StaticEntity extends AbstractEntity {
     }
 
     @Override
+    public boolean isStatic() {
+        return true;
+    }
+
+    @Override
     public void render(ShapeRenderer sr) {
         sr.setColor(color);
         sr.rect(position.x, position.y, width, height);

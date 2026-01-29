@@ -1,6 +1,9 @@
 package com.sit.trafficking.engine.entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.sit.trafficking.engine.interfaces.ICollidable;
+import com.sit.trafficking.engine.managers.SoundManager;
 
 /**
  * Represents moving objects in the simulation.
@@ -10,7 +13,7 @@ public class DynamicEntity extends AbstractEntity {
 
     public DynamicEntity(String id, float x, float y, float width, float height) {
         super(id, x, y, width, height);
-        this.color = com.badlogic.gdx.graphics.Color.SKY; // light blue
+        this.color = Color.SKY; // light blue
     }
 
     @Override
@@ -27,9 +30,16 @@ public class DynamicEntity extends AbstractEntity {
         }
 
         // Decay temporary flash back to light blue if needed (simple immediate reset)
-        if (!color.equals(com.badlogic.gdx.graphics.Color.SKY)) {
-            color = com.badlogic.gdx.graphics.Color.SKY;
+        if (!color.equals(Color.SKY)) {
+            color = Color.SKY;
         }
+    }
+
+    @Override
+    public void onCollision(ICollidable other) {
+        color = Color.YELLOW;
+        SoundManager soundManager = SoundManager.getInstance();
+        soundManager.playSound("impact_heavy", 1.0f, 0.0f);
     }
 
     @Override

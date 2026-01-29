@@ -2,7 +2,6 @@ package com.sit.trafficking.scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -10,7 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.sit.trafficking.engine.entities.AbstractEntity;
 import com.sit.trafficking.engine.entities.DynamicEntity;
 import com.sit.trafficking.engine.factory.LevelFactory;
-import com.sit.trafficking.engine.managers.CollisionManager;
+import com.sit.trafficking.engine.managers.InputManager;
 import com.sit.trafficking.engine.scenes.AbstractScene;
 import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.utils.Constants;
@@ -20,7 +19,7 @@ import com.sit.trafficking.utils.TimeManager;
  * The main simulation playground.
  * Implements "God Hand" input controls.
  */
-public class SimulationScene extends AbstractScene {
+public class SimulationScene extends AbstractScene implements InputManager.InputListener {
 
     private boolean isPaused = false;
     private AbstractEntity draggedEntity = null;
@@ -36,10 +35,11 @@ public class SimulationScene extends AbstractScene {
 
         // Input Handling
         resetInputProcessor();
+        inputManager.addListener(this);
     }
 
     public void resetInputProcessor() {
-        Gdx.input.setInputProcessor(new InputHandler());
+        Gdx.input.setInputProcessor(inputManager);
     }
 
     @Override
@@ -95,10 +95,20 @@ public class SimulationScene extends AbstractScene {
             }
         }
 
+        float timeScale = TimeManager.getInstance().getTimeScale();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            timeScale = Math.min(2.0f, timeScale + 0.1f);
+            TimeManager.getInstance().setTimeScale(timeScale);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            timeScale = Math.max(0.1f, timeScale - 0.1f);
+            TimeManager.getInstance().setTimeScale(timeScale);
+        }
+
         if (!isPaused) {
-            float scaledDt = TimeManager.getInstance().getDeltaTime();
+            float scaledDt = dt * TimeManager.getInstance().getTimeScale();
             entityManager.update(scaledDt);
-            
+
             // Pass entities to CollisionManager
             collisionManager.processCollisions(entityManager.getEntities());
         }
@@ -128,44 +138,50 @@ public class SimulationScene extends AbstractScene {
         return null;
     }
 
-    // Inner class for Input Handling
-    private class InputHandler extends InputAdapter {
-        
-        @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            float worldX = screenX;
-            float worldY = Constants.SCREEN_HEIGHT - screenY;
+    @Override
+    public boolean onTouchDown(int screenX, int screenY, int pointer, int button) {
+        float worldX = screenX;
+        float worldY = Constants.SCREEN_HEIGHT - screenY;
 
-            if (button == Input.Buttons.RIGHT) {
-                // Spawn Entity
-                String newId = "spawned_" + System.currentTimeMillis();
-                DynamicEntity e = new DynamicEntity(newId, worldX - 15, worldY - 15, 30, 30);
-                e.setColor(com.badlogic.gdx.graphics.Color.CYAN);
-                entityManager.addEntity(e);
-                return true;
-            } else if (button == Input.Buttons.LEFT) {
-                // Start Drag
-                AbstractEntity e = getEntityUnderMouse();
-                if (e != null && e instanceof DynamicEntity) {
-                    draggedEntity = e;
-                    dragOffset.set(worldX - e.getPosition().x, worldY - e.getPosition().y);
-                    lastMousePos.set(worldX, worldY);
-                    throwVelocity.set(0, 0);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            if (button == Input.Buttons.LEFT && draggedEntity != null) {
-                // Throw
-                draggedEntity.setVelocity(throwVelocity.x, throwVelocity.y);
-                draggedEntity = null;
+        if (button == Input.Buttons.RIGHT) {
+            // Spawn Entity
+            String newId = "spawned_" + System.currentTimeMillis();
+            DynamicEntity e = new DynamicEntity(newId, worldX - 15, worldY - 15, 30, 30);
+            e.setColor(com.badlogic.gdx.graphics.Color.CYAN);
+            entityManager.addEntity(e);
+            return true;
+        } else if (button == Input.Buttons.LEFT) {
+            // Start Drag
+            AbstractEntity e = getEntityUnderMouse();
+            if (e != null && e instanceof DynamicEntity) {
+                draggedEntity = e;
+                dragOffset.set(worldX - e.getPosition().x, worldY - e.getPosition().y);
+                lastMousePos.set(worldX, worldY);
+                throwVelocity.set(0, 0);
                 return true;
             }
-            return false;
         }
+        return false;
+    }
+
+    @Override
+    public boolean onDrag(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean onTouchUp(int screenX, int screenY, int pointer, int button) {
+        if (button == Input.Buttons.LEFT && draggedEntity != null) {
+            // Throw
+            draggedEntity.setVelocity(throwVelocity.x, throwVelocity.y);
+            draggedEntity = null;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyDown(int keycode) {
+        return false;
     }
 }
