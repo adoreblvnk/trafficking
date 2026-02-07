@@ -1,56 +1,76 @@
 package com.sit.trafficking.engine.entities;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.sit.trafficking.engine.EngineConstants;
+import com.sit.trafficking.engine.interfaces.CollisionListener;
 import com.sit.trafficking.engine.interfaces.ICollidable;
-import com.sit.trafficking.engine.managers.SoundManager;
+import com.sit.trafficking.engine.interfaces.Movable;
 
-/**
- * Represents moving objects in the simulation.
- * Renders as a Circle.
- */
-public class DynamicEntity extends AbstractEntity {
+public class DynamicEntity extends AbstractEntity implements Movable {
 
-    public DynamicEntity(String id, float x, float y, float width, float height) {
-        super(id, x, y, width, height);
-        this.color = Color.SKY; // light blue
+    protected Vector2 velocity;
+    protected float friction = EngineConstants.DEFAULT_FRICTION;
+
+    public void setFriction(float friction) {
+        this.friction = friction;
+    }
+
+    // Strategy Pattern: Logic is injected here
+    protected CollisionListener collisionListener;
+
+    public DynamicEntity(String id, float x, float y, float w, float h) {
+        super(id, x, y, w, h);
+        this.velocity = new Vector2(0, 0);
+    }
+
+    public void setCollisionListener(CollisionListener listener) {
+        this.collisionListener = listener;
     }
 
     @Override
     public void update(float dt) {
-        super.update(dt);
-
-        // Apply global friction so entities slow down naturally
-        float friction = 0.5f; // retain ~50% speed per second
-        velocity.scl((float) Math.pow(friction, dt));
-
-        // Snap to full stop when very slow to prevent endless sliding
-        if (velocity.len2() < 25f) { // speed < 5 units/sec
-            velocity.setZero();
-        }
-
-        // Decay temporary flash back to light blue if needed (simple immediate reset)
-        if (!color.equals(Color.SKY)) {
-            color = Color.SKY;
-        }
-    }
-
-    @Override
-    public void onCollision(ICollidable other) {
-        color = Color.YELLOW;
-        SoundManager soundManager = SoundManager.getInstance();
-        soundManager.playSound("impact_heavy", 1.0f, 0.0f);
+        updatePosition(dt);
+        velocity.scl(friction);
     }
 
     @Override
     public void render(ShapeRenderer sr) {
         sr.setColor(color);
-        // Render as a circle centered at position + half dimensions
-        // Note: AbstractEntity position is usually bottom-left for AABB, 
-        // but for a circle we might want to treat pos as center or adjust.
-        // Given AABB logic in getBounds (x,y,w,h), (x,y) is bottom-left corner.
-        // Center is x + w/2, y + h/2. Radius is min(w, h) / 2.
-        float radius = Math.min(width, height) / 2f;
-        sr.circle(position.x + width / 2f, position.y + height / 2f, radius);
+        sr.rect(position.x, position.y, width, height);
+    }
+
+    @Override
+    public Vector2 getVelocity() {
+        return velocity;
+    }
+
+    @Override
+    public void setVelocity(float x, float y) {
+        this.velocity.set(x, y);
+    }
+
+    @Override
+    public void updatePosition(float dt) {
+        position.mulAdd(velocity, dt);
+    }
+
+    @Override
+    public boolean isStatic() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrigger() {
+        return false;
+    }
+
+    @Override
+    public void onCollision(ICollidable other) {
+        // The Engine does NOT know about sounds.
+        // It simply notifies the listener if one exists.
+        if (collisionListener != null) {
+            collisionListener.onCollide(this, other);
+        }
     }
 }

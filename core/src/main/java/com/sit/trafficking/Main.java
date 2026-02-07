@@ -2,34 +2,28 @@ package com.sit.trafficking;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.sit.trafficking.engine.managers.SoundManager;
 import com.sit.trafficking.engine.scenes.SceneManager;
-import com.sit.trafficking.scenes.LoadingScene;
+import com.sit.trafficking.logic.scenes.MenuScene;
 
 /**
- * Main entry point for the LibGDX application.
+ * GameMaster (Main)
+ * Acts as the entry point and orchestrator.
  */
 public class Main extends Game {
 
     @Override
     public void create() {
-        // Initialize Singletons if needed (lazy loaded mostly)
-        // Push initial scene
-        SceneManager.getInstance().pushOverlay(new LoadingScene());
+        // Start with Menu
+        SceneManager.getInstance().pushOverlay(new MenuScene());
     }
 
     @Override
     public void render() {
-        // Update and Render Scene Stack
         SceneManager.getInstance().render(Gdx.graphics.getDeltaTime());
     }
 
     @Override
     public void dispose() {
-        // Clear stack
-        while (SceneManager.getInstance().getCurrentScene() != null) {
-             SceneManager.getInstance().popScene();
-        }
-        SoundManager.getInstance().dispose();
+        SceneManager.getInstance().dispose();
     }
 }

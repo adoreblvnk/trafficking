@@ -1,68 +1,36 @@
 package com.sit.trafficking.engine.managers;
 
-import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SoundManager {
     
-    private static SoundManager instance;
-    private final AssetManager assetManager;
-    private final Map<String, String> soundBank;
-    private float volume = 1.0f;
+    private final Map<String, Sound> soundBank;
 
-    private SoundManager() {
-        assetManager = new AssetManager();
-        soundBank = new HashMap<>();
+    public SoundManager() {
+        this.soundBank = new HashMap<>();
     }
 
-    public static SoundManager getInstance() {
-        if (instance == null) {
-            instance = new SoundManager();
-        }
-        return instance;
-    }
-
-    public void loadSound(String id, String internalPath) {
+    public void loadSound(String id, String path) {
         if (!soundBank.containsKey(id)) {
-            soundBank.put(id, internalPath);
-        }
-        if (!assetManager.isLoaded(internalPath)) {
-            assetManager.load(internalPath, Sound.class);
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal(path));
+            soundBank.put(id, sound);
         }
     }
 
-    public boolean update() {
-        return assetManager.update();
-    }
-
-    public float getProgress() {
-        return assetManager.getProgress();
-    }
-
-    public void setVolume(float volume) {
-        this.volume = Math.max(0f, Math.min(1f, volume));
-    }
-
-    public float getVolume() {
-        return volume;
-    }
-
-    public void playSound(String id, float pitch, float pan) {
-        String path = soundBank.get(id);
-        if (path == null || !assetManager.isLoaded(path)) {
-            return;
-        }
-
-        Sound sound = assetManager.get(path, Sound.class);
-        long soundId = sound.play(volume, pitch, pan);
-        if (soundId == -1) {
-            return;
+    public void playSound(String id, float volume) {
+        Sound sound = soundBank.get(id);
+        if (sound != null) {
+            sound.play(volume);
         }
     }
-    
+
     public void dispose() {
-        assetManager.dispose();
+        for (Sound sound : soundBank.values()) {
+            sound.dispose();
+        }
+        soundBank.clear();
     }
 }

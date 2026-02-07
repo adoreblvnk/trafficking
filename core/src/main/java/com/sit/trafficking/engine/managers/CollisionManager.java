@@ -2,162 +2,97 @@ package com.sit.trafficking.engine.managers;
 
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.sit.trafficking.engine.EngineConstants;
 import com.sit.trafficking.engine.entities.AbstractEntity;
 import com.sit.trafficking.engine.interfaces.ICollidable;
-
+import com.sit.trafficking.engine.interfaces.Movable;
 import java.util.List;
 
-/**
- * Handles physics and collision resolution.
- * NOT a Singleton - instantiated per Scene.
- * Implements custom AABB collision logic without Box2D.
- */
 public class CollisionManager {
 
-    /**
-     * Detects and resolves collisions between entities.
-     * @param entities List of entities to check.
-     */
+    public CollisionManager() {
+    }
+
     public void processCollisions(List<? extends ICollidable> entities) {
-        int size = entities.size();
-        // Iterate all unique pairs (A vs B)
-        for (int i = 0; i < size; i++) {
-            for (int j = i + 1; j < size; j++) {
+        for (int i = 0; i < entities.size(); i++) {
+            for (int j = i + 1; j < entities.size(); j++) {
                 ICollidable a = entities.get(i);
                 ICollidable b = entities.get(j);
 
-                resolveCollision(a, b);
+                if (checkAABB(a.getBounds(), b.getBounds())) {
+                    resolveCollision(a, b);
+                    a.onCollision(b);
+                    b.onCollision(a);
+                }
             }
         }
+    }
+
+    private boolean checkAABB(Rectangle rectA, Rectangle rectB) {
+        return rectA.overlaps(rectB);
     }
 
     private void resolveCollision(ICollidable a, ICollidable b) {
-        Rectangle rectA = a.getBounds();
-        Rectangle rectB = b.getBounds();
-        
-        // Simple AABB overlap check
-        if (Intersector.overlaps(rectA, rectB)) {
-            if (!a.isTrigger() && !b.isTrigger()) {
-                resolvePhysics(a, b, rectA, rectB);
-            }
-            a.onCollision(b);
-            b.onCollision(a);
-        }
+        if (a.isStatic() && b.isStatic()) return;
+        if (a.isTrigger() || b.isTrigger()) return;
+
+        resolvePhysics(a, b);
     }
 
-    private void resolvePhysics(ICollidable a, ICollidable b, Rectangle rectA, Rectangle rectB) {
-        if (a.isStatic() && b.isStatic()) {
-            return;
-        }
-
-        AbstractEntity entA = (AbstractEntity) a;
-        AbstractEntity entB = (AbstractEntity) b;
-
+    private void resolvePhysics(ICollidable a, ICollidable b) {
+        Rectangle rA = a.getBounds();
+        Rectangle rB = b.getBounds();
         Rectangle intersection = new Rectangle();
-        Intersector.intersectRectangles(rectA, rectB, intersection);
+        Intersector.intersectRectangles(rA, rB, intersection);
 
-        if (intersection.width < intersection.height) {
-            resolveHorizontal(entA, entB, intersection.width);
+        float overlapX = intersection.width;
+        float overlapY = intersection.height;
+        float pushX = 0, pushY = 0;
+
+        if (overlapX < overlapY) {
+            if (rA.x < rB.x) pushX = -overlapX;
+            else pushX = overlapX;
         } else {
-            resolveVertical(entA, entB, intersection.height);
-        }
-    }
-
-    private void resolveHorizontal(AbstractEntity entA, AbstractEntity entB, float overlap) {
-        float centerA = entA.getPosition().x + entA.getWidth() / 2f;
-        float centerB = entB.getPosition().x + entB.getWidth() / 2f;
-
-        if (entA.isStatic()) {
-            applyStaticSeparationHorizontal(entB, entA, overlap, centerB < centerA);
-            reflectHorizontal(entB, 0.6f, 0.85f);
-            return;
+            if (rA.y < rB.y) pushY = -overlapY;
+            else pushY = overlapY;
         }
 
-        if (entB.isStatic()) {
-            applyStaticSeparationHorizontal(entA, entB, overlap, centerA < centerB);
-            reflectHorizontal(entA, 0.6f, 0.85f);
-            return;
+        if (!a.isStatic() && b.isStatic()) {
+            if (a instanceof Movable && a instanceof AbstractEntity) {
+                ((AbstractEntity) a).getPosition().add(pushX, pushY);
+                Vector2 vel = ((Movable) a).getVelocity();
+                if (pushX != 0) vel.x *= -EngineConstants.DEFAULT_BOUNCE;
+                if (pushY != 0) vel.y *= -EngineConstants.DEFAULT_BOUNCE;
+            }
+        } else if (a.isStatic() && !b.isStatic()) {
+            if (b instanceof Movable && b instanceof AbstractEntity) {
+                ((AbstractEntity) b).getPosition().add(-pushX, -pushY);
+                Vector2 vel = ((Movable) b).getVelocity();
+                if (pushX != 0) vel.x *= -EngineConstants.DEFAULT_BOUNCE;
+                if (pushY != 0) vel.y *= -EngineConstants.DEFAULT_BOUNCE;
+            }
+        } else if (!a.isStatic() && !b.isStatic()) {
+            if (a instanceof AbstractEntity && b instanceof AbstractEntity) {
+                 ((AbstractEntity) a).getPosition().add(pushX * EngineConstants.PUSH_OUT_FACTOR, pushY * EngineConstants.PUSH_OUT_FACTOR);
+                 ((AbstractEntity) b).getPosition().add(-pushX * EngineConstants.PUSH_OUT_FACTOR, -pushY * EngineConstants.PUSH_OUT_FACTOR);
+
+                if (a instanceof Movable && b instanceof Movable) {
+                    Vector2 vA = ((Movable) a).getVelocity();
+                    Vector2 vB = ((Movable) b).getVelocity();
+
+                    if (pushX != 0) {
+                        float temp = vA.x;
+                        vA.x = vB.x * EngineConstants.DEFAULT_BOUNCE;
+                        vB.x = temp * EngineConstants.DEFAULT_BOUNCE;
+                    }
+                    if (pushY != 0) {
+                        float temp = vA.y;
+                        vA.y = vB.y * EngineConstants.DEFAULT_BOUNCE;
+                        vB.y = temp * EngineConstants.DEFAULT_BOUNCE;
+                    }
+                }
+            }
         }
-
-        float separation = overlap / 2f;
-        if (centerA < centerB) {
-            entA.getPosition().x -= separation;
-            entB.getPosition().x += separation;
-        } else {
-            entA.getPosition().x += separation;
-            entB.getPosition().x -= separation;
-        }
-
-        float velAx = entA.getVelocity().x;
-        float velAy = entA.getVelocity().y;
-        float velBx = entB.getVelocity().x;
-        float velBy = entB.getVelocity().y;
-        float impactDampingB = 0.6f;
-
-        entA.setVelocity(velBx, velAy);
-        entB.setVelocity(velAx * impactDampingB, velBy * impactDampingB);
-    }
-
-    private void resolveVertical(AbstractEntity entA, AbstractEntity entB, float overlap) {
-        float centerA = entA.getPosition().y + entA.getHeight() / 2f;
-        float centerB = entB.getPosition().y + entB.getHeight() / 2f;
-
-        if (entA.isStatic()) {
-            applyStaticSeparationVertical(entB, entA, overlap, centerB < centerA);
-            reflectVertical(entB, 0.6f, 0.85f);
-            return;
-        }
-
-        if (entB.isStatic()) {
-            applyStaticSeparationVertical(entA, entB, overlap, centerA < centerB);
-            reflectVertical(entA, 0.6f, 0.85f);
-            return;
-        }
-
-        float separation = overlap / 2f;
-        if (centerA < centerB) {
-            entA.getPosition().y -= separation;
-            entB.getPosition().y += separation;
-        } else {
-            entA.getPosition().y += separation;
-            entB.getPosition().y -= separation;
-        }
-
-        float velAx = entA.getVelocity().x;
-        float velAy = entA.getVelocity().y;
-        float velBx = entB.getVelocity().x;
-        float velBy = entB.getVelocity().y;
-        float impactDampingB = 0.6f;
-
-        entA.setVelocity(velAx, velBy);
-        entB.setVelocity(velBx * impactDampingB, velAy * impactDampingB);
-    }
-
-    private void applyStaticSeparationHorizontal(AbstractEntity mover, AbstractEntity blocker, float overlap, boolean moverOnLeft) {
-        if (moverOnLeft) {
-            mover.getPosition().x -= overlap;
-        } else {
-            mover.getPosition().x += overlap;
-        }
-    }
-
-    private void applyStaticSeparationVertical(AbstractEntity mover, AbstractEntity blocker, float overlap, boolean moverBelow) {
-        if (moverBelow) {
-            mover.getPosition().y -= overlap;
-        } else {
-            mover.getPosition().y += overlap;
-        }
-    }
-
-    private void reflectHorizontal(AbstractEntity entity, float restitution, float damping) {
-        float vx = entity.getVelocity().x;
-        float vy = entity.getVelocity().y;
-        entity.setVelocity(-vx * restitution * damping, vy * damping);
-    }
-
-    private void reflectVertical(AbstractEntity entity, float restitution, float damping) {
-        float vx = entity.getVelocity().x;
-        float vy = entity.getVelocity().y;
-        entity.setVelocity(vx * damping, -vy * restitution * damping);
     }
 }

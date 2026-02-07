@@ -1,20 +1,26 @@
 package com.sit.trafficking.engine.scenes;
 
+import com.sit.trafficking.engine.managers.IOManager;
+import com.sit.trafficking.engine.managers.SoundManager;
+import com.sit.trafficking.engine.managers.TimeManager;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
-/**
- * Singleton managing the scene stack.
- * Allows for overlays (like Pause Menu) on top of active scenes.
- */
 public class SceneManager {
 
     private static SceneManager instance;
     private final Deque<AbstractScene> sceneStack;
+    
+    private final SoundManager soundManager;
+    private final IOManager ioManager;
+    private final TimeManager timeManager;
 
     private SceneManager() {
         this.sceneStack = new ArrayDeque<>();
+        this.soundManager = new SoundManager();
+        this.ioManager = new IOManager();
+        this.timeManager = new TimeManager();
     }
 
     public static SceneManager getInstance() {
@@ -24,28 +30,18 @@ public class SceneManager {
         return instance;
     }
 
-    /**
-     * Pushes a new scene onto the stack.
-     * @param scene The scene to add.
-     */
     public void pushOverlay(AbstractScene scene) {
         scene.create();
         sceneStack.push(scene);
     }
 
-    /**
-     * Removes the top scene from the stack.
-     */
     public void popScene() {
         if (!sceneStack.isEmpty()) {
             AbstractScene s = sceneStack.pop();
             s.dispose();
         }
     }
-    
-    /**
-     * Replaces the entire stack with a single scene.
-     */
+
     public void setScene(AbstractScene scene) {
         while(!sceneStack.isEmpty()) {
             popScene();
@@ -53,26 +49,35 @@ public class SceneManager {
         pushOverlay(scene);
     }
 
-    /**
-     * Updates and renders the scene stack.
-     * Logic: Update only the top scene. Render all scenes from bottom to top.
-     * @param dt Delta time.
-     */
     public void render(float dt) {
         if (sceneStack.isEmpty()) return;
 
-        // Update ONLY the top scene
+        // Update top scene
         sceneStack.peek().update(dt);
 
-        // Render ALL scenes (from bottom to top for correct layering)
-        // ArrayDeque iterator goes top-to-bottom usually, so we need reverse iteration for bottom-to-top rendering
+        // Render from bottom to top
         Iterator<AbstractScene> it = sceneStack.descendingIterator();
         while (it.hasNext()) {
             it.next().render();
         }
     }
-    
-    public AbstractScene getCurrentScene() {
-        return sceneStack.peek();
+
+    public void dispose() {
+        while (!sceneStack.isEmpty()) {
+            popScene();
+        }
+        soundManager.dispose();
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
+    }
+
+    public IOManager getIOManager() {
+        return ioManager;
+    }
+
+    public TimeManager getTimeManager() {
+        return timeManager;
     }
 }

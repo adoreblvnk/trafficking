@@ -1,25 +1,25 @@
 package com.sit.trafficking.engine.entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.sit.trafficking.engine.interfaces.ICollidable;
 
-/**
- * Represents immutable obstacles like walls.
- * Velocity is permanently zero.
- * Renders as a Rectangle.
- */
 public class StaticEntity extends AbstractEntity {
 
-    public StaticEntity(String id, float x, float y, float width, float height) {
-        super(id, x, y, width, height);
-        this.velocity.set(0, 0);
+    public StaticEntity(String id, float x, float y, float w, float h) {
+        super(id, x, y, w, h);
+        this.color = Color.GRAY;
     }
 
     @Override
     public void update(float dt) {
-        // Static entities do not move.
-        // Overridden to ensure velocity remains 0 if accidentally set? 
-        // Or just leave empty to save comp time. 
-        // Super update does pos += vel * dt. Since vel is 0, super.update is harmless but this is explicit.
+        // Do nothing
+    }
+
+    @Override
+    public void render(ShapeRenderer sr) {
+        sr.setColor(color);
+        sr.rect(position.x, position.y, width, height);
     }
 
     @Override
@@ -28,8 +28,12 @@ public class StaticEntity extends AbstractEntity {
     }
 
     @Override
-    public void render(ShapeRenderer sr) {
-        sr.setColor(color);
-        sr.rect(position.x, position.y, width, height);
+    public boolean isTrigger() {
+        return false;
+    }
+
+    @Override
+    public void onCollision(ICollidable other) {
+        // Do nothing
     }
 }
