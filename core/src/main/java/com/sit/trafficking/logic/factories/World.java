@@ -14,12 +14,12 @@ import com.sit.trafficking.engine.managers.EntityManager;
 import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.logic.LogicConstants;
 
-public class LevelFactory {
+public class World {
 
-    public LevelFactory() {
+    public World() {
     }
 
-    public void loadLevel(EntityManager em, String jsonPath) {
+    public void loadWorld(EntityManager em, String jsonPath) {
         String jsonString = SceneManager.getInstance().getIOManager().readTextFile(jsonPath);
         parseAndCreate(jsonString, em);
     }
@@ -68,10 +68,10 @@ public class LevelFactory {
         }
 
         // Wrapper object
-        LevelData level = new LevelData();
-        level.entities = dataList;
+        WorldData world = new WorldData();
+        world.entities = dataList;
 
-        String saveString = json.toJson(level);
+        String saveString = json.toJson(world);
         SceneManager.getInstance().getIOManager().writeSaveFile("save.json", saveString);
     }
 
@@ -118,7 +118,7 @@ public class LevelFactory {
     }
 
     // Inner classes for JSON serialization helper
-    public static class LevelData {
+    public static class WorldData {
         public ArrayList<EntityData> entities;
     }
 

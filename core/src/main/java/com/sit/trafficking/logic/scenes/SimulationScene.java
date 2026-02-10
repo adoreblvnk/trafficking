@@ -13,7 +13,7 @@ import com.sit.trafficking.engine.scenes.AbstractScene;
 import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.logic.LogicConstants;
 
-import com.sit.trafficking.logic.factories.LevelFactory;
+import com.sit.trafficking.logic.factories.World;
 
 public class SimulationScene extends AbstractScene implements InputListener {
 
@@ -21,11 +21,11 @@ public class SimulationScene extends AbstractScene implements InputListener {
     private Vector2 dragStartPos = new Vector2();
     private Vector2 dragCurrentPos = new Vector2();
     private boolean isDragging = false;
-    private LevelFactory levelFactory;
+    private World world;
 
     @Override
     public void create() {
-        levelFactory = new LevelFactory();
+        world = new World();
         
         // Setup Input
         Gdx.input.setInputProcessor(inputManager);
@@ -34,8 +34,8 @@ public class SimulationScene extends AbstractScene implements InputListener {
         // Load Sound
         SceneManager.getInstance().getSoundManager().loadSound("crash", "sounds/car_crash_1.wav");
 
-        // Load Level
-        levelFactory.loadLevel(entityManager, "levels/engine_demo.json");
+        // Load World
+        world.loadWorld(entityManager, "worlds/default.json");
 
         // Create Initial Traffic (Autonomous Movement)
         spawnDynamicEntity(LogicConstants.SCREEN_WIDTH / 2f, LogicConstants.SCREEN_HEIGHT / 2f, true);
@@ -82,13 +82,13 @@ public class SimulationScene extends AbstractScene implements InputListener {
         
         // SAVE (F5)
         if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
-            levelFactory.saveCurrentState(entityManager);
+            world.saveCurrentState(entityManager);
             System.out.println("Quick Save Complete!");
         }
 
         // LOAD (F9)
         if (Gdx.input.isKeyJustPressed(Input.Keys.F9)) {
-            levelFactory.loadSaveState(entityManager);
+            world.loadSaveState(entityManager);
             System.out.println("Quick Load Complete!");
         }
         
