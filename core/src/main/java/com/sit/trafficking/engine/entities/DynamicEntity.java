@@ -3,8 +3,6 @@ package com.sit.trafficking.engine.entities;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.sit.trafficking.engine.EngineConstants;
-import com.sit.trafficking.engine.interfaces.CollisionListener;
-import com.sit.trafficking.engine.interfaces.ICollidable;
 import com.sit.trafficking.engine.interfaces.Movable;
 
 public class DynamicEntity extends AbstractEntity implements Movable {
@@ -16,16 +14,10 @@ public class DynamicEntity extends AbstractEntity implements Movable {
         this.friction = friction;
     }
 
-    // Strategy Pattern: Logic is injected here
-    protected CollisionListener collisionListener;
 
     public DynamicEntity(String id, float x, float y, float w, float h) {
         super(id, x, y, w, h);
         this.velocity = new Vector2(0, 0);
-    }
-
-    public void setCollisionListener(CollisionListener listener) {
-        this.collisionListener = listener;
     }
 
     @Override
@@ -63,14 +55,5 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     @Override
     public boolean isTrigger() {
         return false;
-    }
-
-    @Override
-    public void onCollision(ICollidable other) {
-        // The Engine does NOT know about sounds.
-        // It simply notifies the listener if one exists.
-        if (collisionListener != null) {
-            collisionListener.onCollide(this, other);
-        }
     }
 }

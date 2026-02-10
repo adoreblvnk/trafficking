@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.sit.trafficking.engine.EngineConstants;
-import com.sit.trafficking.engine.entities.AbstractEntity;
 import com.sit.trafficking.engine.interfaces.ICollidable;
 import com.sit.trafficking.engine.interfaces.Movable;
 import java.util.List;
@@ -59,38 +58,36 @@ public class CollisionManager {
         }
 
         if (!a.isStatic() && b.isStatic()) {
-            if (a instanceof Movable && a instanceof AbstractEntity) {
-                ((AbstractEntity) a).getPosition().add(pushX, pushY);
+            a.getPosition().add(pushX, pushY);
+            if (a instanceof Movable) {
                 Vector2 vel = ((Movable) a).getVelocity();
                 if (pushX != 0) vel.x *= -EngineConstants.DEFAULT_BOUNCE;
                 if (pushY != 0) vel.y *= -EngineConstants.DEFAULT_BOUNCE;
             }
         } else if (a.isStatic() && !b.isStatic()) {
-            if (b instanceof Movable && b instanceof AbstractEntity) {
-                ((AbstractEntity) b).getPosition().add(-pushX, -pushY);
+            b.getPosition().add(-pushX, -pushY);
+            if (b instanceof Movable) {
                 Vector2 vel = ((Movable) b).getVelocity();
                 if (pushX != 0) vel.x *= -EngineConstants.DEFAULT_BOUNCE;
                 if (pushY != 0) vel.y *= -EngineConstants.DEFAULT_BOUNCE;
             }
         } else if (!a.isStatic() && !b.isStatic()) {
-            if (a instanceof AbstractEntity && b instanceof AbstractEntity) {
-                 ((AbstractEntity) a).getPosition().add(pushX * EngineConstants.PUSH_OUT_FACTOR, pushY * EngineConstants.PUSH_OUT_FACTOR);
-                 ((AbstractEntity) b).getPosition().add(-pushX * EngineConstants.PUSH_OUT_FACTOR, -pushY * EngineConstants.PUSH_OUT_FACTOR);
+            a.getPosition().add(pushX * EngineConstants.PUSH_OUT_FACTOR, pushY * EngineConstants.PUSH_OUT_FACTOR);
+            b.getPosition().add(-pushX * EngineConstants.PUSH_OUT_FACTOR, -pushY * EngineConstants.PUSH_OUT_FACTOR);
 
-                if (a instanceof Movable && b instanceof Movable) {
-                    Vector2 vA = ((Movable) a).getVelocity();
-                    Vector2 vB = ((Movable) b).getVelocity();
+            if (a instanceof Movable && b instanceof Movable) {
+                Vector2 vA = ((Movable) a).getVelocity();
+                Vector2 vB = ((Movable) b).getVelocity();
 
-                    if (pushX != 0) {
-                        float temp = vA.x;
-                        vA.x = vB.x * EngineConstants.DEFAULT_BOUNCE;
-                        vB.x = temp * EngineConstants.DEFAULT_BOUNCE;
-                    }
-                    if (pushY != 0) {
-                        float temp = vA.y;
-                        vA.y = vB.y * EngineConstants.DEFAULT_BOUNCE;
-                        vB.y = temp * EngineConstants.DEFAULT_BOUNCE;
-                    }
+                if (pushX != 0) {
+                    float temp = vA.x;
+                    vA.x = vB.x * EngineConstants.DEFAULT_BOUNCE;
+                    vB.x = temp * EngineConstants.DEFAULT_BOUNCE;
+                }
+                if (pushY != 0) {
+                    float temp = vA.y;
+                    vA.y = vB.y * EngineConstants.DEFAULT_BOUNCE;
+                    vB.y = temp * EngineConstants.DEFAULT_BOUNCE;
                 }
             }
         }

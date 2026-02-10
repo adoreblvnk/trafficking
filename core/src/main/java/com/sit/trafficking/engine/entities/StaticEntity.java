@@ -2,7 +2,6 @@ package com.sit.trafficking.engine.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.sit.trafficking.engine.interfaces.ICollidable;
 
 public class StaticEntity extends AbstractEntity {
 
@@ -30,10 +29,5 @@ public class StaticEntity extends AbstractEntity {
     @Override
     public boolean isTrigger() {
         return false;
-    }
-
-    @Override
-    public void onCollision(ICollidable other) {
-        // Do nothing
     }
 }
