@@ -13,15 +13,20 @@ import com.sit.trafficking.engine.scenes.AbstractScene;
 import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.logic.LogicConstants;
 
+import com.sit.trafficking.logic.factories.LevelFactory;
+
 public class SimulationScene extends AbstractScene implements InputListener {
 
     private AbstractEntity draggedEntity;
     private Vector2 dragStartPos = new Vector2();
     private Vector2 dragCurrentPos = new Vector2();
     private boolean isDragging = false;
+    private LevelFactory levelFactory;
 
     @Override
     public void create() {
+        levelFactory = new LevelFactory();
+        
         // Setup Input
         Gdx.input.setInputProcessor(inputManager);
         inputManager.addListener(this);
@@ -30,13 +35,14 @@ public class SimulationScene extends AbstractScene implements InputListener {
         SceneManager.getInstance().getSoundManager().loadSound("crash", "sounds/car_crash_1.wav");
 
         // Load Level
-        new com.sit.trafficking.logic.factories.LevelFactory().loadLevel(entityManager, "levels/engine_demo.json");
+        levelFactory.loadLevel(entityManager, "levels/engine_demo.json");
 
-        // Create Initial Dynamic Entity (extra)
-        spawnDynamicEntity(LogicConstants.SCREEN_WIDTH / 2f, LogicConstants.SCREEN_HEIGHT / 2f);
+        // Create Initial Traffic (Autonomous Movement)
+        spawnDynamicEntity(LogicConstants.SCREEN_WIDTH / 2f, LogicConstants.SCREEN_HEIGHT / 2f, true);
+        spawnDynamicEntity(LogicConstants.SCREEN_WIDTH / 3f, LogicConstants.SCREEN_HEIGHT / 3f, true);
     }
 
-    private void spawnDynamicEntity(float x, float y) {
+    private void spawnDynamicEntity(float x, float y, boolean giveInitialVelocity) {
         String id = "car_" + MathUtils.random(10000);
         DynamicEntity car = new DynamicEntity(id, x, y, LogicConstants.VEHICLE_SIZE, LogicConstants.VEHICLE_SIZE);
         car.setColor(new Color(MathUtils.random(), MathUtils.random(), MathUtils.random(), 1));
@@ -47,6 +53,23 @@ public class SimulationScene extends AbstractScene implements InputListener {
         if (y < LogicConstants.NUDGE_OFFSET) car.getPosition().y = LogicConstants.NUDGE_OFFSET;
         if (y > LogicConstants.SCREEN_HEIGHT - LogicConstants.NUDGE_OFFSET) car.getPosition().y = LogicConstants.SCREEN_HEIGHT - LogicConstants.NUDGE_OFFSET * 2;
 
+        // Autonomous Movement Logic
+        if (giveInitialVelocity) {
+            float speed = MathUtils.random(100f, 300f);
+            float angle = MathUtils.random(0, 360);
+            car.setVelocity(MathUtils.cosDeg(angle) * speed, MathUtils.sinDeg(angle) * speed);
+            
+            // Logic Injection: Listener
+            car.setCollisionListener((source, target) -> {
+                if (source instanceof DynamicEntity) {
+                     DynamicEntity m = (DynamicEntity) source;
+                     if (m.getVelocity().len2() > LogicConstants.CRASH_SOUND_THRESHOLD) {
+                         SceneManager.getInstance().getSoundManager().playSound("crash", LogicConstants.DEFAULT_VOLUME);
+                     }
+                }
+            });
+        }
+
         entityManager.addEntity(car);
     }
 
@@ -55,6 +78,18 @@ public class SimulationScene extends AbstractScene implements InputListener {
         // Global Input check for Pause
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             SceneManager.getInstance().pushOverlay(new PauseOverlay());
+        }
+        
+        // SAVE (F5)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
+            levelFactory.saveCurrentState(entityManager);
+            System.out.println("Quick Save Complete!");
+        }
+
+        // LOAD (F9)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F9)) {
+            levelFactory.loadSaveState(entityManager);
+            System.out.println("Quick Load Complete!");
         }
         
         super.update(dt);
@@ -85,7 +120,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         float worldY = LogicConstants.SCREEN_HEIGHT - y;
 
         if (btn == Input.Buttons.RIGHT) {
-            spawnDynamicEntity(x, worldY);
+            spawnDynamicEntity(x, worldY, true);
             return true;
         }
 
