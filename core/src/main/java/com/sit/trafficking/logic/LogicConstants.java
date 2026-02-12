@@ -32,4 +32,12 @@ public class LogicConstants {
     public static final float MENU_TITLE_X = 100f;
     public static final float MENU_TITLE_Y = 400f;
     public static final float MENU_SUBTITLE_Y = 350f;
+
+    // File Paths
+    public static final String SAVE_FILE_NAME = "save.json";
+    public static final String DEFAULT_WORLD_PATH = "worlds/default.json";
+
+    // Sound References
+    public static final String SOUND_CRASH_ID = "crash";
+    public static final String SOUND_CRASH_PATH = "sounds/car_crash_1.wav";
 }

@@ -32,10 +32,10 @@ public class SimulationScene extends AbstractScene implements InputListener {
         inputManager.addListener(this);
 
         // Load Sound
-        SceneManager.getInstance().getSoundManager().loadSound("crash", "sounds/car_crash_1.wav");
+        SceneManager.getInstance().getSoundManager().loadSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.SOUND_CRASH_PATH);
 
         // Load World
-        world.loadWorld(entityManager, "worlds/default.json");
+        world.loadWorld(entityManager, LogicConstants.DEFAULT_WORLD_PATH);
 
         // Create Initial Traffic (Autonomous Movement)
         spawnDynamicEntity(LogicConstants.SCREEN_WIDTH / 2f, LogicConstants.SCREEN_HEIGHT / 2f, true);
@@ -64,7 +64,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
                 if (source instanceof DynamicEntity) {
                      DynamicEntity m = (DynamicEntity) source;
                      if (m.getVelocity().len2() > LogicConstants.CRASH_SOUND_THRESHOLD) {
-                         SceneManager.getInstance().getSoundManager().playSound("crash", LogicConstants.DEFAULT_VOLUME);
+                         SceneManager.getInstance().getSoundManager().playSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.DEFAULT_VOLUME);
                      }
                 }
             });

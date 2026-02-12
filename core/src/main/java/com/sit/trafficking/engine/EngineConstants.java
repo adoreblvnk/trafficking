@@ -13,4 +13,8 @@ public class EngineConstants {
     public static final float DEFAULT_BOUNCE = 0.8f;
     public static final float DEFAULT_FRICTION = 0.98f;
     public static final float PUSH_OUT_FACTOR = 0.5f;
+
+    // Entity Types (for serialization)
+    public static final String ENTITY_TYPE_STATIC = "STATIC";
+    public static final String ENTITY_TYPE_DYNAMIC = "DYNAMIC";
 }

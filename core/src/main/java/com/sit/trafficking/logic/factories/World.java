@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.sit.trafficking.engine.entities.AbstractEntity;
 
 import com.badlogic.gdx.utils.JsonValue;
+import com.sit.trafficking.engine.EngineConstants;
 import com.sit.trafficking.engine.entities.DynamicEntity;
 import com.sit.trafficking.engine.entities.StaticEntity;
 import com.sit.trafficking.engine.interfaces.Movable;
@@ -25,7 +26,7 @@ public class World {
     }
 
     public void loadSaveState(EntityManager em) {
-        String jsonString = SceneManager.getInstance().getIOManager().readSaveFile("save.json");
+        String jsonString = SceneManager.getInstance().getIOManager().readSaveFile(LogicConstants.SAVE_FILE_NAME);
         if (jsonString != null) {
             // Clear existing logic - simple clear by ID iteration since we don't have
             // clear()
@@ -56,9 +57,9 @@ public class World {
             data.h = e.getHeight();
 
             if (e.isStatic()) {
-                data.type = "STATIC";
+                data.type = EngineConstants.ENTITY_TYPE_STATIC;
             } else {
-                data.type = "DYNAMIC";
+                data.type = EngineConstants.ENTITY_TYPE_DYNAMIC;
                 if (e instanceof Movable) {
                     data.vx = ((Movable) e).getVelocity().x;
                     data.vy = ((Movable) e).getVelocity().y;
@@ -72,7 +73,7 @@ public class World {
         world.entities = dataList;
 
         String saveString = json.toJson(world);
-        SceneManager.getInstance().getIOManager().writeSaveFile("save.json", saveString);
+        SceneManager.getInstance().getIOManager().writeSaveFile(LogicConstants.SAVE_FILE_NAME, saveString);
     }
 
     private void parseAndCreate(String jsonString, EntityManager em) {
@@ -91,9 +92,9 @@ public class World {
             float vx = val.has("vx") ? val.getFloat("vx") : 0;
             float vy = val.has("vy") ? val.getFloat("vy") : 0;
 
-            if ("STATIC".equals(type)) {
+            if (EngineConstants.ENTITY_TYPE_STATIC.equals(type)) {
                 em.addEntity(new StaticEntity(id, x, y, w, h));
-            } else if ("DYNAMIC".equals(type)) {
+            } else if (EngineConstants.ENTITY_TYPE_DYNAMIC.equals(type)) {
                 DynamicEntity car = new DynamicEntity(id, x, y, w, h);
                 car.setFriction(LogicConstants.VEHICLE_FRICTION);
 
@@ -107,7 +108,7 @@ public class World {
                     if (source instanceof Movable) {
                         Movable m = (Movable) source;
                         if (m.getVelocity().len2() > LogicConstants.CRASH_SOUND_THRESHOLD) {
-                            SceneManager.getInstance().getSoundManager().playSound("crash", LogicConstants.DEFAULT_VOLUME);
+                            SceneManager.getInstance().getSoundManager().playSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.DEFAULT_VOLUME);
                         }
                     }
                 });
