@@ -22,7 +22,6 @@ public class DynamicEntity extends AbstractEntity implements Movable {
 
     @Override
     public void update(float dt) {
-        updatePosition(dt);
         velocity.scl(friction);
         super.update(dt);
     }
