@@ -35,7 +35,10 @@ public class SimulationScene extends AbstractScene implements InputListener {
         SceneManager.getInstance().getSoundManager().loadSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.SOUND_CRASH_PATH);
 
         // Load World
-        world.loadWorld(entityManager, LogicConstants.DEFAULT_WORLD_PATH);
+        boolean worldLoaded = world.loadWorld(entityManager, LogicConstants.DEFAULT_WORLD_PATH);
+        if (!worldLoaded) {
+            Gdx.app.log("SimulationScene", "Failed to load default world, starting with empty world");
+        }
 
         // Create Initial Traffic (Autonomous Movement)
         spawnDynamicEntity(LogicConstants.SCREEN_WIDTH / 2f, LogicConstants.SCREEN_HEIGHT / 2f, true);
@@ -82,14 +85,22 @@ public class SimulationScene extends AbstractScene implements InputListener {
         
         // SAVE (F5)
         if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
-            world.saveCurrentState(entityManager);
-            System.out.println("Quick Save Complete!");
+            boolean saved = world.saveCurrentState(entityManager);
+            if (saved) {
+                Gdx.app.log("SimulationScene", "Quick Save Complete!");
+            } else {
+                Gdx.app.error("SimulationScene", "Quick Save Failed!");
+            }
         }
 
         // LOAD (F9)
         if (Gdx.input.isKeyJustPressed(Input.Keys.F9)) {
-            world.loadSaveState(entityManager);
-            System.out.println("Quick Load Complete!");
+            boolean loaded = world.loadSaveState(entityManager);
+            if (loaded) {
+                Gdx.app.log("SimulationScene", "Quick Load Complete!");
+            } else {
+                Gdx.app.log("SimulationScene", "Quick Load Failed - No save file found");
+            }
         }
         
         super.update(dt);
