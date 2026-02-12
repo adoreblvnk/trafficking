@@ -17,23 +17,26 @@ public abstract class AbstractEntity implements ICollidable {
     protected int zIndex = 0;
     protected CollisionListener collisionListener;
 
+    protected Rectangle bounds;
+
     public AbstractEntity(String id, float x, float y, float w, float h) {
         this.id = id;
         this.position = new Vector2(x, y);
         this.width = w;
         this.height = h;
         this.color = Color.WHITE;
+        this.bounds = new Rectangle(x, y, w, h);
     }
 
     public void update(float dt) {
-        // Base update logic if any
+        bounds.set(position.x, position.y, width, height);
     }
 
     public abstract void render(ShapeRenderer sr);
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle(position.x, position.y, width, height);
+        return bounds;
     }
 
     public String getId() {
@@ -48,6 +51,7 @@ public abstract class AbstractEntity implements ICollidable {
     @Override
     public void setPosition(float x, float y) {
         this.position.set(x, y);
+        this.bounds.setPosition(x, y);
     }
 
     public float getWidth() {
