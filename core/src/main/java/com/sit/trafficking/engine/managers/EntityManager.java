@@ -2,7 +2,9 @@ package com.sit.trafficking.engine.managers;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.sit.trafficking.engine.entities.AbstractEntity;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,7 +50,10 @@ public class EntityManager {
     }
 
     public void render(ShapeRenderer sr) {
-        for (AbstractEntity e : entityList) {
+        List<AbstractEntity> renderList = new ArrayList<>(entityList);
+        renderList.sort(Comparator.comparingInt(AbstractEntity::getZIndex));
+        
+        for (AbstractEntity e : renderList) {
             e.render(sr);
         }
     }

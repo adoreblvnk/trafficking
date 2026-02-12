@@ -14,6 +14,7 @@ public abstract class AbstractEntity implements ICollidable {
     protected float width;
     protected float height;
     protected Color color;
+    protected int zIndex = 0;
     protected CollisionListener collisionListener;
 
     public AbstractEntity(String id, float x, float y, float w, float h) {
@@ -59,6 +60,18 @@ public abstract class AbstractEntity implements ICollidable {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public int getZIndex() {
+        return zIndex;
+    }
+
+    public void setZIndex(int zIndex) {
+        this.zIndex = zIndex;
+    }
+
+    public void setCollisionListener(CollisionListener collisionListener) {
+        this.collisionListener = collisionListener;
     }
 
     @Override

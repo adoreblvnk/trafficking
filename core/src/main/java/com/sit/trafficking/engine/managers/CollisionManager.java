@@ -6,11 +6,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.sit.trafficking.engine.EngineConstants;
 import com.sit.trafficking.engine.interfaces.ICollidable;
 import com.sit.trafficking.engine.interfaces.Movable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CollisionManager {
 
     public CollisionManager() {
+    }
+
+    public List<ICollidable> getEntitiesInArea(List<? extends ICollidable> entities, Rectangle area) {
+        List<ICollidable> result = new ArrayList<>();
+        for (ICollidable e : entities) {
+            if (e.getBounds().overlaps(area)) {
+                result.add(e);
+            }
+        }
+        return result;
     }
 
     public void processCollisions(List<? extends ICollidable> entities) {
