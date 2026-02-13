@@ -44,8 +44,10 @@ public class CollisionManager {
     }
 
     private void resolveCollision(ICollidable a, ICollidable b) {
-        if (a.isStatic() && b.isStatic()) return;
-        if (a.isTrigger() || b.isTrigger()) return;
+        if (a.isStatic() && b.isStatic())
+            return;
+        if (a.isTrigger() || b.isTrigger())
+            return;
 
         resolvePhysics(a, b);
     }
@@ -61,30 +63,40 @@ public class CollisionManager {
         float pushX = 0, pushY = 0;
 
         if (overlapX < overlapY) {
-            if (rA.x < rB.x) pushX = -overlapX;
-            else pushX = overlapX;
+            if (rA.x < rB.x)
+                pushX = -overlapX;
+            else
+                pushX = overlapX;
         } else {
-            if (rA.y < rB.y) pushY = -overlapY;
-            else pushY = overlapY;
+            if (rA.y < rB.y)
+                pushY = -overlapY;
+            else
+                pushY = overlapY;
         }
 
         if (!a.isStatic() && b.isStatic()) {
-            a.getPosition().add(pushX, pushY);
+            a.setPosition(a.getPosition().x + pushX, a.getPosition().y + pushY);
             if (a instanceof Movable) {
                 Vector2 vel = ((Movable) a).getVelocity();
-                if (pushX != 0) vel.x *= -EngineConstants.DEFAULT_BOUNCE;
-                if (pushY != 0) vel.y *= -EngineConstants.DEFAULT_BOUNCE;
+                if (pushX != 0)
+                    vel.x *= -EngineConstants.DEFAULT_BOUNCE;
+                if (pushY != 0)
+                    vel.y *= -EngineConstants.DEFAULT_BOUNCE;
             }
         } else if (a.isStatic() && !b.isStatic()) {
-            b.getPosition().add(-pushX, -pushY);
+            b.setPosition(b.getPosition().x - pushX, b.getPosition().y - pushY);
             if (b instanceof Movable) {
                 Vector2 vel = ((Movable) b).getVelocity();
-                if (pushX != 0) vel.x *= -EngineConstants.DEFAULT_BOUNCE;
-                if (pushY != 0) vel.y *= -EngineConstants.DEFAULT_BOUNCE;
+                if (pushX != 0)
+                    vel.x *= -EngineConstants.DEFAULT_BOUNCE;
+                if (pushY != 0)
+                    vel.y *= -EngineConstants.DEFAULT_BOUNCE;
             }
         } else if (!a.isStatic() && !b.isStatic()) {
-            a.getPosition().add(pushX * EngineConstants.PUSH_OUT_FACTOR, pushY * EngineConstants.PUSH_OUT_FACTOR);
-            b.getPosition().add(-pushX * EngineConstants.PUSH_OUT_FACTOR, -pushY * EngineConstants.PUSH_OUT_FACTOR);
+            a.setPosition(a.getPosition().x + pushX * EngineConstants.PUSH_OUT_FACTOR,
+                    a.getPosition().y + pushY * EngineConstants.PUSH_OUT_FACTOR);
+            b.setPosition(b.getPosition().x - pushX * EngineConstants.PUSH_OUT_FACTOR,
+                    b.getPosition().y - pushY * EngineConstants.PUSH_OUT_FACTOR);
 
             if (a instanceof Movable && b instanceof Movable) {
                 Vector2 vA = ((Movable) a).getVelocity();

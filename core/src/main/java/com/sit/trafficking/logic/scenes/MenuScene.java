@@ -14,18 +14,11 @@ import com.sit.trafficking.logic.LogicConstants;
 public class MenuScene extends AbstractScene {
 
     private SpriteBatch batch;
-    private BitmapFont font;
-
+    
     @Override
     public void create() {
         batch = new SpriteBatch();
-        
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Geist-Bold.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = LogicConstants.FONT_SIZE_MENU;
-        parameter.color = Color.WHITE;
-        font = generator.generateFont(parameter);
-        generator.dispose();
+        loadFont(LogicConstants.FONT_SIZE_MENU);
     }
 
     @Override
@@ -49,6 +42,5 @@ public class MenuScene extends AbstractScene {
     public void dispose() {
         super.dispose();
         batch.dispose();
-        font.dispose();
     }
 }

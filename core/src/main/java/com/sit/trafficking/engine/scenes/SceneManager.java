@@ -53,12 +53,20 @@ public class SceneManager {
         if (sceneStack.isEmpty()) return;
 
         // Update top scene
-        sceneStack.peek().update(dt);
+        try {
+            sceneStack.peek().update(dt);
+        } catch (Exception e) {
+            com.badlogic.gdx.Gdx.app.error("SceneManager", "Scene update failure: " + e.getMessage());
+        }
 
         // Render from bottom to top
         Iterator<AbstractScene> it = sceneStack.descendingIterator();
         while (it.hasNext()) {
-            it.next().render();
+            try {
+                it.next().render();
+            } catch (Exception e) {
+                com.badlogic.gdx.Gdx.app.error("SceneManager", "Scene render failure: " + e.getMessage());
+            }
         }
     }
 

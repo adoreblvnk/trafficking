@@ -45,6 +45,7 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     @Override
     public void updatePosition(float dt) {
         position.mulAdd(velocity, dt);
+        bounds.setPosition(position.x, position.y); 
     }
 
     @Override

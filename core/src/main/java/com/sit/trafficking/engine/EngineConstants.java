@@ -17,4 +17,7 @@ public class EngineConstants {
     // Entity Types (for serialization)
     public static final String ENTITY_TYPE_STATIC = "STATIC";
     public static final String ENTITY_TYPE_DYNAMIC = "DYNAMIC";
+
+    // Assets
+    public static final String DEFAULT_FONT_PATH = "fonts/Geist-Bold.ttf";
 }

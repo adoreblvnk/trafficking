@@ -25,24 +25,36 @@ public class InputManager extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        for (InputListener l : listeners) {
-            if (l.onTouchDown(screenX, screenY, pointer, button)) return true;
+        try {
+            for (InputListener l : listeners) {
+                if (l.onTouchDown(screenX, screenY, pointer, button)) return true;
+            }
+        } catch (Exception e) {
+            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure: " + e.getMessage());
         }
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        for (InputListener l : listeners) {
-            if (l.onDrag(screenX, screenY, pointer)) return true;
+        try {
+            for (InputListener l : listeners) {
+                if (l.onDrag(screenX, screenY, pointer)) return true;
+            }
+        } catch (Exception e) {
+            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure: " + e.getMessage());
         }
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        for (InputListener l : listeners) {
-            if (l.onTouchUp(screenX, screenY, pointer, button)) return true;
+        try {
+            for (InputListener l : listeners) {
+                if (l.onTouchUp(screenX, screenY, pointer, button)) return true;
+            }
+        } catch (Exception e) {
+            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure: " + e.getMessage());
         }
         return false;
     }

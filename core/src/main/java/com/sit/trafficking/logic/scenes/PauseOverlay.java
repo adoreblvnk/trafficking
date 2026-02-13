@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.sit.trafficking.engine.scenes.AbstractScene;
 import com.sit.trafficking.engine.scenes.SceneManager;
@@ -14,14 +15,11 @@ import com.sit.trafficking.logic.LogicConstants;
 public class PauseOverlay extends AbstractScene {
 
     private SpriteBatch batch;
-    private BitmapFont font;
-
+    
     @Override
     public void create() {
         batch = new SpriteBatch();
-        font = new BitmapFont(); // Default font for simplicity in overlay
-        font.setColor(Color.WHITE);
-        font.getData().setScale(2.0f);
+        loadFont(LogicConstants.FONT_SIZE_MENU);
     }
 
     @Override
@@ -53,6 +51,5 @@ public class PauseOverlay extends AbstractScene {
     public void dispose() {
         super.dispose();
         batch.dispose();
-        font.dispose();
     }
 }
