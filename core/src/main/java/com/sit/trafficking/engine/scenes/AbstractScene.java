@@ -25,9 +25,23 @@ public abstract class AbstractScene {
     public abstract void create();
 
     public void update(float dt) {
-        entityManager.update(dt);
-        movementManager.processMovement(entityManager.getEntities(), dt);
-        collisionManager.processCollisions(entityManager.getEntities());
+        try {
+            entityManager.update(dt);
+        } catch (Exception e) {
+            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure: " + e.getMessage());
+        }
+
+        try {
+            movementManager.processMovement(entityManager.getEntities(), dt);
+        } catch (Exception e) {
+            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure: " + e.getMessage());
+        }
+
+        try {
+            collisionManager.processCollisions(entityManager.getEntities());
+        } catch (Exception e) {
+            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure: " + e.getMessage());
+        }
     }
 
     public void render() {

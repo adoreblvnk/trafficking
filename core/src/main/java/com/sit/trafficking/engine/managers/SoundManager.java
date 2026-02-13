@@ -23,7 +23,11 @@ public class SoundManager {
     public void playSound(String id, float volume) {
         Sound sound = soundBank.get(id);
         if (sound != null) {
-            sound.play(volume);
+            try {
+                sound.play(volume);
+            } catch (Exception e) {
+                Gdx.app.error("SoundManager", "Audio playback failed", e);
+            }
         }
     }
 
