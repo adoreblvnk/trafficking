@@ -78,31 +78,6 @@ public class SimulationScene extends AbstractScene implements InputListener {
 
     @Override
     public void update(float dt) {
-        // Global Input check for Pause
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            SceneManager.getInstance().pushOverlay(new PauseOverlay());
-        }
-        
-        // SAVE (F5)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
-            boolean saved = world.saveCurrentState(entityManager);
-            if (saved) {
-                Gdx.app.log("SimulationScene", "Quick Save Complete!");
-            } else {
-                Gdx.app.error("SimulationScene", "Quick Save Failed!");
-            }
-        }
-
-        // LOAD (F9)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F9)) {
-            boolean loaded = world.loadSaveState(entityManager);
-            if (loaded) {
-                Gdx.app.log("SimulationScene", "Quick Load Complete!");
-            } else {
-                Gdx.app.log("SimulationScene", "Quick Load Failed - No save file found");
-            }
-        }
-        
         super.update(dt);
     }
 
@@ -177,6 +152,35 @@ public class SimulationScene extends AbstractScene implements InputListener {
             }
             isDragging = false;
             draggedEntity = null;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyDown(int keycode) {
+        if (keycode == Input.Keys.ESCAPE) {
+            SceneManager.getInstance().pushOverlay(new PauseOverlay());
+            return true;
+        }
+        
+        if (keycode == Input.Keys.F5) {
+            boolean saved = world.saveCurrentState(entityManager);
+            if (saved) {
+                Gdx.app.log("SimulationScene", "Quick Save Complete!");
+            } else {
+                Gdx.app.error("SimulationScene", "Quick Save Failed!");
+            }
+            return true;
+        }
+
+        if (keycode == Input.Keys.F9) {
+            boolean loaded = world.loadSaveState(entityManager);
+            if (loaded) {
+                Gdx.app.log("SimulationScene", "Quick Load Complete!");
+            } else {
+                Gdx.app.log("SimulationScene", "Quick Load Failed - No save file found");
+            }
             return true;
         }
         return false;

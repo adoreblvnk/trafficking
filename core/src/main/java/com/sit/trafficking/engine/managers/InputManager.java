@@ -62,7 +62,13 @@ public class InputManager extends InputAdapter {
     // Implemented to satisfy UML even if Interface doesn't use it yet
     @Override
     public boolean keyDown(int keycode) {
-        // Future: Forward to listeners if IInputListener adds onKeyDown
+        try {
+            for (InputListener l : listeners) {
+                if (l.onKeyDown(keycode)) return true;
+            }
+        } catch (Exception e) {
+            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure: " + e.getMessage());
+        }
         return false;
     }
 }
