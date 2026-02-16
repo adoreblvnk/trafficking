@@ -145,7 +145,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
     public boolean onTouchUp(int x, int y, int ptr, int btn) {
         if (isDragging && draggedEntity != null) {
             if (draggedEntity instanceof DynamicEntity) {
-                Vector2 throwVel = new Vector2(dragCurrentPos).sub(dragStartPos).scl(LogicConstants.SLINGSHOT_MULTIPLIER);
+                Vector2 throwVel = new Vector2(dragStartPos).sub(dragCurrentPos).scl(LogicConstants.SLINGSHOT_MULTIPLIER);
                 // Clamp max speed
                 throwVel.clamp(0, LogicConstants.MAX_VELOCITY); 
                 ((DynamicEntity) draggedEntity).setVelocity(throwVel.x, throwVel.y);
