@@ -19,6 +19,7 @@ public abstract class AbstractEntity implements ICollidable {
 
     protected Rectangle bounds;
 
+    //every entity requires a position and size to exist
     public AbstractEntity(String id, float x, float y, float w, float h) {
         this.id = id;
         this.position = new Vector2(x, y);
@@ -28,12 +29,14 @@ public abstract class AbstractEntity implements ICollidable {
         this.bounds = new Rectangle(x, y, w, h);
     }
 
+    //make sure collision bounding is in sync whenever entity position updates
     public void update(float dt) {
         bounds.set(position.x, position.y, width, height);
     }
 
     public abstract void render(ShapeRenderer sr);
 
+    //shows current AABB for collision checks
     @Override
     public Rectangle getBounds() {
         return bounds;
@@ -43,11 +46,13 @@ public abstract class AbstractEntity implements ICollidable {
         return id;
     }
 
+    //gets and return current world position
     @Override
     public Vector2 getPosition() {
         return position;
     }
 
+    //updates both position and bounding box to prevent desync whenever moving the entity
     @Override
     public void setPosition(float x, float y) {
         this.position.set(x, y);
@@ -69,18 +74,20 @@ public abstract class AbstractEntity implements ICollidable {
     public int getZIndex() {
         return zIndex;
     }
-
+    
+    //updates the entity's render layer
     public void setZIndex(int zIndex) {
         this.zIndex = zIndex;
     }
+
 
     public void setCollisionListener(CollisionListener collisionListener) {
         this.collisionListener = collisionListener;
     }
 
+    //activates when an overlap with each other occurs
     @Override
     public void onCollision(ICollidable other) {
-        // Now BOTH Static and Dynamic entities can react via logic injection
         if (collisionListener != null) {
             collisionListener.onCollide(this, other);
         }

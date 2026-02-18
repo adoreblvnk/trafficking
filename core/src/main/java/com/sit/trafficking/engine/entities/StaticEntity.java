@@ -10,11 +10,13 @@ public class StaticEntity extends AbstractEntity {
         this.color = Color.GRAY;
     }
 
+    //skipped as static entities don't change between frames
     @Override
     public void update(float dt) {
         // Do nothing
     }
 
+    //default rendering - subclasses can override
     @Override
     public void render(ShapeRenderer sr) {
         sr.setColor(color);

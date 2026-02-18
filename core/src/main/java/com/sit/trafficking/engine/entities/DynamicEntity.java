@@ -14,7 +14,7 @@ public class DynamicEntity extends AbstractEntity implements Movable {
         this.friction = friction;
     }
 
-
+    //the entity is movable with velocity-based motion
     public DynamicEntity(String id, float x, float y, float w, float h) {
         super(id, x, y, w, h);
         this.velocity = new Vector2(0, 0);
@@ -26,22 +26,26 @@ public class DynamicEntity extends AbstractEntity implements Movable {
         super.update(dt);
     }
 
+    //default rendering - subclasses can override
     @Override
     public void render(ShapeRenderer sr) {
         sr.setColor(color);
         sr.rect(position.x, position.y, width, height);
     }
 
+    //returning velocity for movement and collision responses
     @Override
     public Vector2 getVelocity() {
         return velocity;
     }
 
+    //set velocity directly
     @Override
     public void setVelocity(float x, float y) {
         this.velocity.set(x, y);
     }
 
+    //update position based on current velocity and keep bounds aligned with updated position
     @Override
     public void updatePosition(float dt) {
         position.mulAdd(velocity, dt);
