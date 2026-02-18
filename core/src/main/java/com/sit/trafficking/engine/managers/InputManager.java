@@ -5,6 +5,10 @@ import com.sit.trafficking.engine.interfaces.InputListener;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Distributes input events to registered listeners in subscription order.
+ * Swallows exceptions to prevent input pipeline crashes.
+ */
 public class InputManager extends InputAdapter {
 
     private final List<InputListener> listeners;

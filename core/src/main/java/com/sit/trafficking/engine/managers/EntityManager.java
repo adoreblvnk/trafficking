@@ -10,6 +10,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Registry for game entities providing lifecycle management and ordered rendering.
+ * Maintains thread-safe concurrent access for entity modifications during iteration.
+ */
 public class EntityManager {
 
     private final Map<String, AbstractEntity> entityMap;
@@ -51,6 +55,7 @@ public class EntityManager {
 
     public void render(ShapeRenderer sr) {
         List<AbstractEntity> renderList = new ArrayList<>(entityList);
+        // Sorts by z-index before rendering to control draw order
         renderList.sort(Comparator.comparingInt(AbstractEntity::getZIndex));
         
         for (AbstractEntity e : renderList) {

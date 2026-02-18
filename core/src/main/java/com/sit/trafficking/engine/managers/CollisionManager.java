@@ -9,6 +9,10 @@ import com.sit.trafficking.engine.interfaces.Movable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Detects and resolves intersections between bounded entities.
+ * Supports static/dynamic entity separation with configurable bounce and push factors.
+ */
 public class CollisionManager {
 
     public CollisionManager() {
@@ -52,6 +56,7 @@ public class CollisionManager {
         resolvePhysics(a, b);
     }
 
+    // Separates overlapping entities using minimum translation vector
     private void resolvePhysics(ICollidable a, ICollidable b) {
         Rectangle rA = a.getBounds();
         Rectangle rB = b.getBounds();

@@ -2,6 +2,10 @@ package com.sit.trafficking.engine.managers;
 
 import com.badlogic.gdx.Gdx;
 
+/**
+ * Provides scaled delta time for controlling simulation speed.
+ * Values below 1.0 slow time; values above 1.0 accelerate.
+ */
 public class TimeManager {
     
     private float timeScale = 1.0f;

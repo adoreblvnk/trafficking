@@ -4,6 +4,9 @@ import com.sit.trafficking.engine.entities.AbstractEntity;
 import com.sit.trafficking.engine.interfaces.Movable;
 import java.util.List;
 
+/**
+ * Applies position updates to movable entities based on their velocity and delta time.
+ */
 public class MovementManager {
 
     public MovementManager() {

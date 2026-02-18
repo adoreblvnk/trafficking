@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import java.util.Optional;
 
+/**
+ * Abstraction for file system operations supporting both internal assets and local storage.
+ */
 public class IOManager {
 
     private static final String TAG = "IOManager";
