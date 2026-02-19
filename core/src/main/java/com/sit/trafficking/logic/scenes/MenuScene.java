@@ -1,17 +1,14 @@
 package com.sit.trafficking.logic.scenes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.sit.trafficking.engine.interfaces.InputListener;
 import com.sit.trafficking.engine.scenes.AbstractScene;
 import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.logic.LogicConstants;
 
-public class MenuScene extends AbstractScene {
+public class MenuScene extends AbstractScene implements InputListener {
 
     private SpriteBatch batch;
     
@@ -19,14 +16,31 @@ public class MenuScene extends AbstractScene {
     public void create() {
         batch = new SpriteBatch();
         loadFont(LogicConstants.FONT_SIZE_MENU);
+        inputManager.addListener(this);
     }
 
     @Override
     public void update(float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            SceneManager.getInstance().setScene(new SimulationScene());
-        }
     }
+
+    @Override
+    public boolean onKeyDown(int keycode) {
+        if (keycode == Input.Keys.ENTER) {
+            SceneManager.getInstance().setScene(new SimulationScene());
+            return true;
+        }
+        return false;
+    }
+
+    // Required Interface Methods
+    @Override
+    public boolean onTouchDown(int x, int y, int ptr, int btn) { return false; }
+
+    @Override
+    public boolean onDrag(int x, int y, int ptr) { return false; }
+
+    @Override
+    public boolean onTouchUp(int x, int y, int ptr, int btn) { return false; }
 
     @Override
     public void render() {

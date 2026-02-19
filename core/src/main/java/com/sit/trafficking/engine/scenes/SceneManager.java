@@ -1,5 +1,6 @@
 package com.sit.trafficking.engine.scenes;
 
+import com.badlogic.gdx.Gdx;
 import com.sit.trafficking.engine.managers.IOManager;
 import com.sit.trafficking.engine.managers.SoundManager;
 import com.sit.trafficking.engine.managers.TimeManager;
@@ -33,12 +34,18 @@ public class SceneManager {
     public void pushOverlay(AbstractScene scene) {
         scene.create();
         sceneStack.push(scene);
+        Gdx.input.setInputProcessor(scene.getInputManager());
     }
 
     public void popScene() {
         if (!sceneStack.isEmpty()) {
             AbstractScene s = sceneStack.pop();
             s.dispose();
+        }
+        if (!sceneStack.isEmpty()) {
+            Gdx.input.setInputProcessor(sceneStack.peek().getInputManager());
+        } else {
+            Gdx.input.setInputProcessor(null);
         }
     }
 
