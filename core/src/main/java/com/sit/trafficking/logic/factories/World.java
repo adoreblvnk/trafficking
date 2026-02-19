@@ -59,14 +59,18 @@ public class World {
             Json json = new Json();
             json.setOutputType(OutputType.json);
 
-            // We create a simple data structure to hold the list for serialization
             ArrayList<EntityData> dataList = new ArrayList<>();
+            float screenW = Gdx.graphics.getWidth();
+            float screenH = Gdx.graphics.getHeight();
 
             for (AbstractEntity e : em.getEntities()) {
+                // Skip dynamically generated borders
+                if (e.getId().startsWith("border_")) continue;
+
                 EntityData data = new EntityData();
                 data.id = e.getId();
-                data.x = e.getPosition().x;
-                data.y = e.getPosition().y;
+                data.relX = e.getPosition().x / screenW;
+                data.relY = e.getPosition().y / screenH;
                 data.w = e.getWidth();
                 data.h = e.getHeight();
 
@@ -82,11 +86,13 @@ public class World {
                 dataList.add(data);
             }
 
-            // Wrapper object
-            WorldData world = new WorldData();
-            world.entities = dataList;
+            SaveData saveData = new SaveData();
+            saveData.metadata = new SaveMetadata();
+            saveData.metadata.screenWidth = screenW;
+            saveData.metadata.screenHeight = screenH;
+            saveData.entities = dataList;
 
-            String saveString = json.toJson(world);
+            String saveString = json.toJson(saveData);
             boolean success = SceneManager.getInstance().getIOManager().writeSaveFile(LogicConstants.SAVE_FILE_NAME, saveString);
             if (success) {
                 Gdx.app.log(TAG, "Save state saved successfully");
@@ -121,36 +127,40 @@ public class World {
                 return;
             }
 
+            float currentScreenW = Gdx.graphics.getWidth();
+            float currentScreenH = Gdx.graphics.getHeight();
             int entityCount = 0;
             int errorCount = 0;
 
             for (JsonValue val : entities) {
                 try {
-                    // Validate required fields
-                    if (!val.has("id")) {
-                        Gdx.app.error(TAG, "Entity missing required field 'id', skipping");
-                        errorCount++;
-                        continue;
-                    }
-                    if (!val.has("type")) {
-                        Gdx.app.error(TAG, "Entity missing required field 'type', skipping");
-                        errorCount++;
-                        continue;
-                    }
-                    if (!val.has("x") || !val.has("y") || !val.has("w") || !val.has("h")) {
-                        Gdx.app.error(TAG, "Entity missing position/size fields, skipping");
+                    if (!val.has("id") || !val.has("type")) {
+                        Gdx.app.error(TAG, "Entity missing required fields, skipping");
                         errorCount++;
                         continue;
                     }
 
                     String id = val.getString("id");
                     String type = val.getString("type");
-                    float x = val.getFloat("x");
-                    float y = val.getFloat("y");
                     float w = val.getFloat("w");
                     float h = val.getFloat("h");
 
-                    // Optional velocity loading for saves
+                    // Support both relative (new) and absolute (legacy) positioning
+                    float x, y;
+                    if (val.has("relX") && val.has("relY")) {
+                        // Relative positioning scales to current screen size
+                        x = val.getFloat("relX") * currentScreenW;
+                        y = val.getFloat("relY") * currentScreenH;
+                    } else if (val.has("x") && val.has("y")) {
+                        // Legacy absolute positioning (backward compatibility)
+                        x = val.getFloat("x");
+                        y = val.getFloat("y");
+                    } else {
+                        Gdx.app.error(TAG, "Entity missing position fields, skipping");
+                        errorCount++;
+                        continue;
+                    }
+
                     float vx = val.has("vx") ? val.getFloat("vx") : 0;
                     float vy = val.has("vy") ? val.getFloat("vy") : 0;
 
@@ -161,12 +171,10 @@ public class World {
                         DynamicEntity car = new DynamicEntity(id, x, y, w, h);
                         car.setFriction(LogicConstants.VEHICLE_FRICTION);
 
-                        // If loading from save, use saved velocity.
                         if (vx != 0 || vy != 0) {
                             car.setVelocity(vx, vy);
                         }
 
-                        // Inject Logic (Crash Sound)
                         car.setCollisionListener((source, target) -> {
                             if (source instanceof Movable) {
                                 Movable m = (Movable) source;
@@ -195,15 +203,22 @@ public class World {
         }
     }
 
-    // Inner classes for JSON serialization helper
-    public static class WorldData {
+    // Data structures for save/load with relative positioning
+    public static class SaveData {
+        public SaveMetadata metadata;
         public ArrayList<EntityData> entities;
+    }
+
+    public static class SaveMetadata {
+        public float screenWidth;
+        public float screenHeight;
     }
 
     public static class EntityData {
         public String id;
         public String type;
-        public float x, y, w, h;
+        public float relX, relY;  // Relative position (0.0 to 1.0) for cross-screen compatibility
+        public float w, h;        // Absolute size (constant)
         public float vx, vy;
     }
 }
