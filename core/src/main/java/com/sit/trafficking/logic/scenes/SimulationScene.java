@@ -52,10 +52,11 @@ public class SimulationScene extends AbstractScene implements InputListener {
         entityManager.removeEntity("border_left");
         entityManager.removeEntity("border_right");
 
-        entityManager.addEntity(new StaticEntity("border_top", 0, screenH - 20, screenW, 20));
-        entityManager.addEntity(new StaticEntity("border_bottom", 0, 0, screenW, 20));
-        entityManager.addEntity(new StaticEntity("border_left", 0, 0, 20, screenH));
-        entityManager.addEntity(new StaticEntity("border_right", screenW - 20, 0, 20, screenH));
+        float thickness = LogicConstants.BORDER_WALL_THICKNESS;
+        entityManager.addEntity(new StaticEntity("border_top", 0, screenH - thickness, screenW, thickness));
+        entityManager.addEntity(new StaticEntity("border_bottom", 0, 0, screenW, thickness));
+        entityManager.addEntity(new StaticEntity("border_left", 0, 0, thickness, screenH));
+        entityManager.addEntity(new StaticEntity("border_right", screenW - thickness, 0, thickness, screenH));
     }
 
     private void spawnDynamicEntity(float x, float y, boolean giveInitialVelocity) {
@@ -94,6 +95,27 @@ public class SimulationScene extends AbstractScene implements InputListener {
     @Override
     public void update(float dt) {
         super.update(dt);
+        clampEntitiesToBounds();
+    }
+
+    private void clampEntitiesToBounds() {
+        float screenW = Gdx.graphics.getWidth();
+        float screenH = Gdx.graphics.getHeight();
+        float margin = LogicConstants.BORDER_WALL_THICKNESS;
+        float maxX = screenW - margin;
+        float maxY = screenH - margin;
+
+        for (AbstractEntity e : entityManager.getEntities()) {
+            if (e.getId().startsWith("border_") || e.isStatic()) continue;
+
+            Vector2 pos = e.getPosition();
+            float clampedX = MathUtils.clamp(pos.x, margin, maxX - e.getWidth());
+            float clampedY = MathUtils.clamp(pos.y, margin, maxY - e.getHeight());
+
+            if (pos.x != clampedX || pos.y != clampedY) {
+                e.setPosition(clampedX, clampedY);
+            }
+        }
     }
 
     @Override
@@ -209,12 +231,13 @@ public class SimulationScene extends AbstractScene implements InputListener {
         entityManager.removeEntity("border_left");
         entityManager.removeEntity("border_right");
 
-        entityManager.addEntity(new StaticEntity("border_top", 0, height - 20, width, 20));
-        entityManager.addEntity(new StaticEntity("border_bottom", 0, 0, width, 20));
-        entityManager.addEntity(new StaticEntity("border_left", 0, 0, 20, height));
-        entityManager.addEntity(new StaticEntity("border_right", width - 20, 0, 20, height));
+        float thickness = LogicConstants.BORDER_WALL_THICKNESS;
+        entityManager.addEntity(new StaticEntity("border_top", 0, height - thickness, width, thickness));
+        entityManager.addEntity(new StaticEntity("border_bottom", 0, 0, width, thickness));
+        entityManager.addEntity(new StaticEntity("border_left", 0, 0, thickness, height));
+        entityManager.addEntity(new StaticEntity("border_right", width - thickness, 0, thickness, height));
 
-        float margin = LogicConstants.NUDGE_OFFSET;
+        float margin = LogicConstants.BORDER_WALL_THICKNESS;
         float maxX = width - margin;
         float maxY = height - margin;
 
