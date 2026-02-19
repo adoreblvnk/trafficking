@@ -18,8 +18,15 @@ public class TimeManager {
     }
 
     public void setTimeScale(float scale) {
-        if (scale < 0) this.timeScale = 0;
-        else this.timeScale = scale;
+        if (scale < 0) {
+            Gdx.app.log("TimeManager", "Negative time scale rejected, using 0: " + scale);
+            this.timeScale = 0;
+        } else if (Float.isNaN(scale) || Float.isInfinite(scale)) {
+            Gdx.app.error("TimeManager", "Invalid time scale rejected: " + scale);
+            this.timeScale = 1f;
+        } else {
+            this.timeScale = scale;
+        }
     }
 
     public float getTimeScale() {

@@ -34,7 +34,7 @@ public class InputManager extends InputAdapter {
                 if (l.onTouchDown(screenX, screenY, pointer, button)) return true;
             }
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure: " + e.getMessage());
+            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure in touchDown", e);
         }
         return false;
     }
@@ -46,7 +46,7 @@ public class InputManager extends InputAdapter {
                 if (l.onDrag(screenX, screenY, pointer)) return true;
             }
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure: " + e.getMessage());
+            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure in touchDragged", e);
         }
         return false;
     }
@@ -58,7 +58,7 @@ public class InputManager extends InputAdapter {
                 if (l.onTouchUp(screenX, screenY, pointer, button)) return true;
             }
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure: " + e.getMessage());
+            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure in touchUp", e);
         }
         return false;
     }
@@ -71,7 +71,7 @@ public class InputManager extends InputAdapter {
                 if (l.onKeyDown(keycode)) return true;
             }
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure: " + e.getMessage());
+            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure in keyDown", e);
         }
         return false;
     }

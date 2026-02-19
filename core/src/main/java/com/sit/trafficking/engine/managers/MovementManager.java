@@ -1,5 +1,6 @@
 package com.sit.trafficking.engine.managers;
 
+import com.badlogic.gdx.Gdx;
 import com.sit.trafficking.engine.entities.AbstractEntity;
 import com.sit.trafficking.engine.interfaces.Movable;
 import java.util.List;
@@ -13,10 +14,23 @@ public class MovementManager {
     }
 
     public void processMovement(List<AbstractEntity> entities, float dt) {
-        for (AbstractEntity e : entities) {
-            if (e instanceof Movable) {
-                ((Movable) e).updatePosition(dt);
+        if (entities == null) {
+            Gdx.app.error("MovementManager", "Cannot process movement on null entity list");
+            return;
+        }
+        if (dt < 0) {
+            Gdx.app.error("MovementManager", "Negative delta time rejected: " + dt);
+            return;
+        }
+
+        try {
+            for (AbstractEntity e : entities) {
+                if (e instanceof Movable) {
+                    ((Movable) e).updatePosition(dt);
+                }
             }
+        } catch (Exception e) {
+            Gdx.app.error("MovementManager", "Movement processing failed", e);
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.sit.trafficking.engine.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.sit.trafficking.engine.EngineConstants;
 import com.sit.trafficking.engine.interfaces.Movable;
@@ -11,7 +13,10 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     protected float friction = EngineConstants.DEFAULT_FRICTION;
 
     public void setFriction(float friction) {
-        this.friction = friction;
+        if (friction < 0 || friction > 1) {
+            Gdx.app.log("DynamicEntity", "Friction clamped to [0,1]: " + friction + " -> " + MathUtils.clamp(friction, 0, 1));
+        }
+        this.friction = MathUtils.clamp(friction, 0, 1);
     }
 
     //the entity is movable with velocity-based motion
@@ -42,6 +47,10 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     //set velocity directly
     @Override
     public void setVelocity(float x, float y) {
+        if (Float.isNaN(x) || Float.isNaN(y) || Float.isInfinite(x) || Float.isInfinite(y)) {
+            Gdx.app.error("DynamicEntity", "Invalid velocity rejected: (" + x + ", " + y + ")");
+            return;
+        }
         this.velocity.set(x, y);
     }
 

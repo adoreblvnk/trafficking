@@ -15,6 +15,11 @@ public class IOManager {
     }
 
     public Optional<String> readTextFile(String internalPath) {
+        if (internalPath == null || internalPath.isEmpty()) {
+            Gdx.app.error(TAG, "Cannot read file with null/empty path");
+            return Optional.empty();
+        }
+
         try {
             com.badlogic.gdx.files.FileHandle file = Gdx.files.internal(internalPath);
             if (!file.exists()) {
@@ -31,6 +36,11 @@ public class IOManager {
     }
 
     public Optional<String> readSaveFile(String localPath) {
+        if (localPath == null || localPath.isEmpty()) {
+            Gdx.app.error(TAG, "Cannot read save file with null/empty path");
+            return Optional.empty();
+        }
+
         try {
             com.badlogic.gdx.files.FileHandle file = Gdx.files.local(localPath);
             if (!file.exists()) {
@@ -47,6 +57,15 @@ public class IOManager {
     }
 
     public boolean writeSaveFile(String localPath, String data) {
+        if (localPath == null || localPath.isEmpty()) {
+            Gdx.app.error(TAG, "Cannot write save file with null/empty path");
+            return false;
+        }
+        if (data == null) {
+            Gdx.app.error(TAG, "Cannot write null data to save file");
+            return false;
+        }
+
         try {
             Gdx.files.local(localPath).writeString(data, false);
             Gdx.app.log(TAG, "Successfully wrote save file: " + localPath);

@@ -32,9 +32,18 @@ public class SceneManager {
     }
 
     public void pushOverlay(AbstractScene scene) {
-        scene.create();
-        sceneStack.push(scene);
-        Gdx.input.setInputProcessor(scene.getInputManager());
+        if (scene == null) {
+            Gdx.app.error("SceneManager", "Cannot push null scene");
+            return;
+        }
+
+        try {
+            scene.create();
+            sceneStack.push(scene);
+            Gdx.input.setInputProcessor(scene.getInputManager());
+        } catch (Exception e) {
+            Gdx.app.error("SceneManager", "Failed to create scene", e);
+        }
     }
 
     public void popScene() {
@@ -50,6 +59,11 @@ public class SceneManager {
     }
 
     public void setScene(AbstractScene scene) {
+        if (scene == null) {
+            Gdx.app.error("SceneManager", "Cannot set null scene");
+            return;
+        }
+
         while(!sceneStack.isEmpty()) {
             popScene();
         }
@@ -63,7 +77,7 @@ public class SceneManager {
         try {
             sceneStack.peek().update(dt);
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("SceneManager", "Scene update failure: " + e.getMessage());
+            com.badlogic.gdx.Gdx.app.error("SceneManager", "Scene update failure", e);
         }
 
         // Render from bottom to top
@@ -72,7 +86,7 @@ public class SceneManager {
             try {
                 it.next().render();
             } catch (Exception e) {
-                com.badlogic.gdx.Gdx.app.error("SceneManager", "Scene render failure: " + e.getMessage());
+                com.badlogic.gdx.Gdx.app.error("SceneManager", "Scene render failure", e);
             }
         }
     }

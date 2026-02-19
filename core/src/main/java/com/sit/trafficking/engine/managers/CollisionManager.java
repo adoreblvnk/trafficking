@@ -1,5 +1,6 @@
 package com.sit.trafficking.engine.managers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -20,8 +21,14 @@ public class CollisionManager {
 
     public List<ICollidable> getEntitiesInArea(List<? extends ICollidable> entities, Rectangle area) {
         List<ICollidable> result = new ArrayList<>();
+
+        if (entities == null || area == null) {
+            Gdx.app.error("CollisionManager", "Cannot query area with null parameters");
+            return result;
+        }
+
         for (ICollidable e : entities) {
-            if (e.getBounds().overlaps(area)) {
+            if (e != null && e.getBounds() != null && e.getBounds().overlaps(area)) {
                 result.add(e);
             }
         }
@@ -29,17 +36,28 @@ public class CollisionManager {
     }
 
     public void processCollisions(List<? extends ICollidable> entities) {
-        for (int i = 0; i < entities.size(); i++) {
-            for (int j = i + 1; j < entities.size(); j++) {
-                ICollidable a = entities.get(i);
-                ICollidable b = entities.get(j);
+        if (entities == null) {
+            Gdx.app.error("CollisionManager", "Cannot process collisions on null entity list");
+            return;
+        }
 
-                if (checkAABB(a.getBounds(), b.getBounds())) {
-                    resolveCollision(a, b);
-                    a.onCollision(b);
-                    b.onCollision(a);
+        try {
+            for (int i = 0; i < entities.size(); i++) {
+                for (int j = i + 1; j < entities.size(); j++) {
+                    ICollidable a = entities.get(i);
+                    ICollidable b = entities.get(j);
+
+                    if (a == null || b == null) continue;
+
+                    if (checkAABB(a.getBounds(), b.getBounds())) {
+                        resolveCollision(a, b);
+                        a.onCollision(b);
+                        b.onCollision(a);
+                    }
                 }
             }
+        } catch (Exception e) {
+            Gdx.app.error("CollisionManager", "Collision processing failed", e);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.sit.trafficking.engine.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -21,6 +22,16 @@ public abstract class AbstractEntity implements ICollidable {
 
     //every entity requires a position and size to exist
     public AbstractEntity(String id, float x, float y, float w, float h) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Entity ID cannot be null or empty");
+        }
+        if (Float.isNaN(x) || Float.isNaN(y) || Float.isInfinite(x) || Float.isInfinite(y)) {
+            throw new IllegalArgumentException("Position cannot be NaN or Infinite: (" + x + ", " + y + ")");
+        }
+        if (w <= 0 || h <= 0) {
+            throw new IllegalArgumentException("Dimensions must be positive: " + w + "x" + h);
+        }
+
         this.id = id;
         this.position = new Vector2(x, y);
         this.width = w;
@@ -55,6 +66,10 @@ public abstract class AbstractEntity implements ICollidable {
     //updates both position and bounding box to prevent desync whenever moving the entity
     @Override
     public void setPosition(float x, float y) {
+        if (Float.isNaN(x) || Float.isNaN(y) || Float.isInfinite(x) || Float.isInfinite(y)) {
+            Gdx.app.error("AbstractEntity", "Invalid position rejected: (" + x + ", " + y + ")");
+            return;
+        }
         this.position.set(x, y);
         this.bounds.setPosition(x, y);
     }

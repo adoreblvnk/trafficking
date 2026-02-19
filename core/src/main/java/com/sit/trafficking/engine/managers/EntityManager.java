@@ -1,5 +1,6 @@
 package com.sit.trafficking.engine.managers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.sit.trafficking.engine.entities.AbstractEntity;
 import java.util.ArrayList;
@@ -24,23 +25,40 @@ public class EntityManager {
         this.entityList = new CopyOnWriteArrayList<>();
     }
 
-    public void addEntity(AbstractEntity e) {
-        if (e == null) return;
+    public boolean addEntity(AbstractEntity e) {
+        if (e == null) {
+            Gdx.app.log("EntityManager", "Cannot add null entity (ignored)");
+            return false;
+        }
+        if (e.getId() == null || e.getId().isEmpty()) {
+            Gdx.app.log("EntityManager", "Cannot add entity with null/empty ID (ignored)");
+            return false;
+        }
+
         // Prevent duplicate IDs in the list
         if (entityMap.containsKey(e.getId())) {
              // If replacing, remove old from list first
              AbstractEntity old = entityMap.get(e.getId());
              entityList.remove(old);
+             Gdx.app.log("EntityManager", "Replaced entity with duplicate ID: " + e.getId());
         }
         entityMap.put(e.getId(), e);
         entityList.add(e);
+        return true;
     }
 
-    public void removeEntity(String id) {
+    public boolean removeEntity(String id) {
+        if (id == null || id.isEmpty()) {
+            Gdx.app.log("EntityManager", "Cannot remove entity with null/empty ID (ignored)");
+            return false;
+        }
+
         AbstractEntity e = entityMap.remove(id);
         if (e != null) {
             entityList.remove(e);
+            return true;
         }
+        return false;
     }
 
     public AbstractEntity getEntity(String id) {

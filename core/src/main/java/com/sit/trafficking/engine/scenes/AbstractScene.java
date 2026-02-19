@@ -31,12 +31,16 @@ public abstract class AbstractScene {
     public abstract void create();
 
     protected void loadFont(int size) {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(EngineConstants.DEFAULT_FONT_PATH));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = size;
-        parameter.color = Color.WHITE;
-        font = generator.generateFont(parameter);
-        generator.dispose();
+        try {
+            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(EngineConstants.DEFAULT_FONT_PATH));
+            FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            parameter.size = size;
+            parameter.color = Color.WHITE;
+            font = generator.generateFont(parameter);
+            generator.dispose();
+        } catch (Exception e) {
+            Gdx.app.error("AbstractScene", "Failed to load font with size " + size, e);
+        }
     }
 
 
@@ -44,19 +48,19 @@ public abstract class AbstractScene {
         try {
             entityManager.update(dt);
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure: " + e.getMessage());
+            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure", e);
         }
 
         try {
             movementManager.processMovement(entityManager.getEntities(), dt);
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure: " + e.getMessage());
+            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure", e);
         }
 
         try {
             collisionManager.processCollisions(entityManager.getEntities());
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure: " + e.getMessage());
+            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure", e);
         }
     }
 
@@ -64,14 +68,23 @@ public abstract class AbstractScene {
         try {
             entityManager.render(shapeRenderer);
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("AbstractScene", "Render system failure: " + e.getMessage());
+            com.badlogic.gdx.Gdx.app.error("AbstractScene", "Render system failure", e);
         }
     }
 
     public void dispose() {
-        shapeRenderer.dispose();
+        try {
+            shapeRenderer.dispose();
+        } catch (Exception e) {
+            Gdx.app.error("AbstractScene", "Failed to dispose ShapeRenderer", e);
+        }
+
         if (font != null) {
-            font.dispose();
+            try {
+                font.dispose();
+            } catch (Exception e) {
+                Gdx.app.error("AbstractScene", "Failed to dispose font", e);
+            }
         }
     }
 
