@@ -109,4 +109,14 @@ public class SceneManager {
     public TimeManager getTimeManager() {
         return timeManager;
     }
+
+    public void resize(int width, int height) {
+        if (sceneStack.isEmpty()) return;
+
+        try {
+            sceneStack.peek().resize(width, height);
+        } catch (Exception e) {
+            Gdx.app.error("SceneManager", "Scene resize failure", e);
+        }
+    }
 }

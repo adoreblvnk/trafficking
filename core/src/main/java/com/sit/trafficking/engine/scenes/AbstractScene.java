@@ -95,4 +95,8 @@ public abstract class AbstractScene {
     public InputManager getInputManager() {
         return inputManager;
     }
+
+    public void resize(int width, int height) {
+        // Subclasses override to clamp entities, reposition UI, etc.
+    }
 }

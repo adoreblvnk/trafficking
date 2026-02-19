@@ -102,8 +102,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
 
     @Override
     public boolean onTouchDown(int x, int y, int ptr, int btn) {
-        // Convert screen Y to world Y
-        float worldY = LogicConstants.SCREEN_HEIGHT - y;
+        float worldY = Gdx.graphics.getHeight() - y;
 
         if (btn == Input.Buttons.RIGHT) {
             spawnDynamicEntity(x, worldY, true);
@@ -132,7 +131,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
     @Override
     public boolean onDrag(int x, int y, int ptr) {
         if (isDragging && draggedEntity != null) {
-            float worldY = LogicConstants.SCREEN_HEIGHT - y;
+            float worldY = Gdx.graphics.getHeight() - y;
             dragCurrentPos.set(x, worldY);
             // Move entity with mouse
             draggedEntity.getPosition().set(x - draggedEntity.getWidth()/2, worldY - draggedEntity.getHeight()/2);
@@ -184,5 +183,23 @@ public class SimulationScene extends AbstractScene implements InputListener {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        // Clamp entities to stay within new screen bounds when window shrinks
+        float margin = LogicConstants.NUDGE_OFFSET;
+        float maxX = width - margin;
+        float maxY = height - margin;
+
+        for (AbstractEntity e : entityManager.getEntities()) {
+            Vector2 pos = e.getPosition();
+            float clampedX = MathUtils.clamp(pos.x, margin, maxX - e.getWidth());
+            float clampedY = MathUtils.clamp(pos.y, margin, maxY - e.getHeight());
+
+            if (pos.x != clampedX || pos.y != clampedY) {
+                e.setPosition(clampedX, clampedY);
+            }
+        }
     }
 }

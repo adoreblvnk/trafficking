@@ -1,5 +1,6 @@
 package com.sit.trafficking.logic.scenes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -45,10 +46,13 @@ public class MenuScene extends AbstractScene implements InputListener {
     @Override
     public void render() {
         ScreenUtils.clear(0.1f, 0.1f, 0.1f, 1);
-        
+
+        float centerX = Gdx.graphics.getWidth() / 2f;
+        float centerY = Gdx.graphics.getHeight() / 2f;
+
         batch.begin();
-        font.draw(batch, "TRAFFICKING SIMULATION", LogicConstants.MENU_TITLE_X, LogicConstants.MENU_TITLE_Y);
-        font.draw(batch, "Press ENTER to Start", LogicConstants.MENU_TITLE_X, LogicConstants.MENU_SUBTITLE_Y);
+        font.draw(batch, "TRAFFICKING SIMULATION", centerX - 200, centerY + 50);
+        font.draw(batch, "Press ENTER to Start", centerX - 150, centerY - 20);
         batch.end();
     }
 

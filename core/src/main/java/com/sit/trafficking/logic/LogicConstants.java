@@ -12,6 +12,12 @@ public class LogicConstants {
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
 
+    // Screen resize constraints preserve gameplay usability across different hardware
+    public static final int MIN_SCREEN_WIDTH = 800;
+    public static final int MIN_SCREEN_HEIGHT = 600;
+    public static final int MAX_SCREEN_WIDTH = 1920;
+    public static final int MAX_SCREEN_HEIGHT = 1080;
+
     // Gameplay Physics
     public static final float MAX_VELOCITY = 2000f;
     public static final float SLINGSHOT_MULTIPLIER = 5.0f;

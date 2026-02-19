@@ -26,4 +26,9 @@ public class Main extends Game {
     public void dispose() {
         SceneManager.getInstance().dispose();
     }
+
+    @Override
+    public void resize(int width, int height) {
+        SceneManager.getInstance().resize(width, height);
+    }
 }

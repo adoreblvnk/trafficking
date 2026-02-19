@@ -44,19 +44,22 @@ public class PauseOverlay extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        
+
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0, 0, 0, LogicConstants.OVERLAY_ALPHA);
-        shapeRenderer.rect(0, 0, LogicConstants.SCREEN_WIDTH, LogicConstants.SCREEN_HEIGHT);
+        shapeRenderer.rect(0, 0, screenWidth, screenHeight);
         shapeRenderer.end();
-        
+
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
         batch.begin();
-        font.draw(batch, "PAUSED", LogicConstants.SCREEN_WIDTH / 2f - 50, LogicConstants.SCREEN_HEIGHT / 2f);
-        font.draw(batch, "Press ESC to Resume", LogicConstants.SCREEN_WIDTH / 2f - 100, LogicConstants.SCREEN_HEIGHT / 2f - 40);
+        font.draw(batch, "PAUSED", screenWidth / 2f - 50, screenHeight / 2f + 20);
+        font.draw(batch, "Press ESC to Resume", screenWidth / 2f - 100, screenHeight / 2f - 30);
         batch.end();
     }
 
