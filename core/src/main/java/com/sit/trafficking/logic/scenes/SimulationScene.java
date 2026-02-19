@@ -190,6 +190,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         if (keycode == Input.Keys.F9) {
             boolean loaded = world.loadSaveState(entityManager);
             if (loaded) {
+                createBorderWalls(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 Gdx.app.log("SimulationScene", "Quick Load Complete!");
             } else {
                 Gdx.app.log("SimulationScene", "Quick Load Failed - No save file found");
