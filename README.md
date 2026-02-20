@@ -21,6 +21,22 @@ A 2D traffic simulation game built with libGDX demonstrating Object-Oriented Pro
 .\gradlew.bat lwjgl3:run
 ```
 
+## GDX Liftoff Setup
+
+- Project Name: Trafficking
+- Package: com.sit.trafficking
+- Main Class: Main
+- Platforms Selected:
+  - Core
+  - Desktop (LWJGL3)
+- Extensions:
+  - Freetype
+- Template: Game
+- libGDX Version: 1.14.0
+- Java Version: 21
+
+A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+
 ### Controls
 
 - **Right-click**: Spawn a new vehicle
