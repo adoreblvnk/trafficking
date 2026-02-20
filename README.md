@@ -10,6 +10,9 @@ A 2D traffic simulation game built with libGDX demonstrating Object-Oriented Pro
 
 ```bash
 ./gradlew lwjgl3:run
+# ALSOFT_DRIVERS=pulse ./gradlew lwjgl3:run
+# ./gradlew lwjgl3:headlessTest # test
+# ./gradlew --stop # if audio is not working, force lwjgl3 restart
 ```
 
 **Windows:**
