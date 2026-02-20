@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * HEADLESS INTEGRATION TEST SUITE
- * Runs multiple scenarios to verify Engine API contracts and Fault Tolerance.
+ * automated testing for abstract engine using LibGDX headless mode for reproducible deterministic testing
  */
 public class HeadlessTestLauncher {
 
@@ -69,14 +69,14 @@ public class HeadlessTestLauncher {
             float dt = 0.016f; // Simulate 60 FPS lock
 
             try {
-                // RUN PIPELINE
+                // manually update the engine loop for headless testing
                 entityManager.update(dt);
                 movementManager.processMovement(entityManager.getEntities(), dt);
                 collisionManager.processCollisions(entityManager.getEntities());
 
                 frames++;
 
-                // EXECUTE CURRENT TEST
+                // execute current test
                 if (currentTestIndex < tests.size()) {
                     boolean completed = tests.get(currentTestIndex).run();
                     if (completed) {
@@ -97,7 +97,7 @@ public class HeadlessTestLauncher {
             }
         }
 
-        // --- TEST CASE 1: DOES PHYSICS INTEGRATE? ---
+        // AT01: test movement physics
         private boolean runTest_MovementPhysics() {
             if (frames == 1) {
                 System.out.println("[TEST 1] Movement Physics Check");
@@ -124,6 +124,7 @@ public class HeadlessTestLauncher {
         }
 
         // --- TEST CASE 2: DOES COLLISION STOP OBJECTS? ---
+        // AT02: test collision resolution with high-speed entity
         private boolean runTest_CollisionResolution() {
             if (frames == 1) {
                 System.out.println("[TEST 2] Collision Resolution Check");
@@ -134,7 +135,7 @@ public class HeadlessTestLauncher {
                 DynamicEntity car = new DynamicEntity("crasher", 0, 0, 10, 10);
                 car.setVelocity(500, 0); // High speed
                 
-                // Place wall at 20 (Car should hit it almost immediately)
+                // place wall at 20, car should hit it immediately
                 StaticEntity wall = new StaticEntity("wall", 20, 0, 10, 100);
 
                 entityManager.addEntity(car);
@@ -145,9 +146,7 @@ public class HeadlessTestLauncher {
                 DynamicEntity car = (DynamicEntity) entityManager.getEntity("crasher");
                 float actualX = car.getPosition().x;
                 float actualY = car.getPosition().y;
-                // The wall is at x=20. The car is width 10. 
-                // Using AABB resolution, the car should be stopped at x=10 (touching left side of wall).
-                // It definitely should NOT be at x=50+ (which it would be if no collision happened).
+                // with AABB resollution, the car should be stopped at x=10 (touching left side of wall)
                 System.out.println("   Actual:   Entity stopped at position (" + actualX + ", " + actualY + ")");
                 
                 if (actualX < 25) { 
@@ -161,12 +160,12 @@ public class HeadlessTestLauncher {
             return false;
         }
 
-        // --- TEST CASE 3: DOES ENGINE SURVIVE BAD DATA? ---
+        // AT03: test engine fault tolerance
         private boolean runTest_FaultTolerance() {
             if (frames == 1) {
                 System.out.println("[TEST 3] Fault Tolerance (Sad Path) Check");
                 
-                // 3a. Try adding NULL entity
+                // AT03: add null entity without crashing
                 System.out.println("   Test 3a: Add null entity to EntityManager");
                 System.out.println("   Expected: No exception thrown, null ignored");
                 try {
@@ -177,7 +176,7 @@ public class HeadlessTestLauncher {
                     throw new RuntimeException("FAIL: Crash on null add. Exception: " + e.getClass().getSimpleName() + " - " + e.getMessage());
                 }
 
-                // 3b. Try removing non-existent entity
+                // AT04: remove non-existent entity without crashing
                 System.out.println("   Test 3b: Remove non-existent entity 'ghost_entity'");
                 System.out.println("   Expected: No exception thrown, no-op behavior");
                 try {
