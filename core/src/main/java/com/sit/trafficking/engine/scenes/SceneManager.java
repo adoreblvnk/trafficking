@@ -8,15 +8,16 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
+// Owns the scene stack and global services, single entry point for scene transitions and overlays.
 public class SceneManager {
 
     private static SceneManager instance;
     private final Deque<AbstractScene> sceneStack;
-    
     private final SoundManager soundManager;
     private final IOManager ioManager;
     private final TimeManager timeManager;
 
+    // Singleton so one manager drives all scene state and avoids duplicate services.
     private SceneManager() {
         this.sceneStack = new ArrayDeque<>();
         this.soundManager = new SoundManager();
@@ -31,6 +32,7 @@ public class SceneManager {
         return instance;
     }
 
+    // Layers a scene on top of the current one and routes input to it (e.g. pause menu).
     public void pushOverlay(AbstractScene scene) {
         if (scene == null) {
             Gdx.app.error("SceneManager", "Cannot push null scene");
@@ -46,6 +48,7 @@ public class SceneManager {
         }
     }
 
+    // Removes the top scene and restores input to the one below (or clears if none).
     public void popScene() {
         if (!sceneStack.isEmpty()) {
             AbstractScene s = sceneStack.pop();
@@ -58,6 +61,7 @@ public class SceneManager {
         }
     }
 
+    // Replaces the entire stack with one scene for full transitions (e.g. from menu to game).
     public void setScene(AbstractScene scene) {
         if (scene == null) {
             Gdx.app.error("SceneManager", "Cannot set null scene");
@@ -73,14 +77,12 @@ public class SceneManager {
     public void render(float dt) {
         if (sceneStack.isEmpty()) return;
 
-        // Update top scene
         try {
             sceneStack.peek().update(dt);
         } catch (Exception e) {
             com.badlogic.gdx.Gdx.app.error("SceneManager", "Scene update failure", e);
         }
 
-        // Render from bottom to top
         Iterator<AbstractScene> it = sceneStack.descendingIterator();
         while (it.hasNext()) {
             try {
@@ -91,6 +93,7 @@ public class SceneManager {
         }
     }
 
+    // Cleans up all scenes and shared services on app exit.
     public void dispose() {
         while (!sceneStack.isEmpty()) {
             popScene();
@@ -110,6 +113,7 @@ public class SceneManager {
         return timeManager;
     }
 
+    // Forwards window resize to the active scene so projection stays correct.
     public void resize(int width, int height) {
         if (sceneStack.isEmpty()) return;
 

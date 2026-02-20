@@ -12,8 +12,9 @@ import com.sit.trafficking.engine.managers.EntityManager;
 import com.sit.trafficking.engine.managers.InputManager;
 import com.sit.trafficking.engine.managers.MovementManager;
 
+// Base for all game screens; provides shared managers and a consistent lifecycle.
 public abstract class AbstractScene {
-    
+
     protected EntityManager entityManager;
     protected CollisionManager collisionManager;
     protected InputManager inputManager;
@@ -21,6 +22,7 @@ public abstract class AbstractScene {
     protected ShapeRenderer shapeRenderer;
     protected BitmapFont font;
 
+    // Gives every scene its own manager instances for isolation and predictable teardown.
     public AbstractScene() {
         this.entityManager = new EntityManager();
         this.collisionManager = new CollisionManager();
@@ -31,6 +33,7 @@ public abstract class AbstractScene {
 
     public abstract void create();
 
+    // Centralizes font loading so scenes avoid duplicating TTF setup and paths.
     protected void loadFont(int size) {
         try {
             FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(EngineConstants.DEFAULT_FONT_PATH));
@@ -45,6 +48,7 @@ public abstract class AbstractScene {
     }
 
 
+    // Runs entity updates, then movement, then collision so physics and callbacks stay consistent.
     public void update(float dt) {
         try {
             entityManager.update(dt);
@@ -73,6 +77,7 @@ public abstract class AbstractScene {
         }
     }
 
+    // Releases GPU and font resources so scenes can be swapped without leaks.
     public void dispose() {
         try {
             shapeRenderer.dispose();
@@ -92,11 +97,12 @@ public abstract class AbstractScene {
     public EntityManager getEntityManager() {
         return entityManager;
     }
-    
+
     public InputManager getInputManager() {
         return inputManager;
     }
 
+    // Keeps rendering in screen coordinates when the window is resized.
     public void resize(int width, int height) {
         shapeRenderer.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, width, height));
     }
