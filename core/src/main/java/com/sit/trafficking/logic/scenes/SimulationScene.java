@@ -25,6 +25,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
     private boolean isDragging = false;
     private World world;
 
+    //initialises world data, load assets, and spawn initial entities
     @Override
     public void create() {
         world = new World();
@@ -47,6 +48,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         spawnDynamicEntity(screenW / 3f, screenH / 3f, true);
     }
 
+    //defines static collision boundaries around the screen edges
     private void createBorderWalls(float screenW, float screenH) {
         entityManager.removeEntity("border_top");
         entityManager.removeEntity("border_bottom");
@@ -60,6 +62,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         entityManager.addEntity(new StaticEntity("border_right", screenW - thickness, 0, thickness, screenH));
     }
 
+    //spawn entity with optional motion and collision logic
     private void spawnDynamicEntity(float x, float y, boolean giveInitialVelocity) {
         String id = "car_" + MathUtils.random(10000);
         DynamicEntity car = new DynamicEntity(id, x, y, LogicConstants.VEHICLE_SIZE, LogicConstants.VEHICLE_SIZE);
@@ -93,12 +96,14 @@ public class SimulationScene extends AbstractScene implements InputListener {
         entityManager.addEntity(car);
     }
 
+    //updates world physics and ensure entities remain within play area
     @Override
     public void update(float dt) {
         super.update(dt);
         clampEntitiesToBounds();
     }
 
+    //forces non-static entities to stay within the border wall margins
     private void clampEntitiesToBounds() {
         float screenW = Gdx.graphics.getWidth();
         float screenH = Gdx.graphics.getHeight();
@@ -118,7 +123,8 @@ public class SimulationScene extends AbstractScene implements InputListener {
             }
         }
     }
-
+    
+    //clears screen and draw entities plus active drag indicators
     @Override
     public void render() {
         // Clear screen
@@ -137,7 +143,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
     }
 
     // Input Listener Implementation
-
+    //select entities for dragging or spawn new ones on right click
     @Override
     public boolean onTouchDown(int x, int y, int ptr, int btn) {
         float worldY = Gdx.graphics.getHeight() - y;
@@ -166,6 +172,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         return false;
     }
 
+    //updates the position of the dragged entity relative to cursor movement
     @Override
     public boolean onDrag(int x, int y, int ptr) {
         if (isDragging && draggedEntity != null) {
@@ -177,6 +184,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         return false;
     }
 
+    //releases the dragged entity and apply slingshot velocity
     @Override
     public boolean onTouchUp(int x, int y, int ptr, int btn) {
         if (isDragging && draggedEntity != null) {
@@ -193,6 +201,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         return false;
     }
 
+    //processes global scene commands like pausing and save/load
     @Override
     public boolean onKeyDown(int keycode) {
         switch (keycode) {
@@ -221,6 +230,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         }
     }
 
+    //recalculates borders and clamp entity positions when the window size changes
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);

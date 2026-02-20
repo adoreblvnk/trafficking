@@ -13,6 +13,7 @@ public class MenuScene extends AbstractScene implements InputListener {
 
     private SpriteBatch batch;
 
+    //initializes resources, load menu-specific fonts, and register for input events
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -24,6 +25,7 @@ public class MenuScene extends AbstractScene implements InputListener {
     public void update(float dt) {
     }
 
+    //handles scene transitions based on keyboard input
     @Override
     public boolean onKeyDown(int keycode) {
         if (keycode == Input.Keys.ENTER) {
@@ -33,7 +35,7 @@ public class MenuScene extends AbstractScene implements InputListener {
         return false;
     }
 
-    // Required Interface Methods
+    //required interface methods - unused for specific scene
     @Override
     public boolean onTouchDown(int x, int y, int ptr, int btn) { return false; }
 
@@ -43,6 +45,7 @@ public class MenuScene extends AbstractScene implements InputListener {
     @Override
     public boolean onTouchUp(int x, int y, int ptr, int btn) { return false; }
 
+    //draws the menu title and navigation instructions to the screen
     @Override
     public void render() {
         ScreenUtils.clear(0.1f, 0.1f, 0.1f, 1);
@@ -56,6 +59,7 @@ public class MenuScene extends AbstractScene implements InputListener {
         batch.end();
     }
 
+    //cleans up native resources and call superclass disposal logic
     @Override
     public void dispose() {
         super.dispose();

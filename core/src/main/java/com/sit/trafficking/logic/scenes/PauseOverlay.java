@@ -14,6 +14,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
 
     private SpriteBatch batch;
 
+    //sets up rendering tools and register for input events
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -34,7 +35,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
         return false;
     }
 
-    // Implement required interface methods (can be empty/false)
+    //unused touch interactions for the pause screen
     @Override
     public boolean onTouchDown(int x, int y, int ptr, int btn) { return false; }
     @Override
@@ -42,6 +43,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     @Override
     public boolean onTouchUp(int x, int y, int ptr, int btn) { return false; }
 
+    //renders a semi-transparent background and pause text
     @Override
     public void render() {
         float screenWidth = Gdx.graphics.getWidth();
@@ -63,6 +65,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
         batch.end();
     }
 
+    //disposes of batch resources and call super disposal
     @Override
     public void dispose() {
         super.dispose();
