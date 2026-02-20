@@ -10,7 +10,7 @@ import java.util.Map;
  * Manages audio resource lifecycle with lazy loading and centralized playback control.
  */
 public class SoundManager {
-    
+
     private final Map<String, Sound> soundBank;
 
     public SoundManager() {

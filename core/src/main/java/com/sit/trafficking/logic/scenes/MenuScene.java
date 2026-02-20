@@ -12,7 +12,7 @@ import com.sit.trafficking.logic.LogicConstants;
 public class MenuScene extends AbstractScene implements InputListener {
 
     private SpriteBatch batch;
-    
+
     @Override
     public void create() {
         batch = new SpriteBatch();

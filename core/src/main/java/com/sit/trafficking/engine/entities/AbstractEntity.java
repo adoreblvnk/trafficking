@@ -89,7 +89,7 @@ public abstract class AbstractEntity implements ICollidable {
     public int getZIndex() {
         return zIndex;
     }
-    
+
     //updates the entity's render layer
     public void setZIndex(int zIndex) {
         this.zIndex = zIndex;

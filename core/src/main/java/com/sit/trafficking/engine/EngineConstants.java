@@ -1,10 +1,9 @@
 package com.sit.trafficking.engine;
 
-
 //constants are strictly for the Abstract Engine alone
 //defines both physics defaults and unit scales
 public class EngineConstants {
-    
+
     //pixels per meter - 1:1 ratio
     public static final float PPM = 1.0f;
 

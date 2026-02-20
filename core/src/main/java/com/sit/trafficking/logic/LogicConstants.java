@@ -34,7 +34,7 @@ public class LogicConstants {
     public static final float VEHICLE_SIZE = 40f;
     public static final float NUDGE_OFFSET = 60f;
     public static final float BORDER_WALL_THICKNESS = 20f;
-    
+
     // Menu Layout
     public static final float MENU_TITLE_X = 100f;
     public static final float MENU_TITLE_Y = 400f;

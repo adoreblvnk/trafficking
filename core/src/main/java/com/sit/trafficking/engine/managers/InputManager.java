@@ -62,7 +62,7 @@ public class InputManager extends InputAdapter {
         }
         return false;
     }
-    
+
     // Implemented to satisfy UML even if Interface doesn't use it yet
     @Override
     public boolean keyDown(int keycode) {

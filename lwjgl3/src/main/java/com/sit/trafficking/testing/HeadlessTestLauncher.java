@@ -21,8 +21,8 @@ public class HeadlessTestLauncher {
 
     public static void main(String[] args) {
         HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
-        config.updatesPerSecond = 60; 
-        
+        config.updatesPerSecond = 60;
+
         System.out.println("====================================================");
         System.out.println("   STARTING ABSTRACT ENGINE INTEGRATION SUITE");
         System.out.println("====================================================");
@@ -40,11 +40,11 @@ public class HeadlessTestLauncher {
         EntityManager entityManager;
         MovementManager movementManager;
         CollisionManager collisionManager;
-        
+
         int frames = 0;
         int currentTestIndex = 0;
         boolean isExiting = false;
-        
+
         List<TestCase> tests = new ArrayList<>();
 
         @Override
@@ -65,7 +65,7 @@ public class HeadlessTestLauncher {
         @Override
         public void render() {
             if (isExiting) return;
-            
+
             float dt = 0.016f; // Simulate 60 FPS lock
 
             try {
@@ -104,7 +104,7 @@ public class HeadlessTestLauncher {
                 System.out.println("   Input:    Entity 'mover' at position (0, 0) with velocity (100, 0) px/s");
                 System.out.println("   Expected: Position.x > 0 after 10 frames (160ms simulated)");
                 DynamicEntity car = new DynamicEntity("mover", 0, 0, 10, 10);
-                car.setVelocity(100, 0); 
+                car.setVelocity(100, 0);
                 entityManager.addEntity(car);
             }
 
@@ -123,7 +123,6 @@ public class HeadlessTestLauncher {
             return false;
         }
 
-        // --- TEST CASE 2: DOES COLLISION STOP OBJECTS? ---
         // AT02: test collision resolution with high-speed entity
         private boolean runTest_CollisionResolution() {
             if (frames == 1) {
@@ -134,7 +133,7 @@ public class HeadlessTestLauncher {
                 // Place car at 0, moving right
                 DynamicEntity car = new DynamicEntity("crasher", 0, 0, 10, 10);
                 car.setVelocity(500, 0); // High speed
-                
+
                 // place wall at 20, car should hit it immediately
                 StaticEntity wall = new StaticEntity("wall", 20, 0, 10, 100);
 
@@ -148,8 +147,8 @@ public class HeadlessTestLauncher {
                 float actualY = car.getPosition().y;
                 // with AABB resollution, the car should be stopped at x=10 (touching left side of wall)
                 System.out.println("   Actual:   Entity stopped at position (" + actualX + ", " + actualY + ")");
-                
-                if (actualX < 25) { 
+
+                if (actualX < 25) {
                     float distanceFromWall = 20 - actualX;
                     System.out.println("   ->   PASS: Collision resolved - entity stopped " + distanceFromWall + " px from wall origin");
                     return true;
@@ -164,7 +163,7 @@ public class HeadlessTestLauncher {
         private boolean runTest_FaultTolerance() {
             if (frames == 1) {
                 System.out.println("[TEST 3] Fault Tolerance (Sad Path) Check");
-                
+
                 // AT03: add null entity without crashing
                 System.out.println("   Test 3a: Add null entity to EntityManager");
                 System.out.println("   Expected: No exception thrown, null ignored");

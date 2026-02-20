@@ -75,7 +75,7 @@ public class EntityManager {
         List<AbstractEntity> renderList = new ArrayList<>(entityList);
         // Sorts by z-index before rendering to control draw order
         renderList.sort(Comparator.comparingInt(AbstractEntity::getZIndex));
-        
+
         for (AbstractEntity e : renderList) {
             e.render(sr);
         }

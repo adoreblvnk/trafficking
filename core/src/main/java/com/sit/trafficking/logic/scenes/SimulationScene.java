@@ -78,7 +78,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
             float speed = MathUtils.random(100f, 300f);
             float angle = MathUtils.random(0, 360);
             car.setVelocity(MathUtils.cosDeg(angle) * speed, MathUtils.sinDeg(angle) * speed);
-            
+
             // Logic Injection: Listener
             car.setCollisionListener((source, target) -> {
                 if (source instanceof DynamicEntity) {
@@ -127,7 +127,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         super.render();
-        
+
         // Draw drag line
         if (isDragging && draggedEntity != null) {
             shapeRenderer.setColor(Color.RED);
@@ -183,7 +183,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
             if (draggedEntity instanceof DynamicEntity) {
                 Vector2 throwVel = new Vector2(dragStartPos).sub(dragCurrentPos).scl(LogicConstants.SLINGSHOT_MULTIPLIER);
                 // Clamp max speed
-                throwVel.clamp(0, LogicConstants.MAX_VELOCITY); 
+                throwVel.clamp(0, LogicConstants.MAX_VELOCITY);
                 ((DynamicEntity) draggedEntity).setVelocity(throwVel.x, throwVel.y);
             }
             isDragging = false;
@@ -195,32 +195,30 @@ public class SimulationScene extends AbstractScene implements InputListener {
 
     @Override
     public boolean onKeyDown(int keycode) {
-        if (keycode == Input.Keys.ESCAPE) {
-            SceneManager.getInstance().pushOverlay(new PauseOverlay());
-            return true;
+        switch (keycode) {
+            case Input.Keys.ESCAPE:
+                SceneManager.getInstance().pushOverlay(new PauseOverlay());
+                return true;
+            case Input.Keys.F5:
+                boolean saved = world.saveCurrentState(entityManager);
+                if (saved) {
+                    Gdx.app.log("SimulationScene", "Quick Save Complete!");
+                } else {
+                    Gdx.app.error("SimulationScene", "Quick Save Failed!");
+                }
+                return true;
+            case Input.Keys.F9:
+                boolean loaded = world.loadSaveState(entityManager);
+                if (loaded) {
+                    createBorderWalls(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                    Gdx.app.log("SimulationScene", "Quick Load Complete!");
+                } else {
+                    Gdx.app.log("SimulationScene", "Quick Load Failed - No save file found");
+                }
+                return true;
+            default:
+                return false;
         }
-        
-        if (keycode == Input.Keys.F5) {
-            boolean saved = world.saveCurrentState(entityManager);
-            if (saved) {
-                Gdx.app.log("SimulationScene", "Quick Save Complete!");
-            } else {
-                Gdx.app.error("SimulationScene", "Quick Save Failed!");
-            }
-            return true;
-        }
-
-        if (keycode == Input.Keys.F9) {
-            boolean loaded = world.loadSaveState(entityManager);
-            if (loaded) {
-                createBorderWalls(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-                Gdx.app.log("SimulationScene", "Quick Load Complete!");
-            } else {
-                Gdx.app.log("SimulationScene", "Quick Load Failed - No save file found");
-            }
-            return true;
-        }
-        return false;
     }
 
     @Override

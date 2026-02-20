@@ -37,10 +37,7 @@ public class World {
     public boolean loadSaveState(EntityManager em) {
         Optional<String> jsonString = SceneManager.getInstance().getIOManager().readSaveFile(LogicConstants.SAVE_FILE_NAME);
         if (jsonString.isPresent()) {
-            // Clear existing logic - simple clear by ID iteration since we don't have
-            // clear()
-            // We need a list copy to avoid concurrent modification exception if remove
-            // modifies the collection
+            // create a separate list to avoid concurrent modification of `em`
             java.util.List<AbstractEntity> entities = new java.util.ArrayList<>(em.getEntities());
             for (AbstractEntity e : entities) {
                 em.removeEntity(e.getId());
