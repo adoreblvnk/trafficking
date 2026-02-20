@@ -27,19 +27,6 @@ A 2D traffic simulation game built with libGDX demonstrating Object-Oriented Pro
 - **F9**: Quick load
 - **ENTER**: Start game (from menu)
 
-## Project Overview
-
-This project demonstrates a clean separation between a reusable game engine (`engine/`) and game-specific logic (`logic/`). The engine provides a foundation for entity management, collision detection, input handling, and scene management that could be reused for other games.
-
-### Key Features
-
-- **Entity System**: Hierarchical entity management with static and dynamic entities
-- **Collision Detection**: AABB-based collision system with callbacks
-- **Scene Management**: Stack-based scene system supporting overlays (e.g., pause menu)
-- **Save/Load System**: Persistent game state management
-- **Input Handling**: Event-driven input system with listener pattern
-- **Automated Testing**: Headless integration tests for engine components
-
 ## Architecture
 
 ### Project Structure
@@ -56,46 +43,6 @@ core/src/main/java/com/sit/trafficking/
     ├── factories/       # World factory for save/load
     └── LogicConstants.java
 ```
-
-### OOP Concepts Demonstrated
-
-#### 1. **Inheritance**
-
-- `AbstractEntity` → `StaticEntity` / `DynamicEntity`
-- `AbstractScene` → `MenuScene` / `SimulationScene` / `PauseOverlay`
-- `Game` → `Main`
-
-#### 2. **Interfaces & Polymorphism**
-
-- `ICollidable`: Enables collision detection for any entity
-- `Movable`: Enables velocity-based movement
-- `InputListener`: Handles user input events
-- `CollisionListener`: Observes collision events (Observer pattern)
-
-#### 3. **Design Patterns**
-
-- **Singleton**: `SceneManager.getInstance()` - single instance manages all scenes
-- **Factory**: `World` class creates and loads game states
-- **Observer**: `CollisionListener` for event-driven collision handling
-- **Manager Pattern**: Separate managers for entities, collisions, input, movement
-
-#### 4. **Encapsulation**
-
-- Managers encapsulate system logic
-- Entities encapsulate state and behavior
-- Private fields with controlled access via public methods
-
-#### 5. **Abstraction**
-
-- Engine layer is abstract and reusable
-- Logic layer implements game-specific behavior
-- Clear separation of concerns
-
-## Documentation
-
-- **[Presentation Guide](./docs/PRESENTATION_GUIDE.md)**: Detailed guide for grading and code review
-- Code comments explain the _purpose_ of code, not just what it does
-- JavaDoc comments on interfaces and key classes
 
 ## Testing
 
