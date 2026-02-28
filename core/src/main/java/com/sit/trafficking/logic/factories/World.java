@@ -15,18 +15,23 @@ import com.sit.trafficking.engine.entities.DynamicEntity;
 import com.sit.trafficking.engine.entities.StaticEntity;
 import com.sit.trafficking.engine.interfaces.Movable;
 import com.sit.trafficking.engine.managers.EntityManager;
-import com.sit.trafficking.engine.scenes.SceneManager;
+import com.sit.trafficking.engine.managers.IOManager;
+import com.sit.trafficking.engine.managers.SoundManager;
 import com.sit.trafficking.logic.LogicConstants;
 
 public class World {
 
     private static final String TAG = "World";
+    private final IOManager ioManager;
+    private final SoundManager soundManager;
 
-    public World() {
+    public World(IOManager ioManager, SoundManager soundManager) {
+        this.ioManager = ioManager;
+        this.soundManager = soundManager;
     }
 
     public boolean loadWorld(EntityManager em, String jsonPath) {
-        Optional<String> jsonString = SceneManager.getInstance().getIOManager().readTextFile(jsonPath);
+        Optional<String> jsonString = ioManager.readTextFile(jsonPath);
         if (jsonString.isPresent()) {
             parseAndCreate(jsonString.get(), em);
             return true;
@@ -36,7 +41,7 @@ public class World {
     }
 
     public boolean loadSaveState(EntityManager em) {
-        Optional<String> jsonString = SceneManager.getInstance().getIOManager().readSaveFile(LogicConstants.SAVE_FILE_NAME);
+        Optional<String> jsonString = ioManager.readSaveFile(LogicConstants.SAVE_FILE_NAME);
         if (jsonString.isPresent()) {
             // create a separate list to avoid concurrent modification of `em`
             java.util.List<AbstractEntity> entities = new java.util.ArrayList<>(em.getEntities());
@@ -91,7 +96,7 @@ public class World {
             saveData.entities = dataList;
 
             String saveString = json.toJson(saveData);
-            boolean success = SceneManager.getInstance().getIOManager().writeSaveFile(LogicConstants.SAVE_FILE_NAME, saveString);
+            boolean success = ioManager.writeSaveFile(LogicConstants.SAVE_FILE_NAME, saveString);
             if (success) {
                 Gdx.app.log(TAG, "Save state saved successfully");
             } else {
@@ -177,7 +182,7 @@ public class World {
                             if (source instanceof Movable) {
                                 Movable m = (Movable) source;
                                 if (m.getVelocity().len2() > LogicConstants.CRASH_SOUND_THRESHOLD) {
-                                    SceneManager.getInstance().getSoundManager().playSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.DEFAULT_VOLUME);
+                                    soundManager.playSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.DEFAULT_VOLUME);
                                 }
                             }
                         });

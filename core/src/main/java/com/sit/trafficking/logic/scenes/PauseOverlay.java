@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.sit.trafficking.engine.interfaces.InputListener;
+import com.sit.trafficking.engine.managers.CollisionManager;
+import com.sit.trafficking.engine.managers.EntityManager;
+import com.sit.trafficking.engine.managers.InputManager;
+import com.sit.trafficking.engine.managers.MovementManager;
 import com.sit.trafficking.engine.scenes.AbstractScene;
 import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.logic.LogicConstants;
@@ -13,6 +17,12 @@ import com.sit.trafficking.logic.LogicConstants;
 public class PauseOverlay extends AbstractScene implements InputListener {
 
     private SpriteBatch batch;
+    private final SceneManager sceneManager;
+
+    public PauseOverlay(SceneManager sceneManager, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager, ShapeRenderer shapeRenderer) {
+        super(entityManager, collisionManager, inputManager, movementManager, shapeRenderer);
+        this.sceneManager = sceneManager;
+    }
 
     //sets up rendering tools and register for input events
     @Override
@@ -29,7 +39,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     @Override
     public boolean onKeyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE) {
-            SceneManager.getInstance().popScene();
+            sceneManager.popScene();
             return true;
         }
         return false;

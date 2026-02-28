@@ -23,12 +23,12 @@ public abstract class AbstractScene {
     private BitmapFont font;
 
     // Gives every scene its own manager instances for isolation and predictable teardown.
-    public AbstractScene() {
-        this.entityManager = new EntityManager();
-        this.collisionManager = new CollisionManager();
-        this.inputManager = new InputManager();
-        this.movementManager = new MovementManager();
-        this.shapeRenderer = new ShapeRenderer();
+    public AbstractScene(EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager, ShapeRenderer shapeRenderer) {
+        this.entityManager = entityManager;
+        this.collisionManager = collisionManager;
+        this.inputManager = inputManager;
+        this.movementManager = movementManager;
+        this.shapeRenderer = shapeRenderer;
     }
 
     public abstract void create();
@@ -79,10 +79,12 @@ public abstract class AbstractScene {
 
     // Releases GPU and font resources so scenes can be swapped without leaks.
     public void dispose() {
-        try {
-            shapeRenderer.dispose();
-        } catch (Exception e) {
-            Gdx.app.error("AbstractScene", "Failed to dispose ShapeRenderer", e);
+        if (shapeRenderer != null) {
+            try {
+                shapeRenderer.dispose();
+            } catch (Exception e) {
+                Gdx.app.error("AbstractScene", "Failed to dispose ShapeRenderer", e);
+            }
         }
 
         if (font != null) {

@@ -14,8 +14,13 @@ import com.sit.trafficking.engine.interfaces.InputListener;
 import com.sit.trafficking.engine.scenes.AbstractScene;
 import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.logic.LogicConstants;
+import com.sit.trafficking.engine.managers.CollisionManager;
+import com.sit.trafficking.engine.managers.EntityManager;
+import com.sit.trafficking.engine.managers.InputManager;
+import com.sit.trafficking.engine.managers.MovementManager;
 
 import com.sit.trafficking.logic.factories.World;
+import com.sit.trafficking.logic.factories.SceneFactory;
 
 public class SimulationScene extends AbstractScene implements InputListener {
 
@@ -24,16 +29,24 @@ public class SimulationScene extends AbstractScene implements InputListener {
     private Vector2 dragCurrentPos = new Vector2();
     private boolean isDragging = false;
     private World world;
+    private final SceneManager sceneManager;
+    private final SceneFactory sceneFactory;
+
+    public SimulationScene(SceneManager sceneManager, SceneFactory sceneFactory, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager, ShapeRenderer shapeRenderer) {
+        super(entityManager, collisionManager, inputManager, movementManager, shapeRenderer);
+        this.sceneManager = sceneManager;
+        this.sceneFactory = sceneFactory;
+    }
 
     //initialises world data, load assets, and spawn initial entities
     @Override
     public void create() {
-        world = new World();
+        world = new World(sceneManager.getIOManager(), sceneManager.getSoundManager());
 
         Gdx.input.setInputProcessor(getInputManager());
         getInputManager().addListener(this);
 
-        SceneManager.getInstance().getSoundManager().loadSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.SOUND_CRASH_PATH);
+        sceneManager.getSoundManager().loadSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.SOUND_CRASH_PATH);
 
         boolean worldLoaded = world.loadWorld(getEntityManager(), LogicConstants.DEFAULT_WORLD_PATH);
         if (!worldLoaded) {
@@ -87,7 +100,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
                 if (source instanceof DynamicEntity) {
                      DynamicEntity m = (DynamicEntity) source;
                      if (m.getVelocity().len2() > LogicConstants.CRASH_SOUND_THRESHOLD) {
-                         SceneManager.getInstance().getSoundManager().playSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.DEFAULT_VOLUME);
+                         sceneManager.getSoundManager().playSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.DEFAULT_VOLUME);
                      }
                 }
             });
@@ -206,7 +219,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
     public boolean onKeyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                SceneManager.getInstance().pushOverlay(new PauseOverlay());
+                sceneManager.pushOverlay(sceneFactory.createPauseOverlay());
                 return true;
             case Input.Keys.F5:
                 boolean saved = world.saveCurrentState(getEntityManager());

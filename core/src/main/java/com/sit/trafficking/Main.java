@@ -2,8 +2,11 @@ package com.sit.trafficking;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.sit.trafficking.engine.managers.IOManager;
+import com.sit.trafficking.engine.managers.SoundManager;
+import com.sit.trafficking.engine.managers.TimeManager;
 import com.sit.trafficking.engine.scenes.SceneManager;
-import com.sit.trafficking.logic.scenes.MenuScene;
+import com.sit.trafficking.logic.factories.SceneFactory;
 
 /**
  * GameMaster (Main)
@@ -11,24 +14,33 @@ import com.sit.trafficking.logic.scenes.MenuScene;
  */
 public class Main extends Game {
 
+    private SceneManager sceneManager;
+
     @Override
     public void create() {
+        SoundManager soundManager = new SoundManager();
+        IOManager ioManager = new IOManager();
+        TimeManager timeManager = new TimeManager();
+        sceneManager = new SceneManager(soundManager, ioManager, timeManager);
+        
+        SceneFactory sceneFactory = new SceneFactory(sceneManager);
+
         // Start with Menu
-        SceneManager.getInstance().pushOverlay(new MenuScene());
+        sceneManager.pushOverlay(sceneFactory.createMenuScene());
     }
 
     @Override
     public void render() {
-        SceneManager.getInstance().render(Gdx.graphics.getDeltaTime());
+        sceneManager.render(Gdx.graphics.getDeltaTime());
     }
 
     @Override
     public void dispose() {
-        SceneManager.getInstance().dispose();
+        sceneManager.dispose();
     }
 
     @Override
     public void resize(int width, int height) {
-        SceneManager.getInstance().resize(width, height);
+        sceneManager.resize(width, height);
     }
 }

@@ -11,25 +11,16 @@ import java.util.Iterator;
 // Owns the scene stack and global services, single entry point for scene transitions and overlays.
 public class SceneManager {
 
-    private static SceneManager instance;
     private final Deque<AbstractScene> sceneStack;
     private final SoundManager soundManager;
     private final IOManager ioManager;
     private final TimeManager timeManager;
 
-    // Singleton so one manager drives all scene state and avoids duplicate services.
-    private SceneManager() {
+    public SceneManager(SoundManager soundManager, IOManager ioManager, TimeManager timeManager) {
         this.sceneStack = new ArrayDeque<>();
-        this.soundManager = new SoundManager();
-        this.ioManager = new IOManager();
-        this.timeManager = new TimeManager();
-    }
-
-    public static SceneManager getInstance() {
-        if (instance == null) {
-            instance = new SceneManager();
-        }
-        return instance;
+        this.soundManager = soundManager;
+        this.ioManager = ioManager;
+        this.timeManager = timeManager;
     }
 
     // Layers a scene on top of the current one and routes input to it (e.g. pause menu).

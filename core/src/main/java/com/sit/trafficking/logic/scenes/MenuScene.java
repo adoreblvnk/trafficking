@@ -4,14 +4,28 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.sit.trafficking.engine.interfaces.InputListener;
+import com.sit.trafficking.engine.managers.CollisionManager;
+import com.sit.trafficking.engine.managers.EntityManager;
+import com.sit.trafficking.engine.managers.InputManager;
+import com.sit.trafficking.engine.managers.MovementManager;
 import com.sit.trafficking.engine.scenes.AbstractScene;
 import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.logic.LogicConstants;
+import com.sit.trafficking.logic.factories.SceneFactory;
 
 public class MenuScene extends AbstractScene implements InputListener {
 
     private SpriteBatch batch;
+    private final SceneManager sceneManager;
+    private final SceneFactory sceneFactory;
+
+    public MenuScene(SceneManager sceneManager, SceneFactory sceneFactory, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager, ShapeRenderer shapeRenderer) {
+        super(entityManager, collisionManager, inputManager, movementManager, shapeRenderer);
+        this.sceneManager = sceneManager;
+        this.sceneFactory = sceneFactory;
+    }
 
     //initializes resources, load menu-specific fonts, and register for input events
     @Override
@@ -29,7 +43,7 @@ public class MenuScene extends AbstractScene implements InputListener {
     @Override
     public boolean onKeyDown(int keycode) {
         if (keycode == Input.Keys.ENTER) {
-            SceneManager.getInstance().setScene(new SimulationScene());
+            sceneManager.setScene(sceneFactory.createSimulationScene());
             return true;
         }
         return false;
