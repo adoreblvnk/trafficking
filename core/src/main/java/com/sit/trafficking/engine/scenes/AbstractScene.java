@@ -15,12 +15,12 @@ import com.sit.trafficking.engine.managers.MovementManager;
 // Base for all game screens; provides shared managers and a consistent lifecycle.
 public abstract class AbstractScene {
 
-    protected EntityManager entityManager;
-    protected CollisionManager collisionManager;
-    protected InputManager inputManager;
-    protected MovementManager movementManager;
-    protected ShapeRenderer shapeRenderer;
-    protected BitmapFont font;
+    private EntityManager entityManager;
+    private CollisionManager collisionManager;
+    private InputManager inputManager;
+    private MovementManager movementManager;
+    private ShapeRenderer shapeRenderer;
+    private BitmapFont font;
 
     // Gives every scene its own manager instances for isolation and predictable teardown.
     public AbstractScene() {
@@ -100,6 +100,22 @@ public abstract class AbstractScene {
 
     public InputManager getInputManager() {
         return inputManager;
+    }
+
+    public CollisionManager getCollisionManager() {
+        return collisionManager;
+    }
+
+    public MovementManager getMovementManager() {
+        return movementManager;
+    }
+
+    public ShapeRenderer getShapeRenderer() {
+        return shapeRenderer;
+    }
+
+    public BitmapFont getFont() {
+        return font;
     }
 
     // Keeps rendering in screen coordinates when the window is resized.

@@ -19,7 +19,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     public void create() {
         batch = new SpriteBatch();
         loadFont(LogicConstants.FONT_SIZE_MENU);
-        inputManager.addListener(this);
+        getInputManager().addListener(this);
     }
 
     @Override
@@ -52,16 +52,16 @@ public class PauseOverlay extends AbstractScene implements InputListener {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0, 0, 0, LogicConstants.OVERLAY_ALPHA);
-        shapeRenderer.rect(0, 0, screenWidth, screenHeight);
-        shapeRenderer.end();
+        getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
+        getShapeRenderer().setColor(0, 0, 0, LogicConstants.OVERLAY_ALPHA);
+        getShapeRenderer().rect(0, 0, screenWidth, screenHeight);
+        getShapeRenderer().end();
 
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
         batch.begin();
-        font.draw(batch, "PAUSED", screenWidth / 2f - 50, screenHeight / 2f + 20);
-        font.draw(batch, "Press ESC to Resume", screenWidth / 2f - 100, screenHeight / 2f - 30);
+        getFont().draw(batch, "PAUSED", screenWidth / 2f - 50, screenHeight / 2f + 20);
+        getFont().draw(batch, "Press ESC to Resume", screenWidth / 2f - 100, screenHeight / 2f - 30);
         batch.end();
     }
 

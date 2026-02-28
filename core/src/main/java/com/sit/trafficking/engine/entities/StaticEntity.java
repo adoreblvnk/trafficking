@@ -7,7 +7,7 @@ public class StaticEntity extends AbstractEntity {
 
     public StaticEntity(String id, float x, float y, float w, float h) {
         super(id, x, y, w, h);
-        this.color = Color.GRAY;
+        setColor(Color.GRAY);
     }
 
     //skipped as static entities don't change between frames
@@ -19,8 +19,8 @@ public class StaticEntity extends AbstractEntity {
     //default rendering - subclasses can override
     @Override
     public void render(ShapeRenderer sr) {
-        sr.setColor(color);
-        sr.rect(position.x, position.y, width, height);
+        sr.setColor(getColor());
+        sr.rect(getPosition().x, getPosition().y, getWidth(), getHeight());
     }
 
     @Override

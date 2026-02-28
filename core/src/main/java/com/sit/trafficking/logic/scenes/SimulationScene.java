@@ -30,12 +30,12 @@ public class SimulationScene extends AbstractScene implements InputListener {
     public void create() {
         world = new World();
 
-        Gdx.input.setInputProcessor(inputManager);
-        inputManager.addListener(this);
+        Gdx.input.setInputProcessor(getInputManager());
+        getInputManager().addListener(this);
 
         SceneManager.getInstance().getSoundManager().loadSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.SOUND_CRASH_PATH);
 
-        boolean worldLoaded = world.loadWorld(entityManager, LogicConstants.DEFAULT_WORLD_PATH);
+        boolean worldLoaded = world.loadWorld(getEntityManager(), LogicConstants.DEFAULT_WORLD_PATH);
         if (!worldLoaded) {
             Gdx.app.log("SimulationScene", "Failed to load default world, starting with empty world");
         }
@@ -50,16 +50,16 @@ public class SimulationScene extends AbstractScene implements InputListener {
 
     //defines static collision boundaries around the screen edges
     private void createBorderWalls(float screenW, float screenH) {
-        entityManager.removeEntity("border_top");
-        entityManager.removeEntity("border_bottom");
-        entityManager.removeEntity("border_left");
-        entityManager.removeEntity("border_right");
+        getEntityManager().removeEntity("border_top");
+        getEntityManager().removeEntity("border_bottom");
+        getEntityManager().removeEntity("border_left");
+        getEntityManager().removeEntity("border_right");
 
         float thickness = LogicConstants.BORDER_WALL_THICKNESS;
-        entityManager.addEntity(new StaticEntity("border_top", 0, screenH - thickness, screenW, thickness));
-        entityManager.addEntity(new StaticEntity("border_bottom", 0, 0, screenW, thickness));
-        entityManager.addEntity(new StaticEntity("border_left", 0, 0, thickness, screenH));
-        entityManager.addEntity(new StaticEntity("border_right", screenW - thickness, 0, thickness, screenH));
+        getEntityManager().addEntity(new StaticEntity("border_top", 0, screenH - thickness, screenW, thickness));
+        getEntityManager().addEntity(new StaticEntity("border_bottom", 0, 0, screenW, thickness));
+        getEntityManager().addEntity(new StaticEntity("border_left", 0, 0, thickness, screenH));
+        getEntityManager().addEntity(new StaticEntity("border_right", screenW - thickness, 0, thickness, screenH));
     }
 
     //spawn entity with optional motion and collision logic
@@ -93,7 +93,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
             });
         }
 
-        entityManager.addEntity(car);
+        getEntityManager().addEntity(car);
     }
 
     //updates world physics and ensure entities remain within play area
@@ -111,7 +111,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         float maxX = screenW - margin;
         float maxY = screenH - margin;
 
-        for (AbstractEntity e : entityManager.getEntities()) {
+        for (AbstractEntity e : getEntityManager().getEntities()) {
             if (e.getId().startsWith("border_") || e.isStatic()) continue;
 
             Vector2 pos = e.getPosition();
@@ -131,15 +131,15 @@ public class SimulationScene extends AbstractScene implements InputListener {
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
         super.render();
 
         // Draw drag line
         if (isDragging && draggedEntity != null) {
-            shapeRenderer.setColor(Color.RED);
-            shapeRenderer.rectLine(dragStartPos, dragCurrentPos, 2);
+            getShapeRenderer().setColor(Color.RED);
+            getShapeRenderer().rectLine(dragStartPos, dragCurrentPos, 2);
         }
-        shapeRenderer.end();
+        getShapeRenderer().end();
     }
 
     // Input Listener Implementation
@@ -155,7 +155,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
 
         if (btn == Input.Buttons.LEFT) {
             // Check intersection
-            for (AbstractEntity e : entityManager.getEntities()) {
+            for (AbstractEntity e : getEntityManager().getEntities()) {
                 if (e.getBounds().contains(x, worldY) && !e.isStatic()) {
                     draggedEntity = e;
                     isDragging = true;
@@ -209,7 +209,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
                 SceneManager.getInstance().pushOverlay(new PauseOverlay());
                 return true;
             case Input.Keys.F5:
-                boolean saved = world.saveCurrentState(entityManager);
+                boolean saved = world.saveCurrentState(getEntityManager());
                 if (saved) {
                     Gdx.app.log("SimulationScene", "Quick Save Complete!");
                 } else {
@@ -217,7 +217,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
                 }
                 return true;
             case Input.Keys.F9:
-                boolean loaded = world.loadSaveState(entityManager);
+                boolean loaded = world.loadSaveState(getEntityManager());
                 if (loaded) {
                     createBorderWalls(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                     Gdx.app.log("SimulationScene", "Quick Load Complete!");
@@ -235,22 +235,22 @@ public class SimulationScene extends AbstractScene implements InputListener {
     public void resize(int width, int height) {
         super.resize(width, height);
 
-        entityManager.removeEntity("border_top");
-        entityManager.removeEntity("border_bottom");
-        entityManager.removeEntity("border_left");
-        entityManager.removeEntity("border_right");
+        getEntityManager().removeEntity("border_top");
+        getEntityManager().removeEntity("border_bottom");
+        getEntityManager().removeEntity("border_left");
+        getEntityManager().removeEntity("border_right");
 
         float thickness = LogicConstants.BORDER_WALL_THICKNESS;
-        entityManager.addEntity(new StaticEntity("border_top", 0, height - thickness, width, thickness));
-        entityManager.addEntity(new StaticEntity("border_bottom", 0, 0, width, thickness));
-        entityManager.addEntity(new StaticEntity("border_left", 0, 0, thickness, height));
-        entityManager.addEntity(new StaticEntity("border_right", width - thickness, 0, thickness, height));
+        getEntityManager().addEntity(new StaticEntity("border_top", 0, height - thickness, width, thickness));
+        getEntityManager().addEntity(new StaticEntity("border_bottom", 0, 0, width, thickness));
+        getEntityManager().addEntity(new StaticEntity("border_left", 0, 0, thickness, height));
+        getEntityManager().addEntity(new StaticEntity("border_right", width - thickness, 0, thickness, height));
 
         float margin = LogicConstants.BORDER_WALL_THICKNESS;
         float maxX = width - margin;
         float maxY = height - margin;
 
-        for (AbstractEntity e : entityManager.getEntities()) {
+        for (AbstractEntity e : getEntityManager().getEntities()) {
             if (e.getId().startsWith("border_") || e.isStatic()) continue;
 
             Vector2 pos = e.getPosition();

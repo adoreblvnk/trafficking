@@ -9,8 +9,12 @@ import com.sit.trafficking.engine.interfaces.Movable;
 
 public class DynamicEntity extends AbstractEntity implements Movable {
 
-    protected Vector2 velocity;
-    protected float friction = EngineConstants.DEFAULT_FRICTION;
+    private Vector2 velocity;
+    private float friction = EngineConstants.DEFAULT_FRICTION;
+
+    public float getFriction() {
+        return friction;
+    }
 
     public void setFriction(float friction) {
         if (friction < 0 || friction > 1) {
@@ -34,8 +38,8 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     //default rendering - subclasses can override
     @Override
     public void render(ShapeRenderer sr) {
-        sr.setColor(color);
-        sr.rect(position.x, position.y, width, height);
+        sr.setColor(getColor());
+        sr.rect(getPosition().x, getPosition().y, getWidth(), getHeight());
     }
 
     //returning velocity for movement and collision responses
@@ -57,8 +61,8 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     //update position based on current velocity and keep bounds aligned with updated position
     @Override
     public void updatePosition(float dt) {
-        position.mulAdd(velocity, dt);
-        bounds.setPosition(position.x, position.y);
+        getPosition().mulAdd(velocity, dt);
+        getBounds().setPosition(getPosition().x, getPosition().y);
     }
 
     @Override

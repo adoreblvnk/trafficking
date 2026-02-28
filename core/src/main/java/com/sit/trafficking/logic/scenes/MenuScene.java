@@ -18,7 +18,7 @@ public class MenuScene extends AbstractScene implements InputListener {
     public void create() {
         batch = new SpriteBatch();
         loadFont(LogicConstants.FONT_SIZE_MENU);
-        inputManager.addListener(this);
+        getInputManager().addListener(this);
     }
 
     @Override
@@ -54,8 +54,8 @@ public class MenuScene extends AbstractScene implements InputListener {
         float centerY = Gdx.graphics.getHeight() / 2f;
 
         batch.begin();
-        font.draw(batch, "TRAFFICKING SIMULATION", centerX - 200, centerY + 50);
-        font.draw(batch, "Press ENTER to Start", centerX - 150, centerY - 20);
+        getFont().draw(batch, "TRAFFICKING SIMULATION", centerX - 200, centerY + 50);
+        getFont().draw(batch, "Press ENTER to Start", centerX - 150, centerY - 20);
         batch.end();
     }
 

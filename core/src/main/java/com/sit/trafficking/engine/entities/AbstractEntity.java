@@ -10,15 +10,15 @@ import com.sit.trafficking.engine.interfaces.ICollidable;
 
 public abstract class AbstractEntity implements ICollidable {
 
-    protected String id;
-    protected Vector2 position;
-    protected float width;
-    protected float height;
-    protected Color color;
-    protected int zIndex = 0;
-    protected CollisionListener collisionListener;
+    private String id;
+    private Vector2 position;
+    private float width;
+    private float height;
+    private Color color;
+    private int zIndex = 0;
+    private CollisionListener collisionListener;
 
-    protected Rectangle bounds;
+    private Rectangle bounds;
 
     //every entity requires a position and size to exist
     public AbstractEntity(String id, float x, float y, float w, float h) {
@@ -86,6 +86,10 @@ public abstract class AbstractEntity implements ICollidable {
         this.color = color;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     public int getZIndex() {
         return zIndex;
     }
@@ -98,6 +102,10 @@ public abstract class AbstractEntity implements ICollidable {
 
     public void setCollisionListener(CollisionListener collisionListener) {
         this.collisionListener = collisionListener;
+    }
+
+    public CollisionListener getCollisionListener() {
+        return collisionListener;
     }
 
     //activates when an overlap with each other occurs
