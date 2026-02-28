@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
+import com.badlogic.gdx.graphics.Color;
 import com.sit.trafficking.engine.entities.DynamicEntity;
 import com.sit.trafficking.engine.entities.StaticEntity;
 import com.sit.trafficking.engine.managers.CollisionManager;
@@ -135,7 +136,7 @@ public class HeadlessTestLauncher {
                 car.setVelocity(500, 0); // High speed
 
                 // place wall at 20, car should hit it immediately
-                StaticEntity wall = new StaticEntity("wall", 20, 0, 10, 100);
+                StaticEntity wall = new StaticEntity("wall", 20, 0, 10, 100, Color.GRAY);
 
                 entityManager.addEntity(car);
                 entityManager.addEntity(wall);

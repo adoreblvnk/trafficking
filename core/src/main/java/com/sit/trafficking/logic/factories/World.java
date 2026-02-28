@@ -1,6 +1,7 @@
 package com.sit.trafficking.logic.factories;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
@@ -162,7 +163,7 @@ public class World {
                     float vy = val.has("vy") ? val.getFloat("vy") : 0;
 
                     if (EngineConstants.ENTITY_TYPE_STATIC.equals(type)) {
-                        em.addEntity(new StaticEntity(id, x, y, w, h));
+                        em.addEntity(new StaticEntity(id, x, y, w, h, Color.GRAY));
                         entityCount++;
                     } else if (EngineConstants.ENTITY_TYPE_DYNAMIC.equals(type)) {
                         DynamicEntity car = new DynamicEntity(id, x, y, w, h);

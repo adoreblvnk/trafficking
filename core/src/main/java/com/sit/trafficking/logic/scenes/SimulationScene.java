@@ -56,10 +56,10 @@ public class SimulationScene extends AbstractScene implements InputListener {
         getEntityManager().removeEntity("border_right");
 
         float thickness = LogicConstants.BORDER_WALL_THICKNESS;
-        getEntityManager().addEntity(new StaticEntity("border_top", 0, screenH - thickness, screenW, thickness));
-        getEntityManager().addEntity(new StaticEntity("border_bottom", 0, 0, screenW, thickness));
-        getEntityManager().addEntity(new StaticEntity("border_left", 0, 0, thickness, screenH));
-        getEntityManager().addEntity(new StaticEntity("border_right", screenW - thickness, 0, thickness, screenH));
+        getEntityManager().addEntity(new StaticEntity("border_top", 0, screenH - thickness, screenW, thickness, Color.GRAY));
+        getEntityManager().addEntity(new StaticEntity("border_bottom", 0, 0, screenW, thickness, Color.GRAY));
+        getEntityManager().addEntity(new StaticEntity("border_left", 0, 0, thickness, screenH, Color.GRAY));
+        getEntityManager().addEntity(new StaticEntity("border_right", screenW - thickness, 0, thickness, screenH, Color.GRAY));
     }
 
     //spawn entity with optional motion and collision logic
@@ -241,10 +241,10 @@ public class SimulationScene extends AbstractScene implements InputListener {
         getEntityManager().removeEntity("border_right");
 
         float thickness = LogicConstants.BORDER_WALL_THICKNESS;
-        getEntityManager().addEntity(new StaticEntity("border_top", 0, height - thickness, width, thickness));
-        getEntityManager().addEntity(new StaticEntity("border_bottom", 0, 0, width, thickness));
-        getEntityManager().addEntity(new StaticEntity("border_left", 0, 0, thickness, height));
-        getEntityManager().addEntity(new StaticEntity("border_right", width - thickness, 0, thickness, height));
+        getEntityManager().addEntity(new StaticEntity("border_top", 0, height - thickness, width, thickness, Color.GRAY));
+        getEntityManager().addEntity(new StaticEntity("border_bottom", 0, 0, width, thickness, Color.GRAY));
+        getEntityManager().addEntity(new StaticEntity("border_left", 0, 0, thickness, height, Color.GRAY));
+        getEntityManager().addEntity(new StaticEntity("border_right", width - thickness, 0, thickness, height, Color.GRAY));
 
         float margin = LogicConstants.BORDER_WALL_THICKNESS;
         float maxX = width - margin;

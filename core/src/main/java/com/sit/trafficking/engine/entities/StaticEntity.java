@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class StaticEntity extends AbstractEntity {
 
-    public StaticEntity(String id, float x, float y, float w, float h) {
+    public StaticEntity(String id, float x, float y, float w, float h, Color color) {
         super(id, x, y, w, h);
-        setColor(Color.GRAY);
+        setColor(color);
     }
 
     //skipped as static entities don't change between frames
