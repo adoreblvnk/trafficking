@@ -16,6 +16,10 @@ public class EngineConstants {
     public static final String ENTITY_TYPE_STATIC = "STATIC";
     public static final String ENTITY_TYPE_DYNAMIC = "DYNAMIC";
 
+    //quadtree spatial partitioning
+    public static final int QUADTREE_MAX_OBJECTS = 10;
+    public static final int QUADTREE_MAX_LEVELS = 5;
+
     //assets
     public static final String DEFAULT_FONT_PATH = "fonts/Geist-Bold.ttf";
 }

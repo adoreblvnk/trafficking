@@ -41,18 +41,66 @@ public class CollisionManager {
             return;
         }
 
+        if (entities.isEmpty()) return;
+
         try {
+            float minX = Float.MAX_VALUE, minY = Float.MAX_VALUE;
+            float maxX = -Float.MAX_VALUE, maxY = -Float.MAX_VALUE;
+
+            for (ICollidable e : entities) {
+                if (e == null || e.getBounds() == null) continue;
+                Rectangle r = e.getBounds();
+                if (r.x < minX) minX = r.x;
+                if (r.y < minY) minY = r.y;
+                if (r.x + r.width > maxX) maxX = r.x + r.width;
+                if (r.y + r.height > maxY) maxY = r.y + r.height;
+            }
+
+            if (minX == Float.MAX_VALUE) return;
+
+            float width = Math.max(maxX - minX, 1);
+            float height = Math.max(maxY - minY, 1);
+
+            QuadTree quad = new QuadTree(0, new Rectangle(minX, minY, width, height));
+
+            for (ICollidable e : entities) {
+                if (e != null && e.getBounds() != null) {
+                    quad.insert(e);
+                }
+            }
+
+            List<ICollidable> returnObjects = new ArrayList<>();
             for (int i = 0; i < entities.size(); i++) {
-                for (int j = i + 1; j < entities.size(); j++) {
-                    ICollidable a = entities.get(i);
-                    ICollidable b = entities.get(j);
+                ICollidable a = entities.get(i);
+                if (a == null || a.getBounds() == null) continue;
 
-                    if (a == null || b == null) continue;
+                returnObjects.clear();
+                quad.retrieve(returnObjects, a.getBounds());
 
-                    if (checkAABB(a.getBounds(), b.getBounds())) {
-                        resolveCollision(a, b);
-                        a.onCollision(b);
-                        b.onCollision(a);
+                for (int j = 0; j < returnObjects.size(); j++) {
+                    ICollidable b = returnObjects.get(j);
+
+                    if (a == b) continue;
+
+                    int hashA = System.identityHashCode(a);
+                    int hashB = System.identityHashCode(b);
+
+                    boolean shouldProcess = false;
+                    if (hashA > hashB) {
+                        shouldProcess = true;
+                    } else if (hashA == hashB) {
+                        if (a.getBounds().x > b.getBounds().x || 
+                           (a.getBounds().x == b.getBounds().x && a.getBounds().y > b.getBounds().y)) {
+                            shouldProcess = true;
+                        }
+                    }
+
+                    if (shouldProcess) {
+                        if (checkAABB(a.getBounds(), b.getBounds())) {
+                            resolveCollision(a, b);
+                            a.onCollision(b);
+                            b.onCollision(a);
+                        }
                     }
                 }
             }
