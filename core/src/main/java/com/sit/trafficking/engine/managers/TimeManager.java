@@ -1,28 +1,40 @@
 package com.sit.trafficking.engine.managers;
 
-import com.badlogic.gdx.Gdx;
+import com.sit.trafficking.engine.interfaces.providers.ITimeProvider;
 
 /**
- * Provides scaled delta time for controlling simulation speed.
+ * Game-level time manager that applies time scaling to platform-provided delta time.
+ * Injected with ITimeProvider to achieve platform independence.
  * Values below 1.0 slow time; values above 1.0 accelerate.
  */
 public class TimeManager {
 
+    private final ITimeProvider timeProvider;
     private float timeScale = 1.0f;
 
-    public TimeManager() {
+    public TimeManager(ITimeProvider timeProvider) {
+        if (timeProvider == null) {
+            throw new IllegalArgumentException("TimeProvider cannot be null");
+        }
+        this.timeProvider = timeProvider;
     }
 
+    /**
+     * Returns the platform delta time multiplied by the game's time scale.
+     */
     public float getDeltaTime() {
-        return Gdx.graphics.getDeltaTime() * timeScale;
+        return timeProvider.getDeltaTime() * timeScale;
     }
 
+    /**
+     * Sets the time scale multiplier for slow-motion or fast-forward effects.
+     *
+     * @param scale the scale factor (0.0 pauses, 1.0 is normal, >1.0 is fast)
+     */
     public void setTimeScale(float scale) {
         if (scale < 0) {
-            Gdx.app.log("TimeManager", "Negative time scale rejected, using 0: " + scale);
             this.timeScale = 0;
         } else if (Float.isNaN(scale) || Float.isInfinite(scale)) {
-            Gdx.app.error("TimeManager", "Invalid time scale rejected: " + scale);
             this.timeScale = 1f;
         } else {
             this.timeScale = scale;

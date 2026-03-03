@@ -1,50 +1,42 @@
 package com.sit.trafficking.engine.scenes;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.math.Matrix4;
 import com.sit.trafficking.engine.EngineConstants;
+import com.sit.trafficking.engine.interfaces.providers.IEngineContext;
 import com.sit.trafficking.engine.managers.CollisionManager;
 import com.sit.trafficking.engine.managers.EntityManager;
 import com.sit.trafficking.engine.managers.InputManager;
 import com.sit.trafficking.engine.managers.MovementManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-// Base for all game screens; provides shared managers and a consistent lifecycle.
+/**
+ * Base for all game screens; provides shared managers and a consistent lifecycle.
+ * Now depends on IEngineContext for platform-independent access to display, graphics, and audio.
+ */
 public abstract class AbstractScene {
+
+    private static final Logger LOGGER = Logger.getLogger(AbstractScene.class.getName());
 
     private EntityManager entityManager;
     private CollisionManager collisionManager;
     private InputManager inputManager;
     private MovementManager movementManager;
-    private ShapeRenderer shapeRenderer;
-    private BitmapFont font;
+    protected final IEngineContext context;
 
     // Gives every scene its own manager instances for isolation and predictable teardown.
-    public AbstractScene(EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager, ShapeRenderer shapeRenderer) {
+    public AbstractScene(IEngineContext context, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+        this.context = context;
         this.entityManager = entityManager;
         this.collisionManager = collisionManager;
         this.inputManager = inputManager;
         this.movementManager = movementManager;
-        this.shapeRenderer = shapeRenderer;
     }
 
     public abstract void create();
 
     // Centralizes font loading so scenes avoid duplicating TTF setup and paths.
     protected void loadFont(int size) {
-        try {
-            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(EngineConstants.DEFAULT_FONT_PATH));
-            FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-            parameter.size = size;
-            parameter.color = Color.WHITE;
-            font = generator.generateFont(parameter);
-            generator.dispose();
-        } catch (Exception e) {
-            Gdx.app.error("AbstractScene", "Failed to load font with size " + size, e);
-        }
+        context.getGraphics().loadFont(EngineConstants.DEFAULT_FONT_PATH, size);
     }
 
 
@@ -53,47 +45,32 @@ public abstract class AbstractScene {
         try {
             entityManager.update(dt);
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure", e);
+            LOGGER.log(Level.SEVERE, "Entity update failed", e);
         }
 
         try {
             movementManager.processMovement(entityManager.getEntities(), dt);
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure", e);
+            LOGGER.log(Level.SEVERE, "Movement processing failed", e);
         }
 
         try {
             collisionManager.processCollisions(entityManager.getEntities());
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("AbstractScene", "System failure", e);
+            LOGGER.log(Level.SEVERE, "Collision processing failed", e);
         }
     }
 
     public void render() {
         try {
-            entityManager.render(shapeRenderer);
+            entityManager.render(context.getGraphics());
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("AbstractScene", "Render system failure", e);
+            LOGGER.log(Level.SEVERE, "Entity rendering failed", e);
         }
     }
 
     // Releases GPU and font resources so scenes can be swapped without leaks.
     public void dispose() {
-        if (shapeRenderer != null) {
-            try {
-                shapeRenderer.dispose();
-            } catch (Exception e) {
-                Gdx.app.error("AbstractScene", "Failed to dispose ShapeRenderer", e);
-            }
-        }
-
-        if (font != null) {
-            try {
-                font.dispose();
-            } catch (Exception e) {
-                Gdx.app.error("AbstractScene", "Failed to dispose font", e);
-            }
-        }
     }
 
     public EntityManager getEntityManager() {
@@ -112,16 +89,8 @@ public abstract class AbstractScene {
         return movementManager;
     }
 
-    public ShapeRenderer getShapeRenderer() {
-        return shapeRenderer;
-    }
-
-    public BitmapFont getFont() {
-        return font;
-    }
-
     // Keeps rendering in screen coordinates when the window is resized.
     public void resize(int width, int height) {
-        shapeRenderer.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, width, height));
+        context.getGraphics().setProjectionMatrix(width, height);
     }
 }

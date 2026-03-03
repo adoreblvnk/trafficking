@@ -1,11 +1,8 @@
 package com.sit.trafficking.logic.scenes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.sit.trafficking.engine.interfaces.InputListener;
+import com.sit.trafficking.engine.interfaces.providers.IEngineContext;
 import com.sit.trafficking.engine.managers.CollisionManager;
 import com.sit.trafficking.engine.managers.EntityManager;
 import com.sit.trafficking.engine.managers.InputManager;
@@ -15,14 +12,17 @@ import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.logic.LogicConstants;
 import com.sit.trafficking.logic.factories.SceneFactory;
 
+/**
+ * Menu scene for traffic simulation game.
+ * No longer directly uses libGDX drawing - uses SpriteBatch for text rendering.
+ */
 public class MenuScene extends AbstractScene implements InputListener {
 
-    private SpriteBatch batch;
     private final SceneManager sceneManager;
     private final SceneFactory sceneFactory;
 
-    public MenuScene(SceneManager sceneManager, SceneFactory sceneFactory, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager, ShapeRenderer shapeRenderer) {
-        super(entityManager, collisionManager, inputManager, movementManager, shapeRenderer);
+    public MenuScene(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+        super(context, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
         this.sceneFactory = sceneFactory;
     }
@@ -30,7 +30,6 @@ public class MenuScene extends AbstractScene implements InputListener {
     //initializes resources, load menu-specific fonts, and register for input events
     @Override
     public void create() {
-        batch = new SpriteBatch();
         loadFont(LogicConstants.FONT_SIZE_MENU);
         getInputManager().addListener(this);
     }
@@ -62,21 +61,18 @@ public class MenuScene extends AbstractScene implements InputListener {
     //draws the menu title and navigation instructions to the screen
     @Override
     public void render() {
-        ScreenUtils.clear(0.1f, 0.1f, 0.1f, 1);
+        context.getGraphics().clearScreen(0.1f, 0.1f, 0.1f);
 
-        float centerX = Gdx.graphics.getWidth() / 2f;
-        float centerY = Gdx.graphics.getHeight() / 2f;
+        float centerX = context.getDisplay().getWidth() / 2f;
+        float centerY = context.getDisplay().getHeight() / 2f;
 
-        batch.begin();
-        getFont().draw(batch, "TRAFFICKING SIMULATION", centerX - 200, centerY + 50);
-        getFont().draw(batch, "Press ENTER to Start", centerX - 150, centerY - 20);
-        batch.end();
+        context.getGraphics().drawText("TRAFFICKING SIMULATION", centerX - 200, centerY + 50);
+        context.getGraphics().drawText("Press ENTER to Start", centerX - 150, centerY - 20);
     }
 
     //cleans up native resources and call superclass disposal logic
     @Override
     public void dispose() {
         super.dispose();
-        batch.dispose();
     }
 }

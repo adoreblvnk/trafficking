@@ -1,15 +1,18 @@
 package com.sit.trafficking.engine.managers;
 
-import com.badlogic.gdx.InputAdapter;
 import com.sit.trafficking.engine.interfaces.InputListener;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Distributes input events to registered listeners in subscription order.
  * Swallows exceptions to prevent input pipeline crashes.
  */
-public class InputManager extends InputAdapter {
+public class InputManager {
+
+    private static final Logger LOGGER = Logger.getLogger(InputManager.class.getName());
 
     private final List<InputListener> listeners;
 
@@ -27,51 +30,47 @@ public class InputManager extends InputAdapter {
         listeners.remove(l);
     }
 
-    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         try {
             for (InputListener l : listeners) {
                 if (l.onTouchDown(screenX, screenY, pointer, button)) return true;
             }
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure in touchDown", e);
+            LOGGER.log(Level.SEVERE, "Input failure in touchDown", e);
         }
         return false;
     }
 
-    @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         try {
             for (InputListener l : listeners) {
                 if (l.onDrag(screenX, screenY, pointer)) return true;
             }
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure in touchDragged", e);
+            LOGGER.log(Level.SEVERE, "Input failure in touchDragged", e);
         }
         return false;
     }
 
-    @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         try {
             for (InputListener l : listeners) {
                 if (l.onTouchUp(screenX, screenY, pointer, button)) return true;
             }
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure in touchUp", e);
+            LOGGER.log(Level.SEVERE, "Input failure in touchUp", e);
         }
         return false;
     }
 
     // Implemented to satisfy UML even if Interface doesn't use it yet
-    @Override
     public boolean keyDown(int keycode) {
         try {
             for (InputListener l : listeners) {
                 if (l.onKeyDown(keycode)) return true;
             }
         } catch (Exception e) {
-            com.badlogic.gdx.Gdx.app.error("InputManager", "Input failure in keyDown", e);
+            LOGGER.log(Level.SEVERE, "Input failure in keyDown", e);
         }
         return false;
     }

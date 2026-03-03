@@ -1,20 +1,26 @@
 package com.sit.trafficking.engine.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.sit.trafficking.engine.interfaces.CollisionListener;
 import com.sit.trafficking.engine.interfaces.ICollidable;
+import com.sit.trafficking.engine.interfaces.providers.IGraphicsProvider;
 
+/**
+ * Abstract base class for all game entities.
+ * Defines common properties like position, size, rendering, and collision behavior.
+ * Rendering is now platform-independent via IGraphicsProvider.
+ */
 public abstract class AbstractEntity implements ICollidable {
 
     private String id;
     private Vector2 position;
     private float width;
     private float height;
-    private Color color;
+    private float r = 1.0f;
+    private float g = 1.0f;
+    private float b = 1.0f;
+    private float a = 1.0f;
     private int zIndex = 0;
     private CollisionListener collisionListener;
 
@@ -36,7 +42,10 @@ public abstract class AbstractEntity implements ICollidable {
         this.position = new Vector2(x, y);
         this.width = w;
         this.height = h;
-        this.color = Color.WHITE;
+        this.r = 1.0f;
+        this.g = 1.0f;
+        this.b = 1.0f;
+        this.a = 1.0f;
         this.bounds = new Rectangle(x, y, w, h);
     }
 
@@ -45,7 +54,12 @@ public abstract class AbstractEntity implements ICollidable {
         bounds.set(position.x, position.y, width, height);
     }
 
-    public abstract void render(ShapeRenderer sr);
+    /**
+     * Renders the entity using the provided graphics provider (platform-independent).
+     *
+     * @param graphics the graphics provider
+     */
+    public abstract void render(IGraphicsProvider graphics);
 
     //shows current AABB for collision checks
     @Override
@@ -67,7 +81,6 @@ public abstract class AbstractEntity implements ICollidable {
     @Override
     public void setPosition(float x, float y) {
         if (Float.isNaN(x) || Float.isNaN(y) || Float.isInfinite(x) || Float.isInfinite(y)) {
-            Gdx.app.error("AbstractEntity", "Invalid position rejected: (" + x + ", " + y + ")");
             return;
         }
         this.position.set(x, y);
@@ -82,12 +95,47 @@ public abstract class AbstractEntity implements ICollidable {
         return height;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+    /**
+     * Sets the color as RGBA components.
+     *
+     * @param r red (0.0 to 1.0)
+     * @param g green (0.0 to 1.0)
+     * @param b blue (0.0 to 1.0)
+     * @param a alpha (0.0 to 1.0)
+     */
+    public void setColor(float r, float g, float b, float a) {
+        this.r = Math.max(0, Math.min(1, r));
+        this.g = Math.max(0, Math.min(1, g));
+        this.b = Math.max(0, Math.min(1, b));
+        this.a = Math.max(0, Math.min(1, a));
     }
 
-    public Color getColor() {
-        return color;
+    /**
+     * Gets the red component of the entity's color.
+     */
+    public float getRed() {
+        return r;
+    }
+
+    /**
+     * Gets the green component of the entity's color.
+     */
+    public float getGreen() {
+        return g;
+    }
+
+    /**
+     * Gets the blue component of the entity's color.
+     */
+    public float getBlue() {
+        return b;
+    }
+
+    /**
+     * Gets the alpha component of the entity's color.
+     */
+    public float getAlpha() {
+        return a;
     }
 
     public int getZIndex() {

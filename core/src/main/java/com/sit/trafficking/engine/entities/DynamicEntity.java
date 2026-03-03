@@ -1,12 +1,15 @@
 package com.sit.trafficking.engine.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.sit.trafficking.engine.EngineConstants;
 import com.sit.trafficking.engine.interfaces.Movable;
+import com.sit.trafficking.engine.interfaces.providers.IGraphicsProvider;
 
+/**
+ * Dynamic entity that moves with velocity-based motion.
+ * Automatically applies friction to velocity each update.
+ * Renders as a filled rectangle with its color.
+ */
 public class DynamicEntity extends AbstractEntity implements Movable {
 
     private Vector2 velocity;
@@ -17,10 +20,7 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     }
 
     public void setFriction(float friction) {
-        if (friction < 0 || friction > 1) {
-            Gdx.app.log("DynamicEntity", "Friction clamped to [0,1]: " + friction + " -> " + MathUtils.clamp(friction, 0, 1));
-        }
-        this.friction = MathUtils.clamp(friction, 0, 1);
+        this.friction = Math.max(0f, Math.min(1f, friction));
     }
 
     //the entity is movable with velocity-based motion
@@ -37,9 +37,9 @@ public class DynamicEntity extends AbstractEntity implements Movable {
 
     //default rendering - subclasses can override
     @Override
-    public void render(ShapeRenderer sr) {
-        sr.setColor(getColor());
-        sr.rect(getPosition().x, getPosition().y, getWidth(), getHeight());
+    public void render(IGraphicsProvider graphics) {
+        graphics.setColor(getRed(), getGreen(), getBlue(), getAlpha());
+        graphics.drawRect(getPosition().x, getPosition().y, getWidth(), getHeight());
     }
 
     //returning velocity for movement and collision responses
@@ -52,7 +52,6 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     @Override
     public void setVelocity(float x, float y) {
         if (Float.isNaN(x) || Float.isNaN(y) || Float.isInfinite(x) || Float.isInfinite(y)) {
-            Gdx.app.error("DynamicEntity", "Invalid velocity rejected: (" + x + ", " + y + ")");
             return;
         }
         this.velocity.set(x, y);

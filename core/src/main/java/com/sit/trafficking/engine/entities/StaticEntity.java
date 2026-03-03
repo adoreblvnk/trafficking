@@ -1,13 +1,16 @@
 package com.sit.trafficking.engine.entities;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.sit.trafficking.engine.interfaces.providers.IGraphicsProvider;
 
+/**
+ * Static entity that does not move or update.
+ * Renders as a filled rectangle with its color.
+ */
 public class StaticEntity extends AbstractEntity {
 
-    public StaticEntity(String id, float x, float y, float w, float h, Color color) {
+    public StaticEntity(String id, float x, float y, float w, float h, float r, float g, float b) {
         super(id, x, y, w, h);
-        setColor(color);
+        setColor(r, g, b, 1.0f);
     }
 
     //skipped as static entities don't change between frames
@@ -18,9 +21,9 @@ public class StaticEntity extends AbstractEntity {
 
     //default rendering - subclasses can override
     @Override
-    public void render(ShapeRenderer sr) {
-        sr.setColor(getColor());
-        sr.rect(getPosition().x, getPosition().y, getWidth(), getHeight());
+    public void render(IGraphicsProvider graphics) {
+        graphics.setColor(getRed(), getGreen(), getBlue(), getAlpha());
+        graphics.drawRect(getPosition().x, getPosition().y, getWidth(), getHeight());
     }
 
     @Override

@@ -1,28 +1,33 @@
 package com.sit.trafficking.logic.scenes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.sit.trafficking.engine.entities.AbstractEntity;
 import com.sit.trafficking.engine.entities.DynamicEntity;
 import com.sit.trafficking.engine.entities.StaticEntity;
 import com.sit.trafficking.engine.interfaces.InputListener;
-import com.sit.trafficking.engine.scenes.AbstractScene;
-import com.sit.trafficking.engine.scenes.SceneManager;
-import com.sit.trafficking.logic.LogicConstants;
+import com.sit.trafficking.engine.interfaces.providers.IEngineContext;
 import com.sit.trafficking.engine.managers.CollisionManager;
 import com.sit.trafficking.engine.managers.EntityManager;
 import com.sit.trafficking.engine.managers.InputManager;
 import com.sit.trafficking.engine.managers.MovementManager;
-
-import com.sit.trafficking.logic.factories.World;
+import com.sit.trafficking.engine.scenes.AbstractScene;
+import com.sit.trafficking.engine.scenes.SceneManager;
+import com.sit.trafficking.logic.LogicConstants;
 import com.sit.trafficking.logic.factories.SceneFactory;
+import com.sit.trafficking.logic.factories.World;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * Main simulation scene for traffic management gameplay.
+ * No longer directly uses libGDX - all graphics/display calls go through IEngineContext.
+ */
 public class SimulationScene extends AbstractScene implements InputListener {
+
+    private static final Random RANDOM = new Random();
+    private static final Logger LOGGER = Logger.getLogger(SimulationScene.class.getName());
 
     private AbstractEntity draggedEntity;
     private Vector2 dragStartPos = new Vector2();
@@ -32,8 +37,8 @@ public class SimulationScene extends AbstractScene implements InputListener {
     private final SceneManager sceneManager;
     private final SceneFactory sceneFactory;
 
-    public SimulationScene(SceneManager sceneManager, SceneFactory sceneFactory, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager, ShapeRenderer shapeRenderer) {
-        super(entityManager, collisionManager, inputManager, movementManager, shapeRenderer);
+    public SimulationScene(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+        super(context, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
         this.sceneFactory = sceneFactory;
     }
@@ -43,18 +48,17 @@ public class SimulationScene extends AbstractScene implements InputListener {
     public void create() {
         world = new World(sceneManager.getIOManager(), sceneManager.getSoundManager());
 
-        Gdx.input.setInputProcessor(getInputManager());
         getInputManager().addListener(this);
 
         sceneManager.getSoundManager().loadSound(LogicConstants.SOUND_CRASH_ID, LogicConstants.SOUND_CRASH_PATH);
 
         boolean worldLoaded = world.loadWorld(getEntityManager(), LogicConstants.DEFAULT_WORLD_PATH);
         if (!worldLoaded) {
-            Gdx.app.log("SimulationScene", "Failed to load default world, starting with empty world");
+            LOGGER.log(Level.SEVERE, "Failed to load default world: " + LogicConstants.DEFAULT_WORLD_PATH);
         }
 
-        float screenW = Gdx.graphics.getWidth();
-        float screenH = Gdx.graphics.getHeight();
+        float screenW = context.getDisplay().getWidth();
+        float screenH = context.getDisplay().getHeight();
         createBorderWalls(screenW, screenH);
 
         spawnDynamicEntity(screenW / 2f, screenH / 2f, true);
@@ -69,20 +73,20 @@ public class SimulationScene extends AbstractScene implements InputListener {
         getEntityManager().removeEntity("border_right");
 
         float thickness = LogicConstants.BORDER_WALL_THICKNESS;
-        getEntityManager().addEntity(new StaticEntity("border_top", 0, screenH - thickness, screenW, thickness, Color.GRAY));
-        getEntityManager().addEntity(new StaticEntity("border_bottom", 0, 0, screenW, thickness, Color.GRAY));
-        getEntityManager().addEntity(new StaticEntity("border_left", 0, 0, thickness, screenH, Color.GRAY));
-        getEntityManager().addEntity(new StaticEntity("border_right", screenW - thickness, 0, thickness, screenH, Color.GRAY));
+        getEntityManager().addEntity(new StaticEntity("border_top", 0, screenH - thickness, screenW, thickness, 0.5f, 0.5f, 0.5f));
+        getEntityManager().addEntity(new StaticEntity("border_bottom", 0, 0, screenW, thickness, 0.5f, 0.5f, 0.5f));
+        getEntityManager().addEntity(new StaticEntity("border_left", 0, 0, thickness, screenH, 0.5f, 0.5f, 0.5f));
+        getEntityManager().addEntity(new StaticEntity("border_right", screenW - thickness, 0, thickness, screenH, 0.5f, 0.5f, 0.5f));
     }
 
     //spawn entity with optional motion and collision logic
     private void spawnDynamicEntity(float x, float y, boolean giveInitialVelocity) {
-        String id = "car_" + MathUtils.random(10000);
+        String id = "car_" + RANDOM.nextInt(10001);
         DynamicEntity car = new DynamicEntity(id, x, y, LogicConstants.VEHICLE_SIZE, LogicConstants.VEHICLE_SIZE);
-        car.setColor(new Color(MathUtils.random(), MathUtils.random(), MathUtils.random(), 1));
+        car.setColor(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat(), 1);
 
-        float screenW = Gdx.graphics.getWidth();
-        float screenH = Gdx.graphics.getHeight();
+        float screenW = context.getDisplay().getWidth();
+        float screenH = context.getDisplay().getHeight();
 
         if (x < LogicConstants.NUDGE_OFFSET) car.getPosition().x = LogicConstants.NUDGE_OFFSET;
         if (x > screenW - LogicConstants.NUDGE_OFFSET) car.getPosition().x = screenW - LogicConstants.NUDGE_OFFSET * 2;
@@ -91,9 +95,10 @@ public class SimulationScene extends AbstractScene implements InputListener {
 
         // Autonomous Movement Logic
         if (giveInitialVelocity) {
-            float speed = MathUtils.random(100f, 300f);
-            float angle = MathUtils.random(0, 360);
-            car.setVelocity(MathUtils.cosDeg(angle) * speed, MathUtils.sinDeg(angle) * speed);
+            float speed = 100f + RANDOM.nextFloat() * 200f;
+            float angleDeg = RANDOM.nextFloat() * 360f;
+            double angleRad = Math.toRadians(angleDeg);
+            car.setVelocity((float) Math.cos(angleRad) * speed, (float) Math.sin(angleRad) * speed);
 
             // Logic Injection: Listener
             car.setCollisionListener((source, target) -> {
@@ -118,8 +123,8 @@ public class SimulationScene extends AbstractScene implements InputListener {
 
     //forces non-static entities to stay within the border wall margins
     private void clampEntitiesToBounds() {
-        float screenW = Gdx.graphics.getWidth();
-        float screenH = Gdx.graphics.getHeight();
+        float screenW = context.getDisplay().getWidth();
+        float screenH = context.getDisplay().getHeight();
         float margin = LogicConstants.BORDER_WALL_THICKNESS;
         float maxX = screenW - margin;
         float maxY = screenH - margin;
@@ -128,8 +133,8 @@ public class SimulationScene extends AbstractScene implements InputListener {
             if (e.getId().startsWith("border_") || e.isStatic()) continue;
 
             Vector2 pos = e.getPosition();
-            float clampedX = MathUtils.clamp(pos.x, margin, maxX - e.getWidth());
-            float clampedY = MathUtils.clamp(pos.y, margin, maxY - e.getHeight());
+            float clampedX = Math.max(margin, Math.min(maxX - e.getWidth(), pos.x));
+            float clampedY = Math.max(margin, Math.min(maxY - e.getHeight(), pos.y));
 
             if (pos.x != clampedX || pos.y != clampedY) {
                 e.setPosition(clampedX, clampedY);
@@ -141,25 +146,24 @@ public class SimulationScene extends AbstractScene implements InputListener {
     @Override
     public void render() {
         // Clear screen
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        context.getGraphics().clearScreen(0.2f, 0.2f, 0.2f);
 
-        getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
+        context.getGraphics().beginShapes();
         super.render();
 
         // Draw drag line
         if (isDragging && draggedEntity != null) {
-            getShapeRenderer().setColor(Color.RED);
-            getShapeRenderer().rectLine(dragStartPos, dragCurrentPos, 2);
+            context.getGraphics().setColor(1.0f, 0.0f, 0.0f, 1.0f);
+            context.getGraphics().drawLine(dragStartPos.x, dragStartPos.y, dragCurrentPos.x, dragCurrentPos.y, 2);
         }
-        getShapeRenderer().end();
+        context.getGraphics().endShapes();
     }
 
     // Input Listener Implementation
     //select entities for dragging or spawn new ones on right click
     @Override
     public boolean onTouchDown(int x, int y, int ptr, int btn) {
-        float worldY = Gdx.graphics.getHeight() - y;
+        float worldY = context.getDisplay().getHeight() - y;
 
         if (btn == Input.Buttons.RIGHT) {
             spawnDynamicEntity(x, worldY, true);
@@ -189,7 +193,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
     @Override
     public boolean onDrag(int x, int y, int ptr) {
         if (isDragging && draggedEntity != null) {
-            float worldY = Gdx.graphics.getHeight() - y;
+            float worldY = context.getDisplay().getHeight() - y;
             dragCurrentPos.set(x, worldY);
             draggedEntity.setPosition(x - draggedEntity.getWidth()/2, worldY - draggedEntity.getHeight()/2);
             return true;
@@ -217,25 +221,27 @@ public class SimulationScene extends AbstractScene implements InputListener {
     //processes global scene commands like pausing and save/load
     @Override
     public boolean onKeyDown(int keycode) {
+        float screenW = context.getDisplay().getWidth();
+        float screenH = context.getDisplay().getHeight();
+
         switch (keycode) {
             case Input.Keys.ESCAPE:
                 sceneManager.pushOverlay(sceneFactory.createPauseOverlay());
                 return true;
             case Input.Keys.F5:
-                boolean saved = world.saveCurrentState(getEntityManager());
+                boolean saved = world.saveCurrentState(getEntityManager(), screenW, screenH);
                 if (saved) {
-                    Gdx.app.log("SimulationScene", "Quick Save Complete!");
+                    LOGGER.info("World state saved");
                 } else {
-                    Gdx.app.error("SimulationScene", "Quick Save Failed!");
+                    LOGGER.log(Level.SEVERE, "Failed to save world state");
                 }
                 return true;
             case Input.Keys.F9:
-                boolean loaded = world.loadSaveState(getEntityManager());
+                boolean loaded = world.loadSaveState(getEntityManager(), screenW, screenH);
                 if (loaded) {
-                    createBorderWalls(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-                    Gdx.app.log("SimulationScene", "Quick Load Complete!");
+                    createBorderWalls(screenW, screenH);
                 } else {
-                    Gdx.app.log("SimulationScene", "Quick Load Failed - No save file found");
+                    LOGGER.log(Level.SEVERE, "Failed to load saved world state");
                 }
                 return true;
             default:
@@ -254,10 +260,10 @@ public class SimulationScene extends AbstractScene implements InputListener {
         getEntityManager().removeEntity("border_right");
 
         float thickness = LogicConstants.BORDER_WALL_THICKNESS;
-        getEntityManager().addEntity(new StaticEntity("border_top", 0, height - thickness, width, thickness, Color.GRAY));
-        getEntityManager().addEntity(new StaticEntity("border_bottom", 0, 0, width, thickness, Color.GRAY));
-        getEntityManager().addEntity(new StaticEntity("border_left", 0, 0, thickness, height, Color.GRAY));
-        getEntityManager().addEntity(new StaticEntity("border_right", width - thickness, 0, thickness, height, Color.GRAY));
+        getEntityManager().addEntity(new StaticEntity("border_top", 0, height - thickness, width, thickness, 0.5f, 0.5f, 0.5f));
+        getEntityManager().addEntity(new StaticEntity("border_bottom", 0, 0, width, thickness, 0.5f, 0.5f, 0.5f));
+        getEntityManager().addEntity(new StaticEntity("border_left", 0, 0, thickness, height, 0.5f, 0.5f, 0.5f));
+        getEntityManager().addEntity(new StaticEntity("border_right", width - thickness, 0, thickness, height, 0.5f, 0.5f, 0.5f));
 
         float margin = LogicConstants.BORDER_WALL_THICKNESS;
         float maxX = width - margin;
@@ -267,8 +273,8 @@ public class SimulationScene extends AbstractScene implements InputListener {
             if (e.getId().startsWith("border_") || e.isStatic()) continue;
 
             Vector2 pos = e.getPosition();
-            float clampedX = MathUtils.clamp(pos.x, margin, maxX - e.getWidth());
-            float clampedY = MathUtils.clamp(pos.y, margin, maxY - e.getHeight());
+            float clampedX = Math.max(margin, Math.min(maxX - e.getWidth(), pos.x));
+            float clampedY = Math.max(margin, Math.min(maxY - e.getHeight(), pos.y));
 
             if (pos.x != clampedX || pos.y != clampedY) {
                 e.setPosition(clampedX, clampedY);

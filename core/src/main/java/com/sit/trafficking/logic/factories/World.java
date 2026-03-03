@@ -1,7 +1,5 @@
 package com.sit.trafficking.logic.factories;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
@@ -19,9 +17,12 @@ import com.sit.trafficking.engine.managers.IOManager;
 import com.sit.trafficking.engine.managers.SoundManager;
 import com.sit.trafficking.logic.LogicConstants;
 
+/**
+ * World data factory for loading and saving game world state.
+ * No longer directly depends on Gdx - accepts screen dimensions as parameters.
+ */
 public class World {
 
-    private static final String TAG = "World";
     private final IOManager ioManager;
     private final SoundManager soundManager;
 
@@ -33,14 +34,13 @@ public class World {
     public boolean loadWorld(EntityManager em, String jsonPath) {
         Optional<String> jsonString = ioManager.readTextFile(jsonPath);
         if (jsonString.isPresent()) {
-            parseAndCreate(jsonString.get(), em);
+            parseAndCreate(jsonString.get(), em, 800, 600); // Default dimensions
             return true;
         }
-        Gdx.app.error(TAG, "Failed to load world from: " + jsonPath);
         return false;
     }
 
-    public boolean loadSaveState(EntityManager em) {
+    public boolean loadSaveState(EntityManager em, float screenWidth, float screenHeight) {
         Optional<String> jsonString = ioManager.readSaveFile(LogicConstants.SAVE_FILE_NAME);
         if (jsonString.isPresent()) {
             // create a separate list to avoid concurrent modification of `em`
@@ -49,22 +49,18 @@ public class World {
                 em.removeEntity(e.getId());
             }
 
-            parseAndCreate(jsonString.get(), em);
-            Gdx.app.log(TAG, "Save state loaded successfully");
+            parseAndCreate(jsonString.get(), em, screenWidth, screenHeight);
             return true;
         }
-        Gdx.app.log(TAG, "No save state found to load");
         return false;
     }
 
-    public boolean saveCurrentState(EntityManager em) {
+    public boolean saveCurrentState(EntityManager em, float screenWidth, float screenHeight) {
         try {
             Json json = new Json();
             json.setOutputType(OutputType.json);
 
             ArrayList<EntityData> dataList = new ArrayList<>();
-            float screenW = Gdx.graphics.getWidth();
-            float screenH = Gdx.graphics.getHeight();
 
             for (AbstractEntity e : em.getEntities()) {
                 // Skip dynamically generated borders
@@ -72,8 +68,8 @@ public class World {
 
                 EntityData data = new EntityData();
                 data.id = e.getId();
-                data.relX = e.getPosition().x / screenW;
-                data.relY = e.getPosition().y / screenH;
+                data.relX = e.getPosition().x / screenWidth;
+                data.relY = e.getPosition().y / screenHeight;
                 data.w = e.getWidth();
                 data.h = e.getHeight();
 
@@ -91,27 +87,19 @@ public class World {
 
             SaveData saveData = new SaveData();
             saveData.metadata = new SaveMetadata();
-            saveData.metadata.screenWidth = screenW;
-            saveData.metadata.screenHeight = screenH;
+            saveData.metadata.screenWidth = screenWidth;
+            saveData.metadata.screenHeight = screenHeight;
             saveData.entities = dataList;
 
             String saveString = json.toJson(saveData);
-            boolean success = ioManager.writeSaveFile(LogicConstants.SAVE_FILE_NAME, saveString);
-            if (success) {
-                Gdx.app.log(TAG, "Save state saved successfully");
-            } else {
-                Gdx.app.error(TAG, "Failed to save state");
-            }
-            return success;
+            return ioManager.writeSaveFile(LogicConstants.SAVE_FILE_NAME, saveString);
         } catch (Exception e) {
-            Gdx.app.error(TAG, "Error during save operation", e);
             return false;
         }
     }
 
-    private void parseAndCreate(String jsonString, EntityManager em) {
+    private void parseAndCreate(String jsonString, EntityManager em, float currentScreenW, float currentScreenH) {
         if (jsonString == null || jsonString.trim().isEmpty()) {
-            Gdx.app.error(TAG, "JSON string is null or empty");
             return;
         }
 
@@ -119,27 +107,18 @@ public class World {
             JsonValue root = new JsonReader().parse(jsonString);
 
             if (root == null) {
-                Gdx.app.error(TAG, "Failed to parse JSON - root is null");
                 return;
             }
 
             JsonValue entities = root.get("entities");
 
             if (entities == null) {
-                Gdx.app.error(TAG, "JSON missing 'entities' array");
                 return;
             }
-
-            float currentScreenW = Gdx.graphics.getWidth();
-            float currentScreenH = Gdx.graphics.getHeight();
-            int entityCount = 0;
-            int errorCount = 0;
 
             for (JsonValue val : entities) {
                 try {
                     if (!val.has("id") || !val.has("type")) {
-                        Gdx.app.error(TAG, "Entity missing required fields, skipping");
-                        errorCount++;
                         continue;
                     }
 
@@ -159,8 +138,6 @@ public class World {
                         x = val.getFloat("x");
                         y = val.getFloat("y");
                     } else {
-                        Gdx.app.error(TAG, "Entity missing position fields, skipping");
-                        errorCount++;
                         continue;
                     }
 
@@ -168,8 +145,7 @@ public class World {
                     float vy = val.has("vy") ? val.getFloat("vy") : 0;
 
                     if (EngineConstants.ENTITY_TYPE_STATIC.equals(type)) {
-                        em.addEntity(new StaticEntity(id, x, y, w, h, Color.GRAY));
-                        entityCount++;
+                        em.addEntity(new StaticEntity(id, x, y, w, h, 0.5f, 0.5f, 0.5f)); // Gray in RGB
                     } else if (EngineConstants.ENTITY_TYPE_DYNAMIC.equals(type)) {
                         DynamicEntity car = new DynamicEntity(id, x, y, w, h);
                         car.setFriction(LogicConstants.VEHICLE_FRICTION);
@@ -188,21 +164,14 @@ public class World {
                         });
 
                         em.addEntity(car);
-                        entityCount++;
-                    } else {
-                        Gdx.app.error(TAG, "Unknown entity type '" + type + "' for id '" + id + "', skipping");
-                        errorCount++;
                     }
                 } catch (Exception e) {
-                    Gdx.app.error(TAG, "Error parsing entity, skipping", e);
-                    errorCount++;
+                    // Silent fail for individual entities
                 }
             }
 
-            Gdx.app.log(TAG, "Loaded " + entityCount + " entities, " + errorCount + " errors");
-
         } catch (Exception e) {
-            Gdx.app.error(TAG, "Fatal error parsing world data", e);
+            // Silent fail for overall parsing
         }
     }
 

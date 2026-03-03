@@ -1,74 +1,57 @@
 package com.sit.trafficking.engine.managers;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.math.MathUtils;
-import java.util.HashMap;
-import java.util.Map;
+import com.sit.trafficking.engine.interfaces.providers.IAudioProvider;
 
 /**
- * Manages audio resource lifecycle with lazy loading and centralized playback control.
+ * Game-level sound manager wrapper.
+ * Delegates all audio operations to the injected IAudioProvider.
+ * No longer directly depends on libGDX.
  */
 public class SoundManager {
 
-    private final Map<String, Sound> soundBank;
+    private final IAudioProvider audioProvider;
 
-    public SoundManager() {
-        this.soundBank = new HashMap<>();
+    public SoundManager(IAudioProvider audioProvider) {
+        if (audioProvider == null) {
+            throw new IllegalArgumentException("AudioProvider cannot be null");
+        }
+        this.audioProvider = audioProvider;
     }
 
+    /**
+     * Loads a sound from the given path and stores it under the given name.
+     *
+     * @param id the identifier for the sound
+     * @param path the file path to the sound resource
+     * @return true if loaded successfully, false otherwise
+     */
     public boolean loadSound(String id, String path) {
         if (id == null || id.isEmpty()) {
-            Gdx.app.log("SoundManager", "Cannot load sound with null/empty ID (ignored)");
             return false;
         }
         if (path == null || path.isEmpty()) {
-            Gdx.app.log("SoundManager", "Cannot load sound with null/empty path (ignored)");
             return false;
         }
-
-        if (soundBank.containsKey(id)) {
-            return true; // Already loaded
-        }
-
-        try {
-            Sound sound = Gdx.audio.newSound(Gdx.files.internal(path));
-            soundBank.put(id, sound);
-            return true;
-        } catch (Exception e) {
-            Gdx.app.error("SoundManager", "Failed to load sound: " + path, e);
-            return false;
-        }
+        return audioProvider.loadSound(path, id);
     }
 
+    /**
+     * Plays a previously loaded sound by its identifier.
+     *
+     * @param id the identifier of the sound to play
+     * @param volume the volume to play at (0.0 to 1.0)
+     */
     public void playSound(String id, float volume) {
         if (id == null || id.isEmpty()) {
-            Gdx.app.log("SoundManager", "Cannot play sound with null/empty ID (ignored)");
             return;
         }
-
-        Sound sound = soundBank.get(id);
-        if (sound == null) {
-            Gdx.app.log("SoundManager", "Sound not found: " + id);
-            return;
-        }
-
-        float clampedVolume = MathUtils.clamp(volume, 0f, 1f);
-        if (clampedVolume != volume) {
-            Gdx.app.log("SoundManager", "Volume clamped to [0,1]: " + volume + " -> " + clampedVolume);
-        }
-
-        try {
-            sound.play(clampedVolume);
-        } catch (Exception e) {
-            Gdx.app.error("SoundManager", "Audio playback failed for: " + id, e);
-        }
+        audioProvider.playSound(id, volume);
     }
 
+    /**
+     * Disposes all audio resources.
+     */
     public void dispose() {
-        for (Sound sound : soundBank.values()) {
-            sound.dispose();
-        }
-        soundBank.clear();
+        audioProvider.dispose();
     }
 }

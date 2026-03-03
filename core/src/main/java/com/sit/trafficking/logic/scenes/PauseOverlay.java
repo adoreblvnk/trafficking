@@ -1,11 +1,8 @@
 package com.sit.trafficking.logic.scenes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.sit.trafficking.engine.interfaces.InputListener;
+import com.sit.trafficking.engine.interfaces.providers.IEngineContext;
 import com.sit.trafficking.engine.managers.CollisionManager;
 import com.sit.trafficking.engine.managers.EntityManager;
 import com.sit.trafficking.engine.managers.InputManager;
@@ -14,20 +11,22 @@ import com.sit.trafficking.engine.scenes.AbstractScene;
 import com.sit.trafficking.engine.scenes.SceneManager;
 import com.sit.trafficking.logic.LogicConstants;
 
+/**
+ * Pause overlay scene for traffic simulation game.
+ * Uses IGraphicsProvider for semi-transparent background rendering.
+ */
 public class PauseOverlay extends AbstractScene implements InputListener {
 
-    private SpriteBatch batch;
     private final SceneManager sceneManager;
 
-    public PauseOverlay(SceneManager sceneManager, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager, ShapeRenderer shapeRenderer) {
-        super(entityManager, collisionManager, inputManager, movementManager, shapeRenderer);
+    public PauseOverlay(IEngineContext context, SceneManager sceneManager, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+        super(context, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
     }
 
     //sets up rendering tools and register for input events
     @Override
     public void create() {
-        batch = new SpriteBatch();
         loadFont(LogicConstants.FONT_SIZE_MENU);
         getInputManager().addListener(this);
     }
@@ -56,29 +55,25 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     //renders a semi-transparent background and pause text
     @Override
     public void render() {
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
+        float screenWidth = context.getDisplay().getWidth();
+        float screenHeight = context.getDisplay().getHeight();
 
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        context.getGraphics().enableBlend();
 
-        getShapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
-        getShapeRenderer().setColor(0, 0, 0, LogicConstants.OVERLAY_ALPHA);
-        getShapeRenderer().rect(0, 0, screenWidth, screenHeight);
-        getShapeRenderer().end();
+        context.getGraphics().beginShapes();
+        context.getGraphics().setColor(0, 0, 0, LogicConstants.OVERLAY_ALPHA);
+        context.getGraphics().drawRect(0, 0, screenWidth, screenHeight);
+        context.getGraphics().endShapes();
 
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+        context.getGraphics().disableBlend();
 
-        batch.begin();
-        getFont().draw(batch, "PAUSED", screenWidth / 2f - 50, screenHeight / 2f + 20);
-        getFont().draw(batch, "Press ESC to Resume", screenWidth / 2f - 100, screenHeight / 2f - 30);
-        batch.end();
+        context.getGraphics().drawText("PAUSED", screenWidth / 2f - 50, screenHeight / 2f + 20);
+        context.getGraphics().drawText("Press ESC to Resume", screenWidth / 2f - 100, screenHeight / 2f - 30);
     }
 
     //disposes of batch resources and call super disposal
     @Override
     public void dispose() {
         super.dispose();
-        batch.dispose();
     }
 }
