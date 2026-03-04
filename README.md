@@ -23,8 +23,8 @@ A 2D traffic simulation game built with libGDX demonstrating Object-Oriented Pro
 
 ## GDX Liftoff Setup
 
-- Project Name: Trafficking
-- Package: com.sit.trafficking
+- Project Name: covid26
+- Package: com.sit.covid26
 - Main Class: Main
 - Platforms Selected:
   - Core
@@ -51,7 +51,7 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 ### Project Structure
 
 ```
-core/src/main/java/com/sit/trafficking/
+core/src/main/java/com/sit/covid26/
 ├── engine/              # Reusable game engine
 │   ├── entities/        # Entity hierarchy (AbstractEntity → Static/Dynamic)
 │   ├── interfaces/      # Contracts (ICollidable, Movable, InputListener)
@@ -68,7 +68,7 @@ core/src/main/java/com/sit/trafficking/
 Run automated integration tests:
 
 ```bash
-./gradlew lwjgl3:run -PmainClass=com.sit.trafficking.testing.HeadlessTestLauncher
+./gradlew lwjgl3:run -PmainClass=com.sit.covid26.testing.HeadlessTestLauncher
 ```
 
 Tests cover entity management, collision detection, movement processing, and manager integration.

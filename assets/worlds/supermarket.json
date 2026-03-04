@@ -1,0 +1,21 @@
+{
+  "mapName": "Supermarket Aisles",
+  "educationalText": "Tight aisles force citizens close together, drastically increasing the spread rate. Flatten the curve to save lives!",
+  "difficulty": "Hard",
+  "population": 150,
+  "hospitalCapacity": 30,
+  "maxCasualties": 5,
+  "baseMortalityRate": 0.08,
+  "entities":[
+    { "id": "wall_top", "type": "STATIC", "x": 0, "y": 700, "w": 1280, "h": 20 },
+    { "id": "wall_bottom", "type": "STATIC", "x": 0, "y": 150, "w": 1280, "h": 20 },
+    { "id": "wall_left", "type": "STATIC", "x": 0, "y": 150, "w": 20, "h": 570 },
+    { "id": "wall_right", "type": "STATIC", "x": 1260, "y": 150, "w": 20, "h": 570 },
+    
+    { "id": "aisle_1", "type": "STATIC", "x": 200, "y": 250, "w": 40, "h": 350 },
+    { "id": "aisle_2", "type": "STATIC", "x": 420, "y": 250, "w": 40, "h": 350 },
+    { "id": "aisle_3", "type": "STATIC", "x": 640, "y": 250, "w": 40, "h": 350 },
+    { "id": "aisle_4", "type": "STATIC", "x": 860, "y": 250, "w": 40, "h": 350 },
+    { "id": "aisle_5", "type": "STATIC", "x": 1080, "y": 250, "w": 40, "h": 350 }
+  ]
+}
