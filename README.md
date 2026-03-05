@@ -5,6 +5,7 @@ A 2D traffic simulation game built with libGDX demonstrating Object-Oriented Pro
 ## Quick Start
 
 ### Running the Application
+Use _"CTRL + SHIFT + B"_ for keyboard shortcut to run the application.
 
 **Mac/Linux:**
 

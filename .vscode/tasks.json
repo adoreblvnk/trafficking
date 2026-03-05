@@ -1,0 +1,46 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run LWJGL3",
+            "type": "shell",
+            "args": [
+                "lwjgl3:run"
+            ],
+            "windows": {
+                "command": ".\\gradlew.bat"
+            },
+            "linux": {
+                "command": "./gradlew"
+            },
+            "osx": {
+                "command": "./gradlew"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Headless Test",
+            "type": "shell",
+            "args": [
+                "lwjgl3:run",
+                "-PmainClass=com.sit.covid26.testing.HeadlessTestLauncher"
+            ],
+            "windows": {
+                "command": ".\\gradlew.bat"
+            },
+            "linux": {
+                "command": "./gradlew"
+            },
+            "osx": {
+                "command": "./gradlew"
+            },
+            "problemMatcher": []
+        }
+    ]
+}
