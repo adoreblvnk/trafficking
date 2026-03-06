@@ -93,6 +93,12 @@ public interface IGraphicsProvider {
      */
     void drawText(String text, float x, float y);
     
+    void drawTexture(String textureId, float x, float y, float w, float h);
+    
+    void begin();
+    
+    void end();
+    
     /**
      * Disposes of native graphics resources.
      */

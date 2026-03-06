@@ -29,7 +29,7 @@ public class CollisionManager {
         }
 
         for (ICollidable e : entities) {
-            if (e != null && e.getBounds() != null && e.getBounds().overlaps(area)) {
+            if (e != null && e.getCollider() != null && e.getCollider().getAABB().overlaps(area)) {
                 result.add(e);
             }
         }
@@ -49,8 +49,8 @@ public class CollisionManager {
             float maxX = -Float.MAX_VALUE, maxY = -Float.MAX_VALUE;
 
             for (ICollidable e : entities) {
-                if (e == null || e.getBounds() == null) continue;
-                Rectangle r = e.getBounds();
+                if (e == null || e.getCollider() == null) continue;
+                Rectangle r = e.getCollider().getAABB();
                 if (r.x < minX) minX = r.x;
                 if (r.y < minY) minY = r.y;
                 if (r.x + r.width > maxX) maxX = r.x + r.width;
@@ -65,7 +65,7 @@ public class CollisionManager {
             QuadTree quad = new QuadTree(0, new Rectangle(minX, minY, width, height));
 
             for (ICollidable e : entities) {
-                if (e != null && e.getBounds() != null) {
+                if (e != null && e.getCollider() != null) {
                     quad.insert(e);
                 }
             }
@@ -73,15 +73,17 @@ public class CollisionManager {
             List<ICollidable> returnObjects = new ArrayList<>();
             for (int i = 0; i < entities.size(); i++) {
                 ICollidable a = entities.get(i);
-                if (a == null || a.getBounds() == null) continue;
+                if (a == null || a.getCollider() == null) continue;
 
                 returnObjects.clear();
-                quad.retrieve(returnObjects, a.getBounds());
+                quad.retrieve(returnObjects, a.getCollider().getAABB());
 
                 for (int j = 0; j < returnObjects.size(); j++) {
                     ICollidable b = returnObjects.get(j);
 
                     if (a == b) continue;
+                    
+                    if (!a.isCollisionEnabled() || !b.isCollisionEnabled()) continue;
 
                     int hashA = System.identityHashCode(a);
                     int hashB = System.identityHashCode(b);
@@ -90,14 +92,14 @@ public class CollisionManager {
                     if (hashA > hashB) {
                         shouldProcess = true;
                     } else if (hashA == hashB) {
-                        if (a.getBounds().x > b.getBounds().x || 
-                           (a.getBounds().x == b.getBounds().x && a.getBounds().y > b.getBounds().y)) {
+                        if (a.getCollider().getAABB().x > b.getCollider().getAABB().x || 
+                           (a.getCollider().getAABB().x == b.getCollider().getAABB().x && a.getCollider().getAABB().y > b.getCollider().getAABB().y)) {
                             shouldProcess = true;
                         }
                     }
 
                     if (shouldProcess) {
-                        if (checkAABB(a.getBounds(), b.getBounds())) {
+                        if (a.getCollider().intersects(b.getCollider())) {
                             resolveCollision(a, b);
                             a.onCollision(b);
                             b.onCollision(a);
@@ -125,8 +127,8 @@ public class CollisionManager {
 
     // Separates overlapping entities using minimum translation vector
     private void resolvePhysics(ICollidable a, ICollidable b) {
-        Rectangle rA = a.getBounds();
-        Rectangle rB = b.getBounds();
+        Rectangle rA = a.getCollider().getAABB();
+        Rectangle rB = b.getCollider().getAABB();
         Rectangle intersection = new Rectangle();
         Intersector.intersectRectangles(rA, rB, intersection);
 

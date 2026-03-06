@@ -9,6 +9,10 @@ import com.badlogic.gdx.math.Matrix4;
 import com.sit.covid26.engine.interfaces.providers.IGraphicsProvider;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import com.badlogic.gdx.graphics.Texture;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * libGDX implementation of IGraphicsProvider.
  * Encapsulates ShapeRenderer and GL20 operations for platform-independent rendering.
@@ -18,12 +22,14 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     private final ShapeRenderer shapeRenderer;
     private final SpriteBatch spriteBatch;
+    private final Map<String, Texture> textures;
     private BitmapFont font;
     private boolean isShapeBatchOpen = false;
 
     public LibGdxGraphics() {
         this.shapeRenderer = new ShapeRenderer();
         this.spriteBatch = new SpriteBatch();
+        this.textures = new HashMap<>();
     }
 
     @Override
@@ -123,6 +129,28 @@ public class LibGdxGraphics implements IGraphicsProvider {
         spriteBatch.begin();
         font.draw(spriteBatch, text, x, y);
         spriteBatch.end();
+    }
+
+    @Override
+    public void drawTexture(String textureId, float x, float y, float w, float h) {
+        Texture texture = textures.get(textureId);
+        if (texture == null) {
+            texture = new Texture(Gdx.files.internal("textures/" + textureId + ".png"));
+            textures.put(textureId, texture);
+        }
+        spriteBatch.draw(texture, x, y, w, h);
+    }
+
+    @Override
+    public void begin() {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        spriteBatch.begin();
+    }
+
+    @Override
+    public void end() {
+        spriteBatch.end();
+        shapeRenderer.end();
     }
 
     @Override

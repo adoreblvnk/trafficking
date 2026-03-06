@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.sit.covid26.engine.interfaces.CollisionListener;
 import com.sit.covid26.engine.interfaces.ICollidable;
 import com.sit.covid26.engine.interfaces.providers.IGraphicsProvider;
+import com.sit.covid26.engine.physics.ICollider;
+import com.sit.covid26.engine.physics.BoxCollider;
 
 /**
  * Abstract base class for all game entities.
@@ -24,7 +26,8 @@ public abstract class AbstractEntity implements ICollidable {
     private int zIndex = 0;
     private CollisionListener collisionListener;
 
-    private Rectangle bounds;
+    protected ICollider collider;
+    protected boolean collisionEnabled = true;
 
     //every entity requires a position and size to exist
     public AbstractEntity(String id, float x, float y, float w, float h) {
@@ -46,12 +49,16 @@ public abstract class AbstractEntity implements ICollidable {
         this.g = 1.0f;
         this.b = 1.0f;
         this.a = 1.0f;
-        this.bounds = new Rectangle(x, y, w, h);
+        this.collider = new BoxCollider(x, y, w, h);
     }
 
     //make sure collision bounding is in sync whenever entity position updates
     public void update(float dt) {
-        bounds.set(position.x, position.y, width, height);
+        if (collider instanceof BoxCollider) {
+            ((BoxCollider) collider).setPosition(position.x, position.y);
+        } else if (collider instanceof com.sit.covid26.engine.physics.CircleCollider) {
+            ((com.sit.covid26.engine.physics.CircleCollider) collider).setPosition(position.x, position.y);
+        }
     }
 
     /**
@@ -63,8 +70,23 @@ public abstract class AbstractEntity implements ICollidable {
 
     //shows current AABB for collision checks
     @Override
-    public Rectangle getBounds() {
-        return bounds;
+    public ICollider getCollider() {
+        return collider;
+    }
+
+    // Retained for backward compatibility with logic package for now
+    public com.badlogic.gdx.math.Rectangle getBounds() {
+        return collider.getAABB();
+    }
+
+    @Override
+    public boolean isCollisionEnabled() {
+        return collisionEnabled;
+    }
+
+    @Override
+    public void setCollisionEnabled(boolean enabled) {
+        this.collisionEnabled = enabled;
     }
 
     public String getId() {
@@ -84,7 +106,11 @@ public abstract class AbstractEntity implements ICollidable {
             return;
         }
         this.position.set(x, y);
-        this.bounds.setPosition(x, y);
+        if (this.collider instanceof BoxCollider) {
+            ((BoxCollider) this.collider).setPosition(x, y);
+        } else if (this.collider instanceof com.sit.covid26.engine.physics.CircleCollider) {
+            ((com.sit.covid26.engine.physics.CircleCollider) this.collider).setPosition(x, y);
+        }
     }
 
     public float getWidth() {

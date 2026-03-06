@@ -61,7 +61,11 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     @Override
     public void updatePosition(float dt) {
         getPosition().mulAdd(velocity, dt);
-        getBounds().setPosition(getPosition().x, getPosition().y);
+        if (collider instanceof com.sit.covid26.engine.physics.BoxCollider) {
+            ((com.sit.covid26.engine.physics.BoxCollider) collider).setPosition(getPosition().x, getPosition().y);
+        } else if (collider instanceof com.sit.covid26.engine.physics.CircleCollider) {
+            ((com.sit.covid26.engine.physics.CircleCollider) collider).setPosition(getPosition().x, getPosition().y);
+        }
     }
 
     @Override

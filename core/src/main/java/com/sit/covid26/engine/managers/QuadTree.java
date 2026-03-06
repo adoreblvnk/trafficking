@@ -76,7 +76,7 @@ public class QuadTree {
 
     public void insert(ICollidable pRect) {
         if (nodes[0] != null) {
-            int index = getIndex(pRect.getBounds());
+            int index = getIndex(pRect.getCollider().getAABB());
             if (index != -1) {
                 nodes[index].insert(pRect);
                 return;
@@ -92,7 +92,7 @@ public class QuadTree {
 
             int i = 0;
             while (i < objects.size()) {
-                int index = getIndex(objects.get(i).getBounds());
+                int index = getIndex(objects.get(i).getCollider().getAABB());
                 if (index != -1) {
                     nodes[index].insert(objects.remove(i));
                 } else {
