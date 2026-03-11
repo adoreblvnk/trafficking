@@ -64,7 +64,7 @@ configure(subprojects) {
 
 subprojects {
   version = "$projectVersion"
-  ext.appName = 'covid26'
+  ext.appName = 'recyclingpinball'
   repositories {
     mavenCentral()
     // You may want to remove the following line if you have errors downloading dependencies.
@@ -74,4 +74,4 @@ subprojects {
   }
 }
 
-eclipse.project.name = 'covid26' + '-parent'
+eclipse.project.name = 'recyclingpinball' + '-parent'

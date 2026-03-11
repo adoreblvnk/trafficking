@@ -24,8 +24,8 @@ Use _"CTRL + SHIFT + B"_ for keyboard shortcut to run the application.
 
 ## GDX Liftoff Setup
 
-- Project Name: covid26
-- Package: com.sit.covid26
+- Project Name: recyclingpinball
+- Package: com.sit.recyclingpinball
 - Main Class: Main
 - Platforms Selected:
   - Core
@@ -52,7 +52,7 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 ### Project Structure
 
 ```
-core/src/main/java/com/sit/covid26/
+core/src/main/java/com/sit/recyclingpinball/
 ├── engine/              # Reusable game engine
 │   ├── entities/        # Entity hierarchy (AbstractEntity → Static/Dynamic)
 │   ├── interfaces/      # Contracts (ICollidable, Movable, InputListener)
@@ -69,7 +69,7 @@ core/src/main/java/com/sit/covid26/
 Run automated integration tests:
 
 ```bash
-./gradlew lwjgl3:run -PmainClass=com.sit.covid26.testing.HeadlessTestLauncher
+./gradlew lwjgl3:run -PmainClass=com.sit.recyclingpinball.testing.HeadlessTestLauncher
 ```
 
 Tests cover entity management, collision detection, movement processing, and manager integration.

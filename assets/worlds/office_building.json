@@ -1,21 +1,23 @@
 {
   "mapName": "The Office Building",
-  "educationalText": "Small rooms contain the virus initially, but doorways create transmission bottlenecks. Enact Lockdowns to prevent cross-room spread.",
+  "educationalText": "Cubicles and rooms contain the virus initially, but doorways create transmission bottlenecks. Act quickly when the virus breaches a new room!",
   "difficulty": "Medium",
-  "population": 100,
-  "hospitalCapacity": 40,
-  "maxCasualties": 8,
+  "population": 45,
+  "hospitalCapacity": 20,
+  "maxCasualties": 5,
   "baseMortalityRate": 0.06,
+  "baseInfectionRate": 0.70,
+  "vaccineCount": 4,
   "entities":[
-    { "id": "wall_top", "type": "STATIC", "x": 0, "y": 700, "w": 1280, "h": 20 },
-    { "id": "wall_bottom", "type": "STATIC", "x": 0, "y": 150, "w": 1280, "h": 20 },
-    { "id": "wall_left", "type": "STATIC", "x": 0, "y": 150, "w": 20, "h": 570 },
-    { "id": "wall_right", "type": "STATIC", "x": 1260, "y": 150, "w": 20, "h": 570 },
+    { "id": "wall_top", "type": "STATIC", "x": 0, "y": 980, "w": 1900, "h": 20 },
+    { "id": "wall_bottom", "type": "STATIC", "x": 0, "y": 150, "w": 1900, "h": 20 },
+    { "id": "wall_left", "type": "STATIC", "x": 0, "y": 150, "w": 20, "h": 850 },
+    { "id": "wall_right", "type": "STATIC", "x": 1880, "y": 150, "w": 20, "h": 850 },
 
-    { "id": "room_divider_horiz_left", "type": "STATIC", "x": 20, "y": 425, "w": 560, "h": 20 },
-    { "id": "room_divider_horiz_right", "type": "STATIC", "x": 680, "y": 425, "w": 580, "h": 20 },
-    
-    { "id": "room_divider_vert_bottom", "type": "STATIC", "x": 630, "y": 170, "w": 20, "h": 200 },
-    { "id": "room_divider_vert_top", "type": "STATIC", "x": 630, "y": 470, "w": 20, "h": 230 }
+    { "id": "room_divider_horiz_left", "type": "STATIC", "x": 0, "y": 550, "w": 850, "h": 20 },
+    { "id": "room_divider_horiz_right", "type": "STATIC", "x": 1050, "y": 550, "w": 850, "h": 20 },
+
+    { "id": "room_divider_vert_bottom", "type": "STATIC", "x": 940, "y": 150, "w": 20, "h": 300 },
+    { "id": "room_divider_vert_top", "type": "STATIC", "x": 940, "y": 650, "w": 20, "h": 330 }
   ]
 }

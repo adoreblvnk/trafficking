@@ -29,7 +29,7 @@
             "type": "shell",
             "args": [
                 "lwjgl3:run",
-                "-PmainClass=com.sit.covid26.testing.HeadlessTestLauncher"
+                "-PmainClass=com.sit.recyclingpinball.testing.HeadlessTestLauncher"
             ],
             "windows": {
                 "command": ".\\gradlew.bat"

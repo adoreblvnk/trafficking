@@ -1,15 +1,17 @@
 {
   "mapName": "The Open Park",
-  "educationalText": "Wide open spaces allow the virus to spread uniformly. Use the Mask Mandate and Social Distancing to flatten the curve.",
+  "educationalText": "Wide open spaces allow the virus to spread uniformly. Use the Mask Mandate and Social Distancing to flatten the curve before the hospital is overwhelmed.",
   "difficulty": "Easy",
-  "population": 150,
-  "hospitalCapacity": 50,
+  "population": 60,
+  "hospitalCapacity": 25,
   "maxCasualties": 10,
   "baseMortalityRate": 0.05,
+  "baseInfectionRate": 0.75,
+  "vaccineCount": 5,
   "entities":[
-    { "id": "wall_top", "type": "STATIC", "x": 0, "y": 700, "w": 1280, "h": 20 },
-    { "id": "wall_bottom", "type": "STATIC", "x": 0, "y": 150, "w": 1280, "h": 20 },
-    { "id": "wall_left", "type": "STATIC", "x": 0, "y": 150, "w": 20, "h": 570 },
-    { "id": "wall_right", "type": "STATIC", "x": 1260, "y": 150, "w": 20, "h": 570 }
+    { "id": "wall_top", "type": "STATIC", "x": 0, "y": 980, "w": 1900, "h": 20 },
+    { "id": "wall_bottom", "type": "STATIC", "x": 0, "y": 150, "w": 1900, "h": 20 },
+    { "id": "wall_left", "type": "STATIC", "x": 0, "y": 150, "w": 20, "h": 850 },
+    { "id": "wall_right", "type": "STATIC", "x": 1880, "y": 150, "w": 20, "h": 850 }
   ]
 }
