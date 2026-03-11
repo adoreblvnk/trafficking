@@ -15,8 +15,10 @@ import java.util.Map;
 
 /**
  * libGDX implementation of IGraphicsProvider.
- * Encapsulates ShapeRenderer and GL20 operations for platform-independent rendering.
- * The ShapeRenderer is NOT exposed; all interactions happen through this interface.
+ * Encapsulates ShapeRenderer and GL20 operations for platform-independent
+ * rendering.
+ * The ShapeRenderer is NOT exposed; all interactions happen through this
+ * interface.
  */
 public class LibGdxGraphics implements IGraphicsProvider {
 
@@ -143,13 +145,15 @@ public class LibGdxGraphics implements IGraphicsProvider {
             }
 
             font = generatedFont;
-            
+
             // Register font by its simple name (e.g. "Geist-Bold")
             String simpleName = fontPath;
             int lastSlash = fontPath.lastIndexOf('/');
-            if (lastSlash >= 0) simpleName = simpleName.substring(lastSlash + 1);
+            if (lastSlash >= 0)
+                simpleName = simpleName.substring(lastSlash + 1);
             int lastDot = simpleName.lastIndexOf('.');
-            if (lastDot >= 0) simpleName = simpleName.substring(0, lastDot);
+            if (lastDot >= 0)
+                simpleName = simpleName.substring(0, lastDot);
             fonts.put(simpleName, generatedFont);
 
             return true;
@@ -163,6 +167,20 @@ public class LibGdxGraphics implements IGraphicsProvider {
         }
     }
 
+    private float textR = 1f, textG = 1f, textB = 1f, textA = 1f;
+
+    @Override
+    public void setTextColor(float r, float g, float b, float a) {
+        this.textR = r;
+        this.textG = g;
+        this.textB = b;
+        this.textA = a;
+    }
+
+    private void applyTextColor(BitmapFont f) {
+        f.setColor(textR, textG, textB, textA);
+    }
+
     @Override
     public void drawText(String text, float x, float y) {
         if (font == null) {
@@ -170,6 +188,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
         }
 
         ensureSpriteBatch();
+        applyTextColor(font);
         font.draw(spriteBatch, text, x, y);
     }
 
@@ -182,12 +201,15 @@ public class LibGdxGraphics implements IGraphicsProvider {
                 loadFont(path, 24);
                 targetFont = fonts.get(fontName);
             }
-            if (targetFont == null) targetFont = font;
+            if (targetFont == null)
+                targetFont = font;
         }
 
-        if (targetFont == null) return;
+        if (targetFont == null)
+            return;
 
         ensureSpriteBatch();
+        applyTextColor(targetFont);
         targetFont.draw(spriteBatch, text, x, y);
     }
 
@@ -200,21 +222,36 @@ public class LibGdxGraphics implements IGraphicsProvider {
                 loadFont(path, 24);
                 targetFont = fonts.get(fontName);
             }
-            if (targetFont == null) targetFont = font;
+            if (targetFont == null)
+                targetFont = font;
         }
 
-        if (targetFont == null) return;
+        if (targetFont == null)
+            return;
 
         ensureSpriteBatch();
+        applyTextColor(targetFont);
         targetFont.draw(spriteBatch, text, x, y, targetWidth, com.badlogic.gdx.utils.Align.center, true);
     }
 
     @Override
     public void fillRectangle(float x, float y, float w, float h, float r, float g, float b, float alpha) {
-        ensureShapeBatch();
+        // Must end any open batches first
+        if (isShapeBatchOpen) {
+            shapeRenderer.end();
+            isShapeBatchOpen = false;
+        }
+        if (isSpriteBatchOpen) {
+            spriteBatch.end();
+            isSpriteBatchOpen = false;
+        }
+        // Enable blending BEFORE begin, draw, then end() flushes vertices while
+        // blending is still active
         enableBlend();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(r, g, b, alpha);
         shapeRenderer.rect(x, y, w, h);
+        shapeRenderer.end();
         disableBlend();
     }
 
@@ -230,14 +267,16 @@ public class LibGdxGraphics implements IGraphicsProvider {
     }
 
     @Override
-    public void drawTexture(String textureId, float x, float y, float width, float height, float originX, float originY, float rotationDegrees) {
+    public void drawTexture(String textureId, float x, float y, float width, float height, float originX, float originY,
+            float rotationDegrees) {
         Texture texture = textures.get(textureId);
         if (texture == null) {
             texture = new Texture(Gdx.files.internal("textures/" + textureId + ".png"));
             textures.put(textureId, texture);
         }
         ensureSpriteBatch();
-        spriteBatch.draw(texture, x, y, originX, originY, width, height, 1.0f, 1.0f, rotationDegrees, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
+        spriteBatch.draw(texture, x, y, originX, originY, width, height, 1.0f, 1.0f, rotationDegrees, 0, 0,
+                texture.getWidth(), texture.getHeight(), false, false);
     }
 
     @Override

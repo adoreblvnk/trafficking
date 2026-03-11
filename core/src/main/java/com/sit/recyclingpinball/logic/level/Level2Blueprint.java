@@ -6,25 +6,24 @@ public class Level2Blueprint implements ILevelBlueprint {
     @Override
     public BoardLayout construct(BoardBuilder builder) {
         // play area x=400 to 1900, y=0 to 1000
-        builder.addWall(400, 0, 15, 1000) // left wall
-               .addWall(1850, 0, 15, 1000) // right wall
-               .addWall(400, 950, 1350, 50); // top wall
+        builder.addWall(400, 0, 50, 1000) // left wall
+               .addWall(1850, 0, 50, 1000) // right wall
+               .addWall(400, 950, 1500, 50); // top wall
                
         // Launch Tube
         builder.addWall(1750, 0, 15, 800);
                
         // Bottom Funnels
-        builder.addSlantedWall(450, 200, 450, 15, -30f); // left funnel
-        builder.addSlantedWall(1260, 200, 490, 15, 30f); // right funnel
-        
+        builder.addSlantedWall(555, 167, 300, 15, -15f); // left funnel
+        builder.addSlantedWall(1335, 180, 430, 15, 15f); // right funnel        
         // Top Curve
         builder.addSlantedWall(1700, 890, 200, 15, 135f);
 
         builder.addSlantedWall(900, 400, 200, 15, 15f); // obstacle wall
         builder.addSlantedWall(1200, 600, 200, 15, -25f); // obstacle wall
 
-        builder.addLeftFlipper(900, 100)
-               .addRightFlipper(1260, 100);
+        builder.addLeftFlipper(850, 100)
+               .addRightFlipper(1300, 100);
                
         builder.addTrash(TrashType.PLASTIC, 700, 500)
                .addTrash(TrashType.PAPER, 1400, 500)

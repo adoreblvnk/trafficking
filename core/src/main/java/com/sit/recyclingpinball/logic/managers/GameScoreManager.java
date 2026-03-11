@@ -10,11 +10,11 @@ import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 public class GameScoreManager implements PinballEventListener {
     private int score = 0;
     private int ballsLeft = 3;
-    private final int winScore;
+    private final int totalTrash;
     private boolean ballInPlay = false;
 
-    public GameScoreManager(PinballEventBus bus, int winScore) {
-        this.winScore = winScore;
+    public GameScoreManager(PinballEventBus bus, int totalTrash) {
+        this.totalTrash = totalTrash;
         bus.register(this);
     }
 
@@ -32,6 +32,23 @@ public class GameScoreManager implements PinballEventListener {
 
     public int getScore() { return score; }
     public int getBallsLeft() { return ballsLeft; }
-    public boolean isWon() { return score >= winScore; }
-    public boolean isLost() { return ballsLeft <= 0 && score < winScore && !ballInPlay; }
+    public int getTotalTrash() { return totalTrash; }
+
+    /**
+     * Game is over when all trash is collected, or all balls have drained.
+     */
+    public boolean isGameOver() {
+        if (score >= totalTrash) return true;
+        return ballsLeft <= 0 && !ballInPlay;
+    }
+
+    /**
+     * Win: game is over AND at least 1 trash was collected.
+     */
+    public boolean isWon() { return isGameOver() && score >= 1; }
+
+    /**
+     * Loss: game is over AND zero trash was collected.
+     */
+    public boolean isLost() { return isGameOver() && score < 1; }
 }

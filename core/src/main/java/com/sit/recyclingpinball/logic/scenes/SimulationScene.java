@@ -2,7 +2,6 @@ package com.sit.recyclingpinball.logic.scenes;
 
 import com.badlogic.gdx.Input;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
-import com.sit.recyclingpinball.engine.interfaces.ICollidable;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
 import com.sit.recyclingpinball.engine.managers.CollisionManager;
 import com.sit.recyclingpinball.engine.managers.EntityManager;
@@ -31,6 +30,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
     private GameScoreManager scoreManager;
     private GameAudioManager audioManager;
     private PinballEntity pinball;
+    private int totalTrash;
 
     public SimulationScene(IEngineContext context, SceneManager sceneManager, ILevelBlueprint blueprint) {
         super(context, new EntityManager(), new CollisionManager(), new InputManager(), new MovementManager());
@@ -43,11 +43,13 @@ public class SimulationScene extends AbstractScene implements InputListener {
         getInputManager().addListener(this);
 
         eventBus = new PinballEventBus();
-        scoreManager = new GameScoreManager(eventBus, 2);
-        audioManager = new GameAudioManager(context.getAudio(), eventBus);
 
         BoardBuilder builder = new BoardBuilder();
         BoardLayout layout = blueprint.construct(builder);
+
+        totalTrash = layout.getTrashes().size();
+        scoreManager = new GameScoreManager(eventBus, totalTrash);
+        audioManager = new GameAudioManager(context.getAudio(), eventBus);
 
         for (WallEntity w : layout.getWalls()) {
             getEntityManager().addEntity(w);
@@ -77,9 +79,9 @@ public class SimulationScene extends AbstractScene implements InputListener {
     public void update(float dt) {
         super.update(dt);
         if (scoreManager.isWon()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, true));
+            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, true, scoreManager.getScore(), totalTrash));
         } else if (scoreManager.isLost()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, false));
+            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, false, scoreManager.getScore(), totalTrash));
         } else if (pinball.getPosition().y < -50 && scoreManager.getBallsLeft() > 0) {
             // Respawn logic
             pinball.setPosition(1801, 400);
@@ -105,6 +107,20 @@ public class SimulationScene extends AbstractScene implements InputListener {
         context.getGraphics().drawText("Score: " + scoreManager.getScore(), "Geist-Bold", 50, 900);
         context.getGraphics().drawText("Balls: " + scoreManager.getBallsLeft(), "Geist-Bold", 50, 850);
         context.getGraphics().drawText(blueprint.getEducationalText(), "Geist-Bold", 50, 800, 300);
+
+        // 4. Draw star icons for collected trash
+        int collected = scoreManager.getScore();
+        for (int i = 0; i < totalTrash; i++) {
+            float starX = 50 + i * 70;
+            float starY = 100;
+            if (i < collected) {
+                context.getGraphics().drawTexture("star", starX, starY, 64, 60);
+            } else {
+                // Draw dimmed placeholder — dark rectangle behind unfilled star position
+                context.getGraphics().fillRectangle(starX + 16, starY + 14, 32, 32, 0.3f, 0.3f, 0.3f, 0.4f);
+            }
+        }
+
         context.getGraphics().end();
     }
 

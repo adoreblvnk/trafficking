@@ -10,6 +10,7 @@ import com.sit.recyclingpinball.engine.interfaces.Movable;
 
 import com.sit.recyclingpinball.engine.physics.BoxCollider;
 import com.sit.recyclingpinball.engine.physics.CircleCollider;
+import com.sit.recyclingpinball.engine.physics.ICollider;
 import com.sit.recyclingpinball.engine.physics.OBBCollider;
 import com.sit.recyclingpinball.engine.physics.SATMathUtils;
 
@@ -21,6 +22,8 @@ import java.util.List;
  * Supports static/dynamic entity separation with configurable bounce and push factors.
  */
 public class CollisionManager {
+
+    private static final float SEPARATION_EPSILON = 0.5f;
 
     public CollisionManager() {
     }
@@ -141,6 +144,18 @@ public class CollisionManager {
         if (a.getCollider() instanceof OBBCollider || b.getCollider() instanceof OBBCollider) {
             Vector2 mtv = calculateSATMTV(a.getCollider(), b.getCollider());
             if (mtv == null) return;
+            Vector2 centerA = getColliderCenter(a.getCollider());
+            Vector2 centerB = getColliderCenter(b.getCollider());
+            Vector2 desired = new Vector2(centerA.x - centerB.x, centerA.y - centerB.y);
+
+            if (mtv.dot(desired) < 0f) {
+                mtv.scl(-1f);
+            }
+
+            if (mtv.len2() > 0f) {
+                mtv.nor().scl(mtv.len() + SEPARATION_EPSILON);
+            }
+
             pushX = mtv.x;
             pushY = mtv.y;
         } else {
@@ -168,16 +183,12 @@ public class CollisionManager {
         if (!a.isStatic() && b.isStatic()) {
             a.setPosition(a.getPosition().x + pushX, a.getPosition().y + pushY);
             if (a instanceof Movable) {
-                Vector2 vel = ((Movable) a).getVelocity();
-                if (Math.abs(pushX) > Math.abs(pushY)) vel.x *= -EngineConstants.DEFAULT_BOUNCE;
-                else vel.y *= -EngineConstants.DEFAULT_BOUNCE;
+                applyBounce((Movable) a, pushX, pushY);
             }
         } else if (a.isStatic() && !b.isStatic()) {
             b.setPosition(b.getPosition().x - pushX, b.getPosition().y - pushY);
             if (b instanceof Movable) {
-                Vector2 vel = ((Movable) b).getVelocity();
-                if (Math.abs(pushX) > Math.abs(pushY)) vel.x *= -EngineConstants.DEFAULT_BOUNCE;
-                else vel.y *= -EngineConstants.DEFAULT_BOUNCE;
+                applyBounce((Movable) b, -pushX, -pushY);
             }
         } else if (!a.isStatic() && !b.isStatic()) {
             a.setPosition(a.getPosition().x + pushX * EngineConstants.PUSH_OUT_FACTOR,
@@ -345,5 +356,29 @@ public class CollisionManager {
             cy += v.y;
         }
         return new Vector2(cx / vertices.length, cy / vertices.length);
+    }
+
+    private Vector2 getColliderCenter(ICollider collider) {
+        Rectangle aabb = collider.getAABB();
+        return new Vector2(aabb.x + aabb.width * 0.5f, aabb.y + aabb.height * 0.5f);
+    }
+
+    private void applyBounce(Movable movable, float normalX, float normalY) {
+        Vector2 normal = new Vector2(normalX, normalY);
+        if (normal.len2() == 0f) {
+            return;
+        }
+
+        normal.nor();
+
+        Vector2 velocity = movable.getVelocity();
+        float speedAlongNormal = velocity.dot(normal);
+
+        if (speedAlongNormal >= 0f) {
+            return;
+        }
+
+        float restitution = EngineConstants.DEFAULT_BOUNCE;
+        velocity.sub(normal.scl((1f + restitution) * speedAlongNormal));
     }
 }

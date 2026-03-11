@@ -23,14 +23,44 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        context.getGraphics().clearScreen(0.2f, 0.6f, 0.4f);
+        context.getGraphics().clearScreen(0.1f, 0.1f, 0.1f);
         context.getGraphics().begin();
-        context.getGraphics().drawText("Level Select", "Geist-Bold", 800, 700);
-        context.getGraphics().drawText("1: " + new Level1Blueprint().getLevelName(), "Geist-Bold", 800, 600);
-        context.getGraphics().drawText("2: " + new Level2Blueprint().getLevelName(), "Geist-Bold", 800, 500);
-        context.getGraphics().drawText("Press 1 or 2 to play.", "Geist-Bold", 800, 400);
+
+        // Full-screen dirty beach background
+        context.getGraphics().drawTexture("dirty_beach", 0, 0, 1900, 1000);
+
+        // Dark text for button labels
+        context.getGraphics().setTextColor(0.2f, 0.15f, 0.1f, 1f);
+
+        // Title with button background
+        float titleBtnW = 384;
+        float titleBtnH = 80;
+        float titleBtnX = 950 - titleBtnW / 2;
+        float titleBtnY = 670;
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
+        context.getGraphics().drawText("Level Select", "Geist-Bold", 870, 720);
+
+        // Level 1 button
+        float btnW = 480;
+        float btnH = 64;
+        float btnX = 950 - btnW / 2;
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 570, btnW, btnH);
+        context.getGraphics().drawText("Level 1", "Geist-Bold", 900, 610);
+
+        // Level 2 button
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 480, btnW, btnH);
+        context.getGraphics().drawText("Level 2", "Geist-Bold", 900, 520);
+
+        // Reset text color to white
+        context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
+
         context.getGraphics().end();
         super.render();
+    }
+
+    private boolean isClicked(int screenX, int screenY, float btnX, float btnY, float btnW, float btnH) {
+        float mappedY = context.getDisplay().getHeight() - screenY;
+        return screenX >= btnX && screenX <= btnX + btnW && mappedY >= btnY && mappedY <= btnY + btnH;
     }
 
     @Override
@@ -45,7 +75,22 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         return false;
     }
 
-    @Override public boolean onTouchDown(int x, int y, int ptr, int btn) { return false; }
+    @Override
+    public boolean onTouchDown(int x, int y, int ptr, int btn) {
+        float btnW = 480;
+        float btnH = 64;
+        float btnX = 950 - btnW / 2;
+
+        if (isClicked(x, y, btnX, 570, btnW, btnH)) {
+            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level1Blueprint()));
+            return true;
+        }
+        if (isClicked(x, y, btnX, 480, btnW, btnH)) {
+            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level2Blueprint()));
+            return true;
+        }
+        return false;
+    }
     @Override public boolean onDrag(int x, int y, int ptr) { return false; }
     @Override public boolean onTouchUp(int x, int y, int ptr, int btn) { return false; }
 }

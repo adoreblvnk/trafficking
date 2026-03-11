@@ -86,6 +86,16 @@ public interface IGraphicsProvider {
     boolean loadFont(String fontPath, int size);
 
     /**
+     * Sets the color used for subsequent text drawing calls.
+     *
+     * @param r red component (0.0 to 1.0)
+     * @param g green component (0.0 to 1.0)
+     * @param b blue component (0.0 to 1.0)
+     * @param a alpha component (0.0 to 1.0)
+     */
+    void setTextColor(float r, float g, float b, float a);
+
+    /**
      * Draws text using the currently loaded font.
      *
      * @param text text to draw

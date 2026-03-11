@@ -32,11 +32,41 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     @Override
     public void render() {
         context.getGraphics().begin();
-        context.getGraphics().fillRectangle(0, 0, 1900, 1000, 0, 0, 0, 0.5f);
-        context.getGraphics().drawText("PAUSED", "Geist-Bold", 800, 600);
-        context.getGraphics().drawText("Press ESC to Resume", "Geist-Bold", 800, 500);
-        context.getGraphics().drawText("Press M for Main Menu", "Geist-Bold", 800, 450);
+        // 60% opacity — dark enough to communicate "paused", light enough to see game state.
+        // Button backgrounds behind text already ensure readability, so we don't need heavier dimming.
+        context.getGraphics().fillRectangle(0, 0, 1900, 1000, 0, 0, 0, 0.6f);
+
+        // Dark text on light buttons
+        context.getGraphics().setTextColor(0.2f, 0.15f, 0.1f, 1f);
+
+        // PAUSED title with button background
+        float pauseBtnW = 384;
+        float pauseBtnH = 80;
+        float pauseBtnX = 950 - pauseBtnW / 2;
+        float pauseBtnY = 580;
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", pauseBtnX, pauseBtnY, pauseBtnW, pauseBtnH);
+        context.getGraphics().drawText("PAUSED", "Geist-Bold", 900, 630);
+
+        // Resume button
+        float btnW = 384;
+        float btnH = 64;
+        float btnX = 950 - btnW / 2;
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 490, btnW, btnH);
+        context.getGraphics().drawText("Resume", "Geist-Bold", 900, 530);
+
+        // Main Menu button
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 410, btnW, btnH);
+        context.getGraphics().drawText("Main Menu", "Geist-Bold", 890, 450);
+
+        // Reset text color to white
+        context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
+
         context.getGraphics().end();
+    }
+
+    private boolean isClicked(int screenX, int screenY, float btnX, float btnY, float btnW, float btnH) {
+        float mappedY = context.getDisplay().getHeight() - screenY;
+        return screenX >= btnX && screenX <= btnX + btnW && mappedY >= btnY && mappedY <= btnY + btnH;
     }
 
     @Override
@@ -51,7 +81,22 @@ public class PauseOverlay extends AbstractScene implements InputListener {
         return false;
     }
 
-    @Override public boolean onTouchDown(int x, int y, int ptr, int btn) { return false; }
+    @Override
+    public boolean onTouchDown(int x, int y, int ptr, int btn) {
+        float btnW = 384;
+        float btnH = 64;
+        float btnX = 950 - btnW / 2;
+
+        if (isClicked(x, y, btnX, 490, btnW, btnH)) {
+            sceneManager.popScene();
+            return true;
+        }
+        if (isClicked(x, y, btnX, 410, btnW, btnH)) {
+            sceneManager.setScene(new MenuScene(context, sceneManager));
+            return true;
+        }
+        return false;
+    }
     @Override public boolean onDrag(int x, int y, int ptr) { return false; }
     @Override public boolean onTouchUp(int x, int y, int ptr, int btn) { return false; }
 }
