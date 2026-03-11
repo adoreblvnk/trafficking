@@ -34,6 +34,8 @@ public class CircleCollider implements ICollider {
         } else if (other instanceof BoxCollider) {
             Rectangle rect = ((BoxCollider) other).getAABB();
             return Intersector.overlaps(this.circle, rect);
+        } else if (other instanceof OBBCollider) {
+            return other.intersects(this);
         }
         return false;
     }

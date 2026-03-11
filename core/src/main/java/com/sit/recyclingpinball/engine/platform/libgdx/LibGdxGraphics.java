@@ -76,6 +76,23 @@ public class LibGdxGraphics implements IGraphicsProvider {
     }
 
     @Override
+    public void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b, float a) {
+        if (isSpriteBatchOpen) {
+            spriteBatch.end();
+            isSpriteBatchOpen = false;
+        }
+        if (isShapeBatchOpen) {
+            shapeRenderer.end();
+            isShapeBatchOpen = false;
+        }
+        enableBlend();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(r, g, b, a);
+        shapeRenderer.line(x1, y1, x2, y2);
+        shapeRenderer.end();
+        disableBlend();
+    }
+
     public void drawLine(float x1, float y1, float x2, float y2, float width) {
         ensureShapeBatch();
         shapeRenderer.rectLine(x1, y1, x2, y2, width);
@@ -210,6 +227,17 @@ public class LibGdxGraphics implements IGraphicsProvider {
         }
         ensureSpriteBatch();
         spriteBatch.draw(texture, x, y, w, h);
+    }
+
+    @Override
+    public void drawTexture(String textureId, float x, float y, float width, float height, float originX, float originY, float rotationDegrees) {
+        Texture texture = textures.get(textureId);
+        if (texture == null) {
+            texture = new Texture(Gdx.files.internal("textures/" + textureId + ".png"));
+            textures.put(textureId, texture);
+        }
+        ensureSpriteBatch();
+        spriteBatch.draw(texture, x, y, originX, originY, width, height, 1.0f, 1.0f, rotationDegrees, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
     }
 
     @Override

@@ -33,4 +33,9 @@ public class LibGdxInputAdapter extends InputAdapter {
     public boolean keyDown(int keycode) {
         return inputManager != null && inputManager.keyDown(keycode);
     }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return inputManager != null && inputManager.keyUp(keycode);
+    }
 }

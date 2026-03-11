@@ -61,10 +61,8 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     @Override
     public void updatePosition(float dt) {
         getPosition().mulAdd(velocity, dt);
-        if (collider instanceof com.sit.recyclingpinball.engine.physics.BoxCollider) {
-            ((com.sit.recyclingpinball.engine.physics.BoxCollider) collider).setPosition(getPosition().x, getPosition().y);
-        } else if (collider instanceof com.sit.recyclingpinball.engine.physics.CircleCollider) {
-            ((com.sit.recyclingpinball.engine.physics.CircleCollider) collider).setPosition(getPosition().x, getPosition().y);
+        if (collider != null) {
+            collider.setPosition(getPosition().x, getPosition().y);
         }
     }
 

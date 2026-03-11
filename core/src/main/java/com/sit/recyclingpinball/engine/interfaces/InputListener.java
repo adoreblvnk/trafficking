@@ -8,4 +8,5 @@ public interface InputListener {
     boolean onDrag(int x, int y, int ptr);
     boolean onTouchUp(int x, int y, int ptr, int btn);
     default boolean onKeyDown(int keycode) { return false; }
+    default boolean onKeyUp(int keycode) { return false; }
 }

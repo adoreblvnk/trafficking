@@ -6,4 +6,5 @@ public interface ICollider {
     Rectangle getAABB();
     boolean intersects(ICollider other);
     boolean contains(float x, float y);
+    void setPosition(float x, float y);
 }

@@ -45,6 +45,7 @@ public interface IGraphicsProvider {
      * @param width the width of the line
      */
     void drawLine(float x1, float y1, float x2, float y2, float width);
+    void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b, float a);
     
     /**
      * Begins a batch of shape drawing operations (e.g., for optimized rendering).
@@ -100,6 +101,8 @@ public interface IGraphicsProvider {
     void fillRectangle(float x, float y, float w, float h, float r, float g, float b, float alpha);
     
     void drawTexture(String textureId, float x, float y, float w, float h);
+    
+    void drawTexture(String textureId, float x, float y, float width, float height, float originX, float originY, float rotationDegrees);
     
     void begin();
     

@@ -75,4 +75,15 @@ public class InputManager {
         }
         return false;
     }
+
+    public boolean keyUp(int keycode) {
+        try {
+            for (InputListener l : listeners) {
+                if (l.onKeyUp(keycode)) return true;
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Input failure in keyUp", e);
+        }
+        return false;
+    }
 }

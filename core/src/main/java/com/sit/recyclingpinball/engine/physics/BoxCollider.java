@@ -27,6 +27,8 @@ public class BoxCollider implements ICollider {
         } else if (other instanceof CircleCollider) {
             Circle circle = ((CircleCollider) other).getCircle();
             return Intersector.overlaps(circle, this.bounds);
+        } else if (other instanceof OBBCollider) {
+            return other.intersects(this);
         }
         return false;
     }

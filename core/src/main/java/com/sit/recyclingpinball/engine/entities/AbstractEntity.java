@@ -54,10 +54,8 @@ public abstract class AbstractEntity implements ICollidable {
 
     //make sure collision bounding is in sync whenever entity position updates
     public void update(float dt) {
-        if (collider instanceof BoxCollider) {
-            ((BoxCollider) collider).setPosition(position.x, position.y);
-        } else if (collider instanceof com.sit.recyclingpinball.engine.physics.CircleCollider) {
-            ((com.sit.recyclingpinball.engine.physics.CircleCollider) collider).setPosition(position.x, position.y);
+        if (collider != null) {
+            collider.setPosition(position.x, position.y);
         }
     }
 
@@ -106,10 +104,8 @@ public abstract class AbstractEntity implements ICollidable {
             return;
         }
         this.position.set(x, y);
-        if (this.collider instanceof BoxCollider) {
-            ((BoxCollider) this.collider).setPosition(x, y);
-        } else if (this.collider instanceof com.sit.recyclingpinball.engine.physics.CircleCollider) {
-            ((com.sit.recyclingpinball.engine.physics.CircleCollider) this.collider).setPosition(x, y);
+        if (this.collider != null) {
+            this.collider.setPosition(x, y);
         }
     }
 
