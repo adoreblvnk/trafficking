@@ -75,22 +75,24 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
 
     @Override
     public boolean onKeyDown(int keycode) {
-        if (isLeft && keycode == Input.Keys.LEFT || keycode == Input.Keys.A) {
-            rotationalVelocity = 600f; // Sweeps CCW (up)
+        // Check LEFT flipper keys
+        if (isLeft && (keycode == Input.Keys.A || keycode == Input.Keys.LEFT)) {
+            currentAngle = isLeft ? maxAngle : -maxAngle;
             return true;
-        } else if (!isLeft && keycode == Input.Keys.RIGHT || keycode == Input.Keys.D) {
-            rotationalVelocity = -600f; // Sweeps CW (up for right flipper)
+        }
+        // Check RIGHT flipper keys
+        if (!isLeft && (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT)) {
+            currentAngle = isLeft ? maxAngle : -maxAngle;
             return true;
         }
         return false;
     }
-
     @Override
     public boolean onKeyUp(int keycode) {
-        if (isLeft && keycode == Input.Keys.LEFT || keycode == Input.Keys.A) {
+        if (isLeft && (keycode == Input.Keys.A || keycode == Input.Keys.LEFT)) {
             rotationalVelocity = -600f; // Sweeps CW (down)
             return true;
-        } else if (!isLeft && keycode == Input.Keys.RIGHT || keycode == Input.Keys.D) {
+        } else if (!isLeft && (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT)) {
             rotationalVelocity = 600f; // Sweeps CCW (down for right flipper)
             return true;
         }
