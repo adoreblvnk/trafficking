@@ -39,14 +39,6 @@ public class PinballEntity extends DynamicEntity implements InputListener {
     @Override
     public void render(IGraphicsProvider graphics) {
         graphics.drawTexture("pinball_default", getPosition().x - 24, getPosition().y - 24, 48, 48);
-        if (currentState instanceof com.sit.recyclingpinball.logic.states.DraggingState) {
-            com.sit.recyclingpinball.logic.states.DraggingState drag = (com.sit.recyclingpinball.logic.states.DraggingState) currentState;
-            float cx = getPosition().x;
-            float cy = getPosition().y;
-            float dx = drag.getStartX() - drag.getCurrentX();
-            float dy = drag.getCurrentY() - drag.getStartY();
-            graphics.drawLine(cx, cy, cx + dx, cy + dy, 1f, 0f, 0f, 1f);
-        }
     }
 
     @Override
@@ -74,6 +66,25 @@ public class PinballEntity extends DynamicEntity implements InputListener {
                 // Boost ball upwards if flipper is moving
                 getVelocity().y += Math.abs(rotVel) * 1.5f;
                 getVelocity().x += rotVel * 0.5f;
+            }
+        } else if (other instanceof ShooterRodEntity) {
+            ShooterRodEntity rod = (ShooterRodEntity) other;
+            if (rod.getVelocity().y > 0) {
+                // Transfer the rod's upward launching velocity directly to the pinball
+                getVelocity().y = Math.max(getVelocity().y, rod.getVelocity().y * 0.9f);
+            } else {
+                // When rod is resting or being pulled down, prevent the pinball from bouncing
+                // so it cleanly rests on the rod and falls with it smoothly
+                if (getVelocity().y < 0) {
+                    getVelocity().y = 0;
+                }
+                float rodTop = rod.getPosition().y + 160 + 24; // 160 rod height + 24 pinball radius
+                if (getPosition().y < rodTop) {
+                    getPosition().y = rodTop;
+                    if (getCollider() instanceof CircleCollider) {
+                        ((CircleCollider) getCollider()).setPosition(getPosition().x, getPosition().y);
+                    }
+                }
             }
         }
     }

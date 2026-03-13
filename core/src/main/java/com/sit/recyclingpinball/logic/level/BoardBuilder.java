@@ -2,6 +2,8 @@ package com.sit.recyclingpinball.logic.level;
 
 import com.sit.recyclingpinball.logic.entities.FlipperEntity;
 import com.sit.recyclingpinball.logic.entities.WallEntity;
+import com.sit.recyclingpinball.logic.entities.ShooterRodEntity;
+import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.factories.TrashFactory;
 import com.sit.recyclingpinball.logic.factories.TrashType;
 
@@ -34,6 +36,12 @@ public class BoardBuilder {
     
     public BoardBuilder addTrash(TrashType type, float x, float y) {
         layout.addTrash(TrashFactory.createTrash(type, x, y));
+        return this;
+    }
+
+    public BoardBuilder setShooterRod(float x, float y, PinballEventBus eventBus) {
+        ShooterRodEntity rod = new ShooterRodEntity("shooter_rod_" + System.nanoTime(), x, y, eventBus);
+        layout.setShooterRod(rod);
         return this;
     }
     

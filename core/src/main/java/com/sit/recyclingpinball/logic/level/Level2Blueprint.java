@@ -1,10 +1,11 @@
 package com.sit.recyclingpinball.logic.level;
 
+import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.factories.TrashType;
 
 public class Level2Blueprint implements ILevelBlueprint {
     @Override
-    public BoardLayout construct(BoardBuilder builder) {
+    public BoardLayout construct(BoardBuilder builder, PinballEventBus eventBus) {
         // play area x=400 to 1900, y=0 to 1000
         builder.addWall(400, 0, 50, 1000) // left wall
                .addWall(1850, 0, 50, 1000) // right wall
@@ -30,6 +31,7 @@ public class Level2Blueprint implements ILevelBlueprint {
                .addTrash(TrashType.GLASS, 1000, 900)
                .addTrash(TrashType.PLASTIC, 1200, 800);
                
+        builder.setShooterRod(1760, 100, eventBus);
         return builder.build();
     }
 

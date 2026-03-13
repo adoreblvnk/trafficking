@@ -2,6 +2,7 @@ package com.sit.recyclingpinball.logic.managers;
 
 import com.sit.recyclingpinball.engine.interfaces.providers.IAudioProvider;
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
+import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
 import com.sit.recyclingpinball.logic.events.IPinballEvent;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.PinballEventListener;
@@ -26,6 +27,8 @@ public class GameAudioManager implements PinballEventListener {
             audio.playSound("collect", 1.0f);
         } else if (event instanceof BallDrainedEvent) {
             audio.playSound("lose", 1.0f);
+        } else if (event instanceof BallLaunchedEvent) {
+            // TODO: Load and play "sounds/launch.mp3" here in the future.
         }
     }
 }

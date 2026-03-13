@@ -45,7 +45,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         eventBus = new PinballEventBus();
 
         BoardBuilder builder = new BoardBuilder();
-        BoardLayout layout = blueprint.construct(builder);
+        BoardLayout layout = blueprint.construct(builder, eventBus);
 
         totalTrash = layout.getTrashes().size();
         scoreManager = new GameScoreManager(eventBus, totalTrash);
@@ -60,6 +60,13 @@ public class SimulationScene extends AbstractScene implements InputListener {
         }
         for (TrashEntity t : layout.getTrashes()) {
             getEntityManager().addEntity(t);
+        }
+
+        com.sit.recyclingpinball.logic.entities.ShooterRodEntity shooterRod = layout.getShooterRod();
+        if (shooterRod != null) {
+            getEntityManager().addEntity(shooterRod);
+            getInputManager().addListener(shooterRod);
+            // It automatically registers with MovementManager and CollisionManager via EntityManager 
         }
 
         pinball = new PinballEntity("pinball", 1801, 400, eventBus);
