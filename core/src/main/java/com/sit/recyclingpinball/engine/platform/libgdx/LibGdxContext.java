@@ -83,8 +83,14 @@ public class LibGdxContext implements IEngineContext {
     /**
      * Disposes all native resources held by providers.
      */
+    @Override
     public void dispose() {
         graphicsProvider.dispose();
         audioProvider.dispose();
+    }
+
+    @Override
+    public void exit() {
+        com.badlogic.gdx.Gdx.app.exit();
     }
 }

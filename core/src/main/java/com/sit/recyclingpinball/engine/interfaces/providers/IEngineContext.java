@@ -40,4 +40,9 @@ public interface IEngineContext {
      * Disposes of all native resources held by the context.
      */
     void dispose();
+
+    /**
+     * Exits the application.
+     */
+    void exit();
 }

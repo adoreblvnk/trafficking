@@ -46,6 +46,14 @@ public class MenuScene extends AbstractScene implements InputListener {
         context.getGraphics().drawTexture("button_rectangle_depth_flat", startBtnX, startBtnY, startBtnW, startBtnH);
         context.getGraphics().drawText("Start Game", "Geist-Bold", 890, 500);
 
+        // Quit prompt with button background
+        float quitBtnW = 480;
+        float quitBtnH = 64;
+        float quitBtnX = 950 - quitBtnW / 2;
+        float quitBtnY = 380;
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", quitBtnX, quitBtnY, quitBtnW, quitBtnH);
+        context.getGraphics().drawText("Quit", "Geist-Bold", 930, 420);
+
         // Reset text color to white
         context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
 
@@ -65,8 +73,18 @@ public class MenuScene extends AbstractScene implements InputListener {
         float startBtnX = 950 - startBtnW / 2;
         float startBtnY = 460;
 
+        float quitBtnW = 480;
+        float quitBtnH = 64;
+        float quitBtnX = 950 - quitBtnW / 2;
+        float quitBtnY = 380;
+
         if (isClicked(x, y, startBtnX, startBtnY, startBtnW, startBtnH)) {
             sceneManager.setScene(new LevelSelectScene(context, sceneManager));
+            return true;
+        }
+
+        if (isClicked(x, y, quitBtnX, quitBtnY, quitBtnW, quitBtnH)) {
+            context.exit();
             return true;
         }
         return false;
