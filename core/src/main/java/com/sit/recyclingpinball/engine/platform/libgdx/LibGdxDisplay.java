@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.engine.platform.libgdx;
 
-import com.badlogic.gdx.Gdx;
+import com.sit.recyclingpinball.engine.EngineConstants;
 import com.sit.recyclingpinball.engine.interfaces.providers.IDisplay;
 
 /**
@@ -11,11 +11,13 @@ public class LibGdxDisplay implements IDisplay {
 
     @Override
     public int getWidth() {
-        return Gdx.graphics.getWidth();
+        // Expose the virtual coordinate space size (not physical pixels).
+        return EngineConstants.VIRTUAL_WIDTH;
     }
 
     @Override
     public int getHeight() {
-        return Gdx.graphics.getHeight();
+        // Expose the virtual coordinate space size (not physical pixels).
+        return EngineConstants.VIRTUAL_HEIGHT;
     }
 }

@@ -16,17 +16,23 @@ public class LibGdxInputAdapter extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return inputManager != null && inputManager.touchDown(screenX, screenY, pointer, button);
+        int vx = LibGdxViewport.screenToVirtualX(screenX);
+        int vy = LibGdxViewport.screenToVirtualY(screenY);
+        return inputManager != null && inputManager.touchDown(vx, vy, pointer, button);
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return inputManager != null && inputManager.touchDragged(screenX, screenY, pointer);
+        int vx = LibGdxViewport.screenToVirtualX(screenX);
+        int vy = LibGdxViewport.screenToVirtualY(screenY);
+        return inputManager != null && inputManager.touchDragged(vx, vy, pointer);
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return inputManager != null && inputManager.touchUp(screenX, screenY, pointer, button);
+        int vx = LibGdxViewport.screenToVirtualX(screenX);
+        int vy = LibGdxViewport.screenToVirtualY(screenY);
+        return inputManager != null && inputManager.touchUp(vx, vy, pointer, button);
     }
 
     @Override

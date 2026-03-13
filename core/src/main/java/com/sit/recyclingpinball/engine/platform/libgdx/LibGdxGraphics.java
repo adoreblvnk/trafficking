@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Matrix4;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.HdpiUtils;
+import com.sit.recyclingpinball.engine.EngineConstants;
 
 import com.badlogic.gdx.graphics.Texture;
 import java.util.HashMap;
@@ -126,7 +128,20 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void setProjectionMatrix(float width, float height) {
-        Matrix4 projection = new Matrix4().setToOrtho2D(0, 0, width, height);
+        // Render in a consistent virtual resolution, letterboxed to the actual window size.
+        // This avoids platform/DPI differences (e.g., macOS Retina) affecting layout.
+        int windowW = Math.max(1, Math.round(width));
+        int windowH = Math.max(1, Math.round(height));
+        LibGdxViewport.updateForWindow(windowW, windowH);
+        // Use HdpiUtils so macOS Retina/backbuffer scaling is handled correctly.
+        HdpiUtils.glViewport(
+                LibGdxViewport.getViewportX(),
+                LibGdxViewport.getViewportY(),
+                LibGdxViewport.getViewportWidth(),
+                LibGdxViewport.getViewportHeight()
+        );
+
+        Matrix4 projection = new Matrix4().setToOrtho2D(0, 0, EngineConstants.VIRTUAL_WIDTH, EngineConstants.VIRTUAL_HEIGHT);
         shapeRenderer.setProjectionMatrix(projection);
         spriteBatch.setProjectionMatrix(projection);
     }
@@ -281,7 +296,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void begin() {
-        // Now mostly a no-op marker to start frame
+        // Refresh viewport/projection every frame so HDPI/backbuffer changes are handled immediately.
+        setProjectionMatrix(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
