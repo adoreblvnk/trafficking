@@ -4,6 +4,8 @@ import com.sit.recyclingpinball.logic.events.PinballEventBus;
 
 public interface ILevelBlueprint {
     BoardLayout construct(BoardBuilder builder, PinballEventBus eventBus);
+
     String getLevelName();
-    String getEducationalText();
+
+    String getText();
 }

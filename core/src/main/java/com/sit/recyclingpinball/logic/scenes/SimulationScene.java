@@ -70,10 +70,11 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         if (shooterRod != null) {
             getEntityManager().addEntity(shooterRod);
             getInputManager().addListener(shooterRod);
-            // It automatically registers with MovementManager and CollisionManager via EntityManager 
+            // It automatically registers with MovementManager and CollisionManager via
+            // EntityManager
         }
 
-        pinball = new PinballEntity("pinball", 1801, 400, eventBus);
+        pinball = new PinballEntity("pinball", 1810, 400, eventBus);
         getEntityManager().addEntity(pinball);
         getInputManager().addListener(pinball);
 
@@ -90,9 +91,11 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     public void update(float dt) {
         super.update(dt);
         if (scoreManager.isWon()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, true, scoreManager.getScore(), totalTrash, blueprint));
+            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, true, scoreManager.getScore(),
+                    totalTrash, blueprint));
         } else if (scoreManager.isLost()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, false, scoreManager.getScore(), totalTrash, blueprint));
+            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, false, scoreManager.getScore(),
+                    totalTrash, blueprint));
         }
     }
 
@@ -101,7 +104,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         if (event instanceof BallDrainedEvent) {
             if (scoreManager.getBallsLeft() > 0) {
                 // Respawn logic
-                pinball.setPosition(1801, 400);
+                pinball.setPosition(1810, 400);
                 pinball.setVelocity(0, 0);
                 pinball.setState(new com.sit.recyclingpinball.logic.states.InPlayState());
             }
@@ -111,7 +114,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     @Override
     public void render() {
         context.getGraphics().clearScreen(0.8f, 0.9f, 1.0f);
-        
+
         // 1. Draw Background
         context.getGraphics().drawTexture("beach_background", 0, 0, 1900, 1000);
         context.getGraphics().end();
@@ -124,7 +127,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         context.getGraphics().drawTexture("ui_panel_bg", 0, 0, 400, 1000);
         context.getGraphics().drawText("Score: " + scoreManager.getScore(), "Geist-Bold", 50, 900);
         context.getGraphics().drawText("Balls: " + scoreManager.getBallsLeft(), "Geist-Bold", 50, 850);
-        context.getGraphics().drawText(blueprint.getEducationalText(), "Geist-Bold", 50, 800, 300);
+        context.getGraphics().drawText(blueprint.getText(), "Geist-Bold", 50, 800, 300);
 
         // 4. Draw star icons for collected trash
         int collected = scoreManager.getScore();
@@ -151,7 +154,18 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         return false;
     }
 
-    @Override public boolean onTouchDown(int x, int y, int ptr, int btn) { return false; }
-    @Override public boolean onDrag(int x, int y, int ptr) { return false; }
-    @Override public boolean onTouchUp(int x, int y, int ptr, int btn) { return false; }
+    @Override
+    public boolean onTouchDown(int x, int y, int ptr, int btn) {
+        return false;
+    }
+
+    @Override
+    public boolean onDrag(int x, int y, int ptr) {
+        return false;
+    }
+
+    @Override
+    public boolean onTouchUp(int x, int y, int ptr, int btn) {
+        return false;
+    }
 }
