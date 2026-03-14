@@ -7,6 +7,11 @@ public class EngineConstants {
     //pixels per meter - 1:1 ratio
     public static final float PPM = 1.0f;
 
+    // Virtual screen size used for UI/layout coordinates across platforms.
+    // Rendering + input are mapped into this space with letterboxing as needed.
+    public static final int VIRTUAL_WIDTH = 1900;
+    public static final int VIRTUAL_HEIGHT = 1000;
+
     //physics Defaults
     public static final float DEFAULT_BOUNCE = 0.8f;
     public static final float DEFAULT_FRICTION = 0.98f;
