@@ -23,8 +23,10 @@ public class GameScoreManager implements PinballEventListener {
         if (event instanceof TrashCollectedEvent) {
             score++;
         } else if (event instanceof BallLaunchedEvent) {
-            ballsLeft--;
-            ballInPlay = true;
+            if (!ballInPlay) {
+                ballsLeft--;
+                ballInPlay = true;
+            }
         } else if (event instanceof BallDrainedEvent) {
             ballInPlay = false;
         }

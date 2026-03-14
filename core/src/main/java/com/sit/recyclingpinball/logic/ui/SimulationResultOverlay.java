@@ -9,19 +9,23 @@ import com.sit.recyclingpinball.engine.managers.MovementManager;
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.logic.scenes.MenuScene;
+import com.sit.recyclingpinball.logic.scenes.SimulationScene;
+import com.sit.recyclingpinball.logic.level.ILevelBlueprint;
 
 public class SimulationResultOverlay extends AbstractScene implements InputListener {
     private final SceneManager sceneManager;
     private final boolean isWin;
     private final int score;
     private final int totalTrash;
+    private final ILevelBlueprint blueprint;
 
-    public SimulationResultOverlay(IEngineContext context, SceneManager sceneManager, boolean isWin, int score, int totalTrash) {
+    public SimulationResultOverlay(IEngineContext context, SceneManager sceneManager, boolean isWin, int score, int totalTrash, ILevelBlueprint blueprint) {
         super(context, new EntityManager(), new CollisionManager(), new InputManager(), new MovementManager());
         this.sceneManager = sceneManager;
         this.isWin = isWin;
         this.score = score;
         this.totalTrash = totalTrash;
+        this.blueprint = blueprint;
     }
 
     @Override
@@ -82,6 +86,11 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         context.getGraphics().drawTexture("button_rectangle_depth_flat", retBtnX, retBtnY, retBtnW, retBtnH);
         context.getGraphics().drawText("Main Menu", "Geist-Bold", 890, 410);
 
+        // Retry instruction with button background (dark text on button)
+        float retryBtnY = 280;
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", retBtnX, retryBtnY, retBtnW, retBtnH);
+        context.getGraphics().drawText("Retry", "Geist-Bold", 920, 320);
+
         // Reset text color to white
         context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
 
@@ -99,9 +108,14 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         float retBtnH = 64;
         float retBtnX = 950 - retBtnW / 2;
         float retBtnY = 370;
+        float retryBtnY = 280;
 
         if (isClicked(x, y, retBtnX, retBtnY, retBtnW, retBtnH)) {
             sceneManager.setScene(new MenuScene(context, sceneManager));
+            return true;
+        }
+        if (isClicked(x, y, retBtnX, retryBtnY, retBtnW, retBtnH)) {
+            sceneManager.setScene(new SimulationScene(context, sceneManager, blueprint));
             return true;
         }
         return false;

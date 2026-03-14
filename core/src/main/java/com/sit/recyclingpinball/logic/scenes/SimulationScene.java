@@ -86,9 +86,9 @@ public class SimulationScene extends AbstractScene implements InputListener {
     public void update(float dt) {
         super.update(dt);
         if (scoreManager.isWon()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, true, scoreManager.getScore(), totalTrash));
+            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, true, scoreManager.getScore(), totalTrash, blueprint));
         } else if (scoreManager.isLost()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, false, scoreManager.getScore(), totalTrash));
+            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, false, scoreManager.getScore(), totalTrash, blueprint));
         } else if (pinball.getPosition().y < -50 && scoreManager.getBallsLeft() > 0) {
             // Respawn logic
             pinball.setPosition(1801, 400);
