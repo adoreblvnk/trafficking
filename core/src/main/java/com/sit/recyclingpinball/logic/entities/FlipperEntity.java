@@ -13,13 +13,16 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     private float currentAngle;
     private float rotationalVelocity;
     private final String textureId;
-    public float getRotationalVelocity() { return rotationalVelocity; }
-    
+
+    public float getRotationalVelocity() {
+        return rotationalVelocity;
+    }
+
     public FlipperEntity(String id, float x, float y, boolean isLeft) {
         super(id, x, y, 180, 40);
         this.isLeft = isLeft;
         this.textureId = "flipper";
-        
+
         if (isLeft) {
             this.startAngle = -10f;
             this.maxAngle = 45f;
@@ -32,9 +35,11 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
         }
         this.currentAngle = this.startAngle;
         this.rotationalVelocity = 0f;
-        
-        // Both pivot on their local (20, 20). When the right flipper starts at 190 degrees,
-        // it naturally mirrors the left one, setting its hinge perfectly to the right side of its bounds!
+
+        // Both pivot on their local (20, 20). When the right flipper starts at 190
+        // degrees,
+        // it naturally mirrors the left one, setting its hinge perfectly to the right
+        // side of its bounds!
         this.collider = new OBBCollider(x, y, 180, 40, 20, 20, currentAngle);
         setCollisionEnabled(true);
     }
@@ -42,7 +47,7 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     @Override
     public void update(float dt) {
         currentAngle += rotationalVelocity * dt;
-        
+
         if (isLeft) {
             if (currentAngle > maxAngle) {
                 currentAngle = maxAngle;
@@ -52,7 +57,8 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
                 rotationalVelocity = 0;
             }
         } else {
-            // Because 135 (max) is less than 190 (start), sweeping up is a NEGATIVE rotation
+            // Because 135 (max) is less than 190 (start), sweeping up is a NEGATIVE
+            // rotation
             if (currentAngle < maxAngle) {
                 currentAngle = maxAngle;
                 rotationalVelocity = 0;
@@ -61,7 +67,7 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
                 rotationalVelocity = 0;
             }
         }
-        
+
         if (this.collider instanceof OBBCollider) {
             ((OBBCollider) this.collider).setRotation(currentAngle);
         }
@@ -77,37 +83,46 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     public boolean onKeyDown(int keycode) {
         // Check LEFT flipper keys
         if (isLeft && (keycode == Input.Keys.A || keycode == Input.Keys.LEFT)) {
-            currentAngle = isLeft ? maxAngle : -maxAngle;
+            rotationalVelocity = 512f; // Sweeps CCW (up)
             return true;
         }
         // Check RIGHT flipper keys
         if (!isLeft && (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT)) {
-            currentAngle = isLeft ? maxAngle : -maxAngle;
+            rotationalVelocity = -512f; // Sweeps CW (up for right flipper)
             return true;
         }
         return false;
     }
+
     @Override
     public boolean onKeyUp(int keycode) {
         if (isLeft && (keycode == Input.Keys.A || keycode == Input.Keys.LEFT)) {
-            rotationalVelocity = -600f; // Sweeps CW (down)
+            rotationalVelocity = -512f; // Sweeps CW (down)
             return true;
         } else if (!isLeft && (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT)) {
-            rotationalVelocity = 600f; // Sweeps CCW (down for right flipper)
+            rotationalVelocity = 512f; // Sweeps CCW (down for right flipper)
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean onTouchDown(int x, int y, int ptr, int btn) { return false; }
+    public boolean onTouchDown(int x, int y, int ptr, int btn) {
+        return false;
+    }
+
     @Override
-    public boolean onDrag(int x, int y, int ptr) { return false; }
+    public boolean onDrag(int x, int y, int ptr) {
+        return false;
+    }
+
     @Override
-    public boolean onTouchUp(int x, int y, int ptr, int btn) { return false; }
+    public boolean onTouchUp(int x, int y, int ptr, int btn) {
+        return false;
+    }
 
     @Override
     public boolean isStatic() {
-        return true; 
+        return true;
     }
 }

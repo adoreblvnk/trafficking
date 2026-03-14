@@ -15,6 +15,9 @@ import com.sit.recyclingpinball.logic.entities.TrashEntity;
 import com.sit.recyclingpinball.logic.entities.WallEntity;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
+import com.sit.recyclingpinball.logic.events.PinballEventListener;
+import com.sit.recyclingpinball.logic.events.IPinballEvent;
+import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 import com.sit.recyclingpinball.logic.level.BoardBuilder;
 import com.sit.recyclingpinball.logic.level.BoardLayout;
 import com.sit.recyclingpinball.logic.level.ILevelBlueprint;
@@ -23,7 +26,7 @@ import com.sit.recyclingpinball.logic.managers.GameScoreManager;
 import com.sit.recyclingpinball.logic.ui.PauseOverlay;
 import com.sit.recyclingpinball.logic.ui.SimulationResultOverlay;
 
-public class SimulationScene extends AbstractScene implements InputListener {
+public class SimulationScene extends AbstractScene implements InputListener, PinballEventListener {
     private final SceneManager sceneManager;
     private final ILevelBlueprint blueprint;
     private PinballEventBus eventBus;
@@ -43,6 +46,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
         getInputManager().addListener(this);
 
         eventBus = new PinballEventBus();
+        eventBus.register(this);
 
         BoardBuilder builder = new BoardBuilder();
         BoardLayout layout = blueprint.construct(builder, eventBus);
@@ -89,11 +93,18 @@ public class SimulationScene extends AbstractScene implements InputListener {
             sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, true, scoreManager.getScore(), totalTrash, blueprint));
         } else if (scoreManager.isLost()) {
             sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, false, scoreManager.getScore(), totalTrash, blueprint));
-        } else if (pinball.getPosition().y < -50 && scoreManager.getBallsLeft() > 0) {
-            // Respawn logic
-            pinball.setPosition(1801, 400);
-            pinball.setVelocity(0, 0);
-            pinball.setState(new com.sit.recyclingpinball.logic.states.InPlayState());
+        }
+    }
+
+    @Override
+    public void onEvent(IPinballEvent event) {
+        if (event instanceof BallDrainedEvent) {
+            if (scoreManager.getBallsLeft() > 0) {
+                // Respawn logic
+                pinball.setPosition(1801, 400);
+                pinball.setVelocity(0, 0);
+                pinball.setState(new com.sit.recyclingpinball.logic.states.InPlayState());
+            }
         }
     }
 
