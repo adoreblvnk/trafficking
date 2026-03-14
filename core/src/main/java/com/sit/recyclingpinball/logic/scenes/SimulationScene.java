@@ -93,7 +93,7 @@ public class SimulationScene extends AbstractScene implements InputListener {
             // Respawn logic
             pinball.setPosition(1801, 400);
             pinball.setVelocity(0, 0);
-            pinball.setState(new com.sit.recyclingpinball.logic.states.IdleState());
+            pinball.setState(new com.sit.recyclingpinball.logic.states.InPlayState());
         }
     }
 

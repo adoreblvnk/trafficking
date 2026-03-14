@@ -6,6 +6,7 @@ import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.sit.recyclingpinball.engine.physics.BoxCollider;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
+import com.sit.recyclingpinball.logic.events.ShooterRodMovedEvent;
 
 public class ShooterRodEntity extends DynamicEntity implements InputListener {
     private final float anchorY;
@@ -14,6 +15,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     private final String shaftTextureId;
     private final String knobTextureId;
     private boolean isDragging;
+    private float launchVelocity;
 
     public ShooterRodEntity(String id, float x, float y, PinballEventBus eventBus) {
         super(id, x, y, 64, 160);
@@ -36,7 +38,8 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        // Draw the shaft at the bottom, and the knob extending upwards (where the ball sits)
+        // Draw the shaft at the bottom, and the knob extending upwards (where the ball
+        // sits)
         graphics.drawTexture(shaftTextureId, getX() + 24, getY(), 16, 96);
         graphics.drawTexture(knobTextureId, getX(), getY() + 96, 64, 64);
     }
@@ -56,15 +59,15 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         if (isDragging) {
             float touchY = 1000f - y;
             float newY = Math.max(anchorY - maxPullDistance, touchY);
-            // Additionally clamp it to not go above anchorY, though prompt doesn't explicitly say for onDrag, 
+            // Additionally clamp it to not go above anchorY, though prompt doesn't
+            // explicitly say for onDrag,
             // but it says "use Math.max(anchorY - maxPullDistance, touchY) to clamp it."
             newY = Math.min(anchorY, newY);
-            
-            getPosition().y = newY;
-            if (getCollider() != null) {
-                ((BoxCollider)getCollider()).setPosition(getPosition().x, getPosition().y);
-            }
+
+            setPosition(getPosition().x, newY);
             setVelocity(0, 0);
+
+            eventBus.post(new ShooterRodMovedEvent(newY));
             return true;
         }
         return false;
@@ -75,7 +78,8 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         if (isDragging) {
             isDragging = false;
             float pullDistance = anchorY - getY();
-            setVelocity(0, pullDistance * 15f);
+            launchVelocity = pullDistance * 20f;
+            setVelocity(0, launchVelocity);
             return true;
         }
         return false;
@@ -85,12 +89,9 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     public void update(float dt) {
         super.update(dt);
         if (getVelocity().y > 0 && getY() >= anchorY) {
-            getPosition().y = anchorY;
+            setPosition(getPosition().x, anchorY);
             setVelocity(0, 0);
-            if (getCollider() != null) {
-                ((BoxCollider)getCollider()).setPosition(getPosition().x, getPosition().y);
-            }
-            eventBus.post(new BallLaunchedEvent());
+            eventBus.post(new BallLaunchedEvent(launchVelocity));
         }
     }
 

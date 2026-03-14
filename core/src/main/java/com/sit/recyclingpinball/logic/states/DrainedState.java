@@ -1,6 +1,7 @@
 package com.sit.recyclingpinball.logic.states;
 
 import com.sit.recyclingpinball.logic.entities.PinballEntity;
+import com.sit.recyclingpinball.logic.events.IPinballEvent;
 
 public class DrainedState implements IPinballState {
     @Override
@@ -14,4 +15,9 @@ public class DrainedState implements IPinballState {
     public boolean onDrag(PinballEntity ctx, int x, int y, int ptr) { return false; }
     @Override
     public boolean onTouchUp(PinballEntity ctx, int x, int y, int ptr, int btn) { return false; }
+    
+    @Override
+    public void onEvent(PinballEntity ctx, IPinballEvent event) {
+        // Drained ball does nothing
+    }
 }

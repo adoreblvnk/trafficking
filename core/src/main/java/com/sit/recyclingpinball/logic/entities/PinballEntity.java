@@ -7,9 +7,13 @@ import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.sit.recyclingpinball.engine.physics.CircleCollider;
 import com.sit.recyclingpinball.logic.states.IPinballState;
 import com.sit.recyclingpinball.logic.states.IdleState;
+import com.sit.recyclingpinball.logic.states.InPlayState;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
+import com.sit.recyclingpinball.logic.events.PinballEventListener;
+import com.sit.recyclingpinball.logic.events.IPinballEvent;
+import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
 
-public class PinballEntity extends DynamicEntity implements InputListener {
+public class PinballEntity extends DynamicEntity implements InputListener, PinballEventListener {
     private IPinballState currentState;
     private final PinballEventBus eventBus;
 
@@ -17,7 +21,8 @@ public class PinballEntity extends DynamicEntity implements InputListener {
         super(id, x, y, 48, 48);
         this.collider = new CircleCollider(x, y, 24);
         this.eventBus = eventBus;
-        this.currentState = new IdleState();
+        this.currentState = new InPlayState(); // Start in play state to allow falling onto shooter rod
+        this.eventBus.register(this);
         setCollisionEnabled(true);
         setFriction(0.999f);
     }
@@ -25,7 +30,7 @@ public class PinballEntity extends DynamicEntity implements InputListener {
     public void setState(IPinballState state) {
         this.currentState = state;
     }
-    
+
     public PinballEventBus getEventBus() {
         return eventBus;
     }
@@ -57,6 +62,11 @@ public class PinballEntity extends DynamicEntity implements InputListener {
     }
 
     @Override
+    public void onEvent(IPinballEvent event) {
+        currentState.onEvent(this, event);
+    }
+
+    @Override
     public void onCollision(ICollidable other) {
         super.onCollision(other);
         if (other instanceof FlipperEntity) {
@@ -69,21 +79,21 @@ public class PinballEntity extends DynamicEntity implements InputListener {
             }
         } else if (other instanceof ShooterRodEntity) {
             ShooterRodEntity rod = (ShooterRodEntity) other;
-            if (rod.getVelocity().y > 0) {
-                // Transfer the rod's upward launching velocity directly to the pinball
-                getVelocity().y = Math.max(getVelocity().y, rod.getVelocity().y * 0.9f);
-            } else {
-                // When rod is resting or being pulled down, prevent the pinball from bouncing
-                // so it cleanly rests on the rod and falls with it smoothly
-                if (getVelocity().y < 0) {
+            if (rod.getVelocity().y <= 0) {
+                // When rod is resting or being pulled down, switch to IdleState
+                setState(new IdleState());
+                getVelocity().y = 0;
+                getVelocity().x = 0;
+
+                // To be perfectly OOP, you could query the colliders instead of hardcoding 160
+                // and 24:
+                // float rodHeight = rod.getCollider().getAABB().height;
+                // float ballRadius = getCollider().getAABB().width / 2;
+                float rodTop = rod.getPosition().y + 160 + 24;
+
+                if (getPosition().y <= rodTop + 2f) { // Small margin to snap securely
+                    setPosition(getPosition().x, rodTop);
                     getVelocity().y = 0;
-                }
-                float rodTop = rod.getPosition().y + 160 + 24; // 160 rod height + 24 pinball radius
-                if (getPosition().y < rodTop) {
-                    getPosition().y = rodTop;
-                    if (getCollider() instanceof CircleCollider) {
-                        ((CircleCollider) getCollider()).setPosition(getPosition().x, getPosition().y);
-                    }
                 }
             }
         }
