@@ -7,6 +7,9 @@ import com.sit.recyclingpinball.engine.managers.*;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.logic.level.Level1Blueprint;
 import com.sit.recyclingpinball.logic.level.Level2Blueprint;
+import com.sit.recyclingpinball.logic.level.Level3Blueprint;
+import com.sit.recyclingpinball.logic.level.Level4Blueprint;
+import com.sit.recyclingpinball.logic.level.Level5Blueprint;
 
 public class LevelSelectScene extends AbstractScene implements InputListener {
     private final SceneManager sceneManager;
@@ -51,6 +54,18 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 480, btnW, btnH);
         context.getGraphics().drawText("Level 2", "Geist-Bold", 900, 520);
 
+        // Level 3 button
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 390, btnW, btnH);
+        context.getGraphics().drawText("Level 3", "Geist-Bold", 900, 430);
+
+        // Level 4 button
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 300, btnW, btnH);
+        context.getGraphics().drawText("Level 4", "Geist-Bold", 900, 340);
+
+        // Level 5 button
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 210, btnW, btnH);
+        context.getGraphics().drawText("Level 5", "Geist-Bold", 900, 250);
+
         // Reset text color to white
         context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
 
@@ -71,6 +86,15 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_2) {
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level2Blueprint()));
             return true;
+        } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_3) {
+            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level3Blueprint()));
+            return true;
+        } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_4) {
+            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level4Blueprint()));
+            return true;
+        } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_5) {
+            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level5Blueprint()));
+            return true;
         }
         return false;
     }
@@ -87,6 +111,18 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         }
         if (isClicked(x, y, btnX, 480, btnW, btnH)) {
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level2Blueprint()));
+            return true;
+        }
+        if (isClicked(x, y, btnX, 390, btnW, btnH)) {
+            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level3Blueprint()));
+            return true;
+        }
+        if (isClicked(x, y, btnX, 300, btnW, btnH)) {
+            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level4Blueprint()));
+            return true;
+        }
+        if (isClicked(x, y, btnX, 210, btnW, btnH)) {
+            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level5Blueprint()));
             return true;
         }
         return false;
