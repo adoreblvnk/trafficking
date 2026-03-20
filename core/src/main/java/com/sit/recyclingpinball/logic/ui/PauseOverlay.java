@@ -72,11 +72,11 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     @Override
     public boolean onKeyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE) {
-            context.getAudio().playSound("click", 0.6f);
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.popScene();
             return true;
         } else if (keycode == Input.Keys.M) {
-            context.getAudio().playSound("click", 0.6f);
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new MenuScene(context, sceneManager));
             return true;
         }
@@ -90,12 +90,12 @@ public class PauseOverlay extends AbstractScene implements InputListener {
         float btnX = 950 - btnW / 2;
 
         if (isClicked(x, y, btnX, 490, btnW, btnH)) {
-            context.getAudio().playSound("click", 0.6f);
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.popScene();
             return true;
         }
         if (isClicked(x, y, btnX, 410, btnW, btnH)) {
-            context.getAudio().playSound("click", 0.6f);
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new MenuScene(context, sceneManager));
             return true;
         }

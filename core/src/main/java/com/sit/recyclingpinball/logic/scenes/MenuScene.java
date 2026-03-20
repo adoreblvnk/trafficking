@@ -79,13 +79,13 @@ public class MenuScene extends AbstractScene implements InputListener {
         float quitBtnY = 380;
 
         if (isClicked(x, y, startBtnX, startBtnY, startBtnW, startBtnH)) {
-            context.getAudio().playSound("click", 0.6f);
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new LevelSelectScene(context, sceneManager));
             return true;
         }
 
         if (isClicked(x, y, quitBtnX, quitBtnY, quitBtnW, quitBtnH)) {
-            context.getAudio().playSound("click", 0.6f);
+            context.getAudio().playSound("click", 1.0f);
             context.exit();
             return true;
         }
