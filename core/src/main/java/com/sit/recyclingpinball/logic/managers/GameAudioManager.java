@@ -19,6 +19,7 @@ public class GameAudioManager implements PinballEventListener {
         audio.loadSound("sounds/bounce.mp3", "bounce");
         audio.loadSound("sounds/flip.mp3", "flip");
         audio.loadSound("sounds/stretch.mp3", "stretch");
+        audio.loadSound("sounds/click.mp3", "click");
         bus.register(this);
     }
 
