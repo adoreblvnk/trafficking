@@ -115,7 +115,7 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
             sceneManager.setScene(new MenuScene(context, sceneManager));
             return true;
         }
-        if (isClicked(x, y, retBtnX, retryBtnY, retBtnW, retBtnH)) 
+        if (isClicked(x, y, retBtnX, retryBtnY, retBtnW, retBtnH)) {
             context.getAudio().playSound("click", 0.6f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, blueprint));
             return true;
