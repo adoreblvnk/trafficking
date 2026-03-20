@@ -18,6 +18,7 @@ public class GameAudioManager implements PinballEventListener {
         audio.loadSound("sounds/win.mp3", "win");
         audio.loadSound("sounds/bounce.mp3", "bounce");
         audio.loadSound("sounds/flip.mp3", "flip");
+        audio.loadSound("sounds/stretch.mp3", "stretch");
         bus.register(this);
     }
 
@@ -28,6 +29,7 @@ public class GameAudioManager implements PinballEventListener {
         } else if (event instanceof BallDrainedEvent) {
             audio.playSound("lose", 1.0f);
         } else if (event instanceof BallLaunchedEvent) {
+            audio.playSound("stretch", 1.0f);
             // TODO: Load and play "sounds/launch.mp3" here in the future.
         }
     }
