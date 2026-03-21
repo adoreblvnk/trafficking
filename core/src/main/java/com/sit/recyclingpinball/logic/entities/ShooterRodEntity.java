@@ -1,5 +1,6 @@
 package com.sit.recyclingpinball.logic.entities;
 
+import com.badlogic.gdx.Input;
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
@@ -15,6 +16,8 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     private final String shaftTextureId;
     private final String knobTextureId;
     private boolean isDragging;
+    private boolean isKeyPulling;
+    private final float keyPullSpeed = 150f;
     private float launchVelocity;
 
     public ShooterRodEntity(String id, float x, float y, PinballEventBus eventBus) {
@@ -26,6 +29,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         this.shaftTextureId = "slide_vertical_grey";
         this.knobTextureId = "ball_blue_large";
         this.isDragging = false;
+        this.isKeyPulling = false;
     }
 
     private float getX() {
@@ -88,11 +92,43 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     @Override
     public void update(float dt) {
         super.update(dt);
+        
+        if (isKeyPulling) {
+            float newY = getY() - keyPullSpeed * dt;
+            newY = Math.max(anchorY - maxPullDistance, newY);
+            setPosition(getPosition().x, newY);
+            setVelocity(0, 0);
+            eventBus.post(new ShooterRodMovedEvent(newY));
+        }
+
         if (getVelocity().y > 0 && getY() >= anchorY) {
             setPosition(getPosition().x, anchorY);
             setVelocity(0, 0);
             eventBus.post(new BallLaunchedEvent(launchVelocity));
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keycode) {
+        if (keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
+            isKeyPulling = true;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyUp(int keycode) {
+        if (keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
+            if (isKeyPulling) {
+                isKeyPulling = false;
+                float pullDistance = anchorY - getY();
+                launchVelocity = pullDistance * 20f;
+                setVelocity(0, launchVelocity);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
