@@ -6,6 +6,7 @@ import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.physics.OBBCollider;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
+import com.sit.recyclingpinball.logic.LogicConstants;
 
 public class FlipperEntity extends DynamicEntity implements InputListener {
     private final boolean isLeft;
@@ -22,7 +23,7 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     public FlipperEntity(String id, float x, float y, boolean isLeft) {
         super(id, x, y, 180, 40);
         this.isLeft = isLeft;
-        this.textureId = "flipper";
+        this.textureId = LogicConstants.TEX_FLIPPER;
 
         if (isLeft) {
             this.startAngle = -10f;
@@ -43,7 +44,7 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
         // side of its bounds!
         setCollider(new OBBCollider(x, y, 180, 40, 20, 20, currentAngle));
         setCollisionEnabled(true);
-        setTag("flipper");
+        setTag(LogicConstants.TAG_FLIPPER);
     }
 
     @Override

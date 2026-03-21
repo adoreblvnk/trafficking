@@ -21,41 +21,41 @@ public class MenuScene extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        getContext().getGraphics().clearScreen(0.1f, 0.1f, 0.1f);
+        getContext().getGraphics().clearScreen(com.sit.recyclingpinball.logic.LogicConstants.COLOR_BG_R, com.sit.recyclingpinball.logic.LogicConstants.COLOR_BG_G, com.sit.recyclingpinball.logic.LogicConstants.COLOR_BG_B);
         getContext().getGraphics().begin();
 
         // Full-screen dirty beach background
-        getContext().getGraphics().drawTexture("dirty_beach", 0, 0, 1900, 1000);
+        getContext().getGraphics().drawTexture(com.sit.recyclingpinball.logic.LogicConstants.TEX_DIRTY_BEACH, 0, 0, com.sit.recyclingpinball.logic.LogicConstants.SCENE_WIDTH, com.sit.recyclingpinball.logic.LogicConstants.SCENE_HEIGHT);
 
         // Dark text for button labels
-        getContext().getGraphics().setTextColor(0.2f, 0.15f, 0.1f, 1f);
+        getContext().getGraphics().setTextColor(com.sit.recyclingpinball.logic.LogicConstants.COLOR_TEXT_DARK_R, com.sit.recyclingpinball.logic.LogicConstants.COLOR_TEXT_DARK_G, com.sit.recyclingpinball.logic.LogicConstants.COLOR_TEXT_DARK_B, com.sit.recyclingpinball.logic.LogicConstants.COLOR_TEXT_A);
 
         // Title with button background
-        float titleBtnW = 480;
-        float titleBtnH = 80;
-        float titleBtnX = 950 - titleBtnW / 2;
+        float titleBtnW = com.sit.recyclingpinball.logic.LogicConstants.UI_BTN_WIDTH_DEFAULT;
+        float titleBtnH = com.sit.recyclingpinball.logic.LogicConstants.UI_BTN_HEIGHT_LARGE;
+        float titleBtnX = com.sit.recyclingpinball.logic.LogicConstants.UI_CENTER_X - titleBtnW / 2;
         float titleBtnY = 560;
-        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
-        getContext().getGraphics().drawTextCentered("Recycling Pinball", "Geist-Bold", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
+        getContext().getGraphics().drawTexture(com.sit.recyclingpinball.logic.LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, titleBtnX, titleBtnY, titleBtnW, titleBtnH);
+        getContext().getGraphics().drawTextCentered(com.sit.recyclingpinball.logic.LogicConstants.TEXT_RECYCLING_PINBALL, com.sit.recyclingpinball.logic.LogicConstants.FONT_GEIST_BOLD, titleBtnX, titleBtnY, titleBtnW, titleBtnH);
 
         // Start prompt with button background
-        float startBtnW = 480;
-        float startBtnH = 64;
-        float startBtnX = 950 - startBtnW / 2;
+        float startBtnW = com.sit.recyclingpinball.logic.LogicConstants.UI_BTN_WIDTH_DEFAULT;
+        float startBtnH = com.sit.recyclingpinball.logic.LogicConstants.UI_BTN_HEIGHT_DEFAULT;
+        float startBtnX = com.sit.recyclingpinball.logic.LogicConstants.UI_CENTER_X - startBtnW / 2;
         float startBtnY = 460;
-        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", startBtnX, startBtnY, startBtnW, startBtnH);
-        getContext().getGraphics().drawTextCentered("Start Game", "Geist-Bold", startBtnX, startBtnY, startBtnW, startBtnH);
+        getContext().getGraphics().drawTexture(com.sit.recyclingpinball.logic.LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, startBtnX, startBtnY, startBtnW, startBtnH);
+        getContext().getGraphics().drawTextCentered(com.sit.recyclingpinball.logic.LogicConstants.TEXT_START_GAME, com.sit.recyclingpinball.logic.LogicConstants.FONT_GEIST_BOLD, startBtnX, startBtnY, startBtnW, startBtnH);
 
         // Quit prompt with button background
-        float quitBtnW = 480;
-        float quitBtnH = 64;
-        float quitBtnX = 950 - quitBtnW / 2;
+        float quitBtnW = com.sit.recyclingpinball.logic.LogicConstants.UI_BTN_WIDTH_DEFAULT;
+        float quitBtnH = com.sit.recyclingpinball.logic.LogicConstants.UI_BTN_HEIGHT_DEFAULT;
+        float quitBtnX = com.sit.recyclingpinball.logic.LogicConstants.UI_CENTER_X - quitBtnW / 2;
         float quitBtnY = 380;
-        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", quitBtnX, quitBtnY, quitBtnW, quitBtnH);
-        getContext().getGraphics().drawTextCentered("Quit", "Geist-Bold", quitBtnX, quitBtnY, quitBtnW, quitBtnH);
+        getContext().getGraphics().drawTexture(com.sit.recyclingpinball.logic.LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, quitBtnX, quitBtnY, quitBtnW, quitBtnH);
+        getContext().getGraphics().drawTextCentered(com.sit.recyclingpinball.logic.LogicConstants.TEXT_QUIT, com.sit.recyclingpinball.logic.LogicConstants.FONT_GEIST_BOLD, quitBtnX, quitBtnY, quitBtnW, quitBtnH);
 
         // Reset text color to white
-        getContext().getGraphics().setTextColor(1f, 1f, 1f, 1f);
+        getContext().getGraphics().setTextColor(com.sit.recyclingpinball.logic.LogicConstants.COLOR_TEXT_LIGHT_R, com.sit.recyclingpinball.logic.LogicConstants.COLOR_TEXT_LIGHT_G, com.sit.recyclingpinball.logic.LogicConstants.COLOR_TEXT_LIGHT_B, com.sit.recyclingpinball.logic.LogicConstants.COLOR_TEXT_A);
 
         getContext().getGraphics().end();
         super.render();
@@ -68,24 +68,24 @@ public class MenuScene extends AbstractScene implements InputListener {
 
     @Override
     public boolean onTouchDown(int x, int y, int ptr, int btn) {
-        float startBtnW = 480;
-        float startBtnH = 64;
-        float startBtnX = 950 - startBtnW / 2;
+        float startBtnW = com.sit.recyclingpinball.logic.LogicConstants.UI_BTN_WIDTH_DEFAULT;
+        float startBtnH = com.sit.recyclingpinball.logic.LogicConstants.UI_BTN_HEIGHT_DEFAULT;
+        float startBtnX = com.sit.recyclingpinball.logic.LogicConstants.UI_CENTER_X - startBtnW / 2;
         float startBtnY = 460;
 
-        float quitBtnW = 480;
-        float quitBtnH = 64;
-        float quitBtnX = 950 - quitBtnW / 2;
+        float quitBtnW = com.sit.recyclingpinball.logic.LogicConstants.UI_BTN_WIDTH_DEFAULT;
+        float quitBtnH = com.sit.recyclingpinball.logic.LogicConstants.UI_BTN_HEIGHT_DEFAULT;
+        float quitBtnX = com.sit.recyclingpinball.logic.LogicConstants.UI_CENTER_X - quitBtnW / 2;
         float quitBtnY = 380;
 
         if (isClicked(x, y, startBtnX, startBtnY, startBtnW, startBtnH)) {
-            getContext().getAudio().playSound("click", 1.0f);
+            getContext().getAudio().playSound(com.sit.recyclingpinball.logic.LogicConstants.SOUND_CLICK, com.sit.recyclingpinball.logic.LogicConstants.VOLUME_DEFAULT);
             sceneManager.setScene(new LevelSelectScene(getContext(), sceneManager));
             return true;
         }
 
         if (isClicked(x, y, quitBtnX, quitBtnY, quitBtnW, quitBtnH)) {
-            getContext().getAudio().playSound("click", 1.0f);
+            getContext().getAudio().playSound(com.sit.recyclingpinball.logic.LogicConstants.SOUND_CLICK, com.sit.recyclingpinball.logic.LogicConstants.VOLUME_DEFAULT);
             getContext().exit();
             return true;
         }

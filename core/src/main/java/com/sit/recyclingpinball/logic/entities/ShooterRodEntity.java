@@ -9,6 +9,7 @@ import com.sit.recyclingpinball.engine.physics.BoxCollider;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.ShooterRodMovedEvent;
+import com.sit.recyclingpinball.logic.LogicConstants;
 
 public class ShooterRodEntity extends DynamicEntity implements InputListener {
     private final float anchorY;
@@ -27,11 +28,11 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         this.anchorY = y;
         this.maxPullDistance = 100f;
         this.eventBus = eventBus;
-        this.shaftTextureId = "slide_vertical_grey";
-        this.knobTextureId = "ball_blue_large";
+        this.shaftTextureId = LogicConstants.TEX_SLIDE_VERTICAL_GREY;
+        this.knobTextureId = LogicConstants.TEX_BALL_BLUE_LARGE;
         this.isDragging = false;
         this.isKeyPulling = false;
-        setTag("shooter");
+        setTag(LogicConstants.TAG_SHOOTER);
     }
 
     private float getX() {

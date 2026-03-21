@@ -1,6 +1,7 @@
 package com.sit.recyclingpinball.engine.managers;
 
 import com.sit.recyclingpinball.engine.interfaces.providers.IAudioProvider;
+import com.sit.recyclingpinball.engine.EngineConstants;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,13 +51,13 @@ public class AssetManager {
             throw new IllegalStateException("AssetManager must be initialized with an IAudioProvider before loading assets");
         }
 
-        loadSound("sounds/click.mp3", "click");
-        loadSound("sounds/collect.mp3", "collect");
-        loadSound("sounds/lose.mp3", "lose");
-        loadSound("sounds/win.mp3", "win");
-        loadSound("sounds/bounce.mp3", "bounce");
-        loadSound("sounds/flip.mp3", "flip");
-        loadSound("sounds/stretch.mp3", "stretch");
+        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_CLICK + EngineConstants.SOUND_EXTENSION, EngineConstants.SOUND_CLICK);
+        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_COLLECT + EngineConstants.SOUND_EXTENSION, EngineConstants.SOUND_COLLECT);
+        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_LOSE + EngineConstants.SOUND_EXTENSION, EngineConstants.SOUND_LOSE);
+        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_WIN + EngineConstants.SOUND_EXTENSION, EngineConstants.SOUND_WIN);
+        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_BOUNCE + EngineConstants.SOUND_EXTENSION, EngineConstants.SOUND_BOUNCE);
+        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_FLIP + EngineConstants.SOUND_EXTENSION, EngineConstants.SOUND_FLIP);
+        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_STRETCH + EngineConstants.SOUND_EXTENSION, EngineConstants.SOUND_STRETCH);
     }
 
     private void loadSound(String path, String id) {

@@ -6,11 +6,11 @@ public final class TrashFactory {
     private TrashFactory() {}
     
     public static TrashEntity createTrash(TrashType type, float x, float y) {
-        String id = "trash_" + System.nanoTime();
+        String id = com.sit.recyclingpinball.logic.LogicConstants.ID_TRASH_PREFIX + System.nanoTime();
         switch (type) {
-            case PLASTIC: return new TrashEntity(id, x, y, TrashType.PLASTIC, "trash_plastic", 1);
-            case PAPER: return new TrashEntity(id, x, y, TrashType.PAPER, "trash_paper", 1);
-            case GLASS: return new TrashEntity(id, x, y, TrashType.GLASS, "trash_glass", 1);
+            case PLASTIC: return new TrashEntity(id, x, y, TrashType.PLASTIC, com.sit.recyclingpinball.logic.LogicConstants.ID_TRASH_PLASTIC, 1);
+            case PAPER: return new TrashEntity(id, x, y, TrashType.PAPER, com.sit.recyclingpinball.logic.LogicConstants.ID_TRASH_PAPER, 1);
+            case GLASS: return new TrashEntity(id, x, y, TrashType.GLASS, com.sit.recyclingpinball.logic.LogicConstants.ID_TRASH_GLASS, 1);
             default: throw new IllegalArgumentException("Unknown trash type");
         }
     }

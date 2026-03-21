@@ -12,6 +12,7 @@ import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.PinballEventVisitor;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
 import com.sit.recyclingpinball.logic.events.ShooterRodMovedEvent;
+import com.sit.recyclingpinball.logic.LogicConstants;
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 
@@ -27,7 +28,7 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
         this.eventBus.register(this);
         setCollisionEnabled(true);
         setFriction(0.999f);
-        setTag("pinball");
+        setTag(LogicConstants.TAG_PINBALL);
     }
 
     public void setState(IPinballState state) {
@@ -46,7 +47,7 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture("pinball_default", getPosition().getX() - 24, getPosition().getY() - 24, 48, 48);
+        graphics.drawTexture(LogicConstants.TEX_PINBALL_DEFAULT, getPosition().getX() - 24, getPosition().getY() - 24, 48, 48);
     }
 
     @Override

@@ -22,4 +22,22 @@ public class EngineConstants {
 
     //assets
     public static final String DEFAULT_FONT_PATH = "fonts/Geist-Bold.ttf";
+    public static final String FONTS_DIR = "fonts/";
+    public static final String TEXTURES_DIR = "textures/";
+    public static final String FONT_EXTENSION = ".ttf";
+    public static final String TEXTURE_EXTENSION = ".png";
+    public static final String SOUNDS_DIR = "sounds/";
+    public static final String SOUND_EXTENSION = ".mp3";
+
+    //sound IDs
+    public static final String SOUND_CLICK = "click";
+    public static final String SOUND_COLLECT = "collect";
+    public static final String SOUND_LOSE = "lose";
+    public static final String SOUND_WIN = "win";
+    public static final String SOUND_BOUNCE = "bounce";
+    public static final String SOUND_FLIP = "flip";
+    public static final String SOUND_STRETCH = "stretch";
+
+    //physics configuration
+    public static final float COLLISION_EPSILON = 0.5f;
 }

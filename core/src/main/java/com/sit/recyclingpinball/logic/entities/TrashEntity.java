@@ -3,6 +3,7 @@ package com.sit.recyclingpinball.logic.entities;
 import com.sit.recyclingpinball.engine.entities.StaticEntity;
 import com.sit.recyclingpinball.engine.physics.CircleCollider;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
+import com.sit.recyclingpinball.logic.LogicConstants;
 import com.sit.recyclingpinball.logic.factories.TrashType;
 
 public class TrashEntity extends StaticEntity {
@@ -17,7 +18,7 @@ public class TrashEntity extends StaticEntity {
         this.points = points;
         setCollider(new CircleCollider(x, y, 32));
         setCollisionEnabled(true);
-        setTag("trash");
+        setTag(LogicConstants.TAG_TRASH);
     }
 
     @Override
