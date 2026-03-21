@@ -16,6 +16,7 @@ public class Main extends Game {
     @Override
     public void create() {
         context = new LibGdxContext();
+        context.getAudio().loadSound("sounds/click.mp3", "click");
         SoundManager soundManager = new SoundManager(context.getAudio());
         IOManager ioManager = new IOManager(context.getIO());
         TimeManager timeManager = new TimeManager(context.getTime());

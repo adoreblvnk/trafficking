@@ -66,6 +66,10 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 210, btnW, btnH);
         context.getGraphics().drawText("Level 5", "Geist-Bold", 900, 250);
 
+        // Back button
+        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 120, btnW, btnH);
+        context.getGraphics().drawText("Back", "Geist-Bold", 930, 160);
+
         // Reset text color to white
         context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
 
@@ -81,19 +85,28 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     @Override
     public boolean onKeyDown(int keycode) {
         if (keycode == com.badlogic.gdx.Input.Keys.NUM_1) {
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level1Blueprint()));
             return true;
         } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_2) {
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level2Blueprint()));
             return true;
         } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_3) {
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level3Blueprint()));
             return true;
         } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_4) {
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level4Blueprint()));
             return true;
         } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_5) {
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level5Blueprint()));
+            return true;
+        } else if (keycode == com.badlogic.gdx.Input.Keys.ESCAPE) {
+            context.getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new MenuScene(context, sceneManager));
             return true;
         }
         return false;
@@ -106,23 +119,33 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         float btnX = 950 - btnW / 2;
 
         if (isClicked(x, y, btnX, 570, btnW, btnH)) {
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level1Blueprint()));
             return true;
         }
         if (isClicked(x, y, btnX, 480, btnW, btnH)) {
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level2Blueprint()));
             return true;
         }
         if (isClicked(x, y, btnX, 390, btnW, btnH)) {
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level3Blueprint()));
             return true;
         }
         if (isClicked(x, y, btnX, 300, btnW, btnH)) {
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level4Blueprint()));
             return true;
         }
         if (isClicked(x, y, btnX, 210, btnW, btnH)) {
+            context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level5Blueprint()));
+            return true;
+        }
+        if (isClicked(x, y, btnX, 120, btnW, btnH)) {
+            context.getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new MenuScene(context, sceneManager));
             return true;
         }
         return false;

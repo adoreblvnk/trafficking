@@ -164,4 +164,5 @@ Thumbs.db
 **/resource-config.json
 
 # recyclingpinball
-assets/save.json
+.agents/
+skills-lock.json
