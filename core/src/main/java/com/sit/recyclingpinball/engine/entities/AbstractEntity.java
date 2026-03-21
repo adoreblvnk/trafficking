@@ -1,6 +1,5 @@
 package com.sit.recyclingpinball.engine.entities;
 
-import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle;
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 import com.sit.recyclingpinball.engine.interfaces.CollisionListener;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;

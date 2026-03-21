@@ -18,7 +18,6 @@ import com.sit.recyclingpinball.logic.entities.WallEntity;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 import com.sit.recyclingpinball.logic.events.PinballEventVisitor;
-import com.sit.recyclingpinball.logic.events.IPinballEvent;
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 import com.sit.recyclingpinball.logic.level.BoardBuilder;
 import com.sit.recyclingpinball.logic.level.BoardLayout;

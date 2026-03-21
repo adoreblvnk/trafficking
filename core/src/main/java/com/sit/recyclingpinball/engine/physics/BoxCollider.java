@@ -1,7 +1,6 @@
 package com.sit.recyclingpinball.engine.physics;
 
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle;
-import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformCircle;
 
 public class BoxCollider implements ICollider {
     private PlatformRectangle bounds;

@@ -1,7 +1,6 @@
 package com.sit.recyclingpinball.engine.managers;
 
 import com.sit.recyclingpinball.engine.entities.AbstractEntity;
-import com.sit.recyclingpinball.engine.interfaces.Movable;
 
 import java.util.List;
 import java.util.logging.Level;

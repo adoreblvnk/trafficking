@@ -84,6 +84,8 @@ subprojects {
     java {
       eclipse()  // Eclipse default style (4-space indent, etc.)
       indentWithSpaces(4)
+      removeUnusedImports()
+      endWithNewline()
     }
   }
 }

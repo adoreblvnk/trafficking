@@ -6,12 +6,6 @@ import com.sit.recyclingpinball.engine.EngineConstants;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
 import com.sit.recyclingpinball.engine.interfaces.Movable;
 
-import com.sit.recyclingpinball.engine.physics.BoxCollider;
-import com.sit.recyclingpinball.engine.physics.CircleCollider;
-import com.sit.recyclingpinball.engine.physics.ICollider;
-import com.sit.recyclingpinball.engine.physics.OBBCollider;
-import com.sit.recyclingpinball.engine.physics.SATMathUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
