@@ -18,8 +18,6 @@ import java.util.logging.Logger;
 public class CollisionManager {
     private static final Logger LOGGER = Logger.getLogger(CollisionManager.class.getName());
 
-    private static final float SEPARATION_EPSILON = 0.5f;
-
     private final QuadTree quadTree;
 
     public CollisionManager(PlatformRectangle bounds) {
@@ -107,10 +105,6 @@ public class CollisionManager {
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Collision processing failed", e);
         }
-    }
-
-    private boolean checkAABB(PlatformRectangle rectA, PlatformRectangle rectB) {
-        return rectA.overlaps(rectB);
     }
 
     private boolean checkCollision(ICollidable a, ICollidable b) {

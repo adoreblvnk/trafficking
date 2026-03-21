@@ -3,10 +3,8 @@ package com.sit.recyclingpinball.logic.states;
 import com.sit.recyclingpinball.logic.entities.PinballEntity;
 
 public class DrainedState implements IPinballState {
-    private final PinballEntity ctx;
 
-    public DrainedState(PinballEntity ctx) {
-        this.ctx = ctx;
+    public DrainedState() {
     }
 
     @Override

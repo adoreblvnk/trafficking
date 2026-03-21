@@ -5,13 +5,11 @@ import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 
 public class OBBWallEntity extends WallEntity {
-    private final float rotationDegrees;
     private static final float FILL_STEP = 2f;
     private final OBBCollider obbCollider;
 
     public OBBWallEntity(String id, float x, float y, float w, float h, float rotationDegrees) {
         super(id, x, y, w, h);
-        this.rotationDegrees = rotationDegrees;
         this.obbCollider = new OBBCollider(x, y, w, h, w / 2, h / 2, rotationDegrees);
         setCollider(this.obbCollider);
     }

@@ -24,7 +24,7 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
         super(id, x, y, 48, 48);
         setCollider(new CircleCollider(x, y, 24));
         this.eventBus = eventBus;
-        this.currentState = new InPlayState(this); // Start in play state to allow falling onto shooter rod
+        this.currentState = new InPlayState(); // Start in play state to allow falling onto shooter rod
         this.eventBus.register(this);
         setCollisionEnabled(true);
         setFriction(0.999f);

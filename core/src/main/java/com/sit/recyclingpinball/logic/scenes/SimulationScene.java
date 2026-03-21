@@ -32,7 +32,6 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     private final ILevelBlueprint blueprint;
     private PinballEventBus eventBus;
     private GameScoreManager scoreManager;
-    private GameAudioManager audioManager;
     private PinballEntity pinball;
     private int totalTrash;
 
@@ -57,7 +56,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
 
         totalTrash = layout.getTrashes().size();
         scoreManager = new GameScoreManager(eventBus, totalTrash);
-        audioManager = new GameAudioManager(getContext().getAudio(), eventBus);
+        new GameAudioManager(getContext().getAudio(), eventBus);
 
         for (WallEntity w : layout.getWalls()) {
             getEntityManager().addEntity(w);
@@ -110,7 +109,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
             // Respawn logic
             pinball.setPosition(LogicConstants.PINBALL_START_X, LogicConstants.PINBALL_START_Y);
             pinball.setVelocity(0, 0);
-            pinball.setState(new com.sit.recyclingpinball.logic.states.InPlayState(pinball));
+            pinball.setState(new com.sit.recyclingpinball.logic.states.InPlayState());
         }
     }
 

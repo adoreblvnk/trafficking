@@ -4,10 +4,8 @@ import com.sit.recyclingpinball.logic.entities.PinballEntity;
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 
 public class InPlayState implements IPinballState {
-    private final PinballEntity ctx;
 
-    public InPlayState(PinballEntity ctx) {
-        this.ctx = ctx;
+    public InPlayState() {
     }
 
     @Override
@@ -16,7 +14,7 @@ public class InPlayState implements IPinballState {
         ctx.getVelocity().setY(ctx.getVelocity().getY() - 900f * dt);
 
         if (ctx.getPosition().getY() < -50) {
-            ctx.setState(new DrainedState(ctx));
+            ctx.setState(new DrainedState());
             ctx.getEventBus().post(new BallDrainedEvent());
         }
     }
