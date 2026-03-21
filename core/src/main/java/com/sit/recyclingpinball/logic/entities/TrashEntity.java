@@ -15,7 +15,7 @@ public class TrashEntity extends StaticEntity {
         this.type = type;
         this.textureId = textureId;
         this.points = points;
-        this.collider = new CircleCollider(x, y, 32);
+        setCollider(new CircleCollider(x, y, 32));
         setCollisionEnabled(true);
         setTag("trash");
     }

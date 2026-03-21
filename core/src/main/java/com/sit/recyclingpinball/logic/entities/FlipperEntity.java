@@ -41,7 +41,7 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
         // degrees,
         // it naturally mirrors the left one, setting its hinge perfectly to the right
         // side of its bounds!
-        this.collider = new OBBCollider(x, y, 180, 40, 20, 20, currentAngle);
+        setCollider(new OBBCollider(x, y, 180, 40, 20, 20, currentAngle));
         setCollisionEnabled(true);
         setTag("flipper");
     }
@@ -70,10 +70,20 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
             }
         }
 
-        if (this.collider != null) {
-            this.collider.setRotation(currentAngle);
+        if (getCollider() != null) {
+            getCollider().setRotation(currentAngle);
         }
         super.update(dt);
+    }
+
+    @Override
+    public void resolveCollision(com.sit.recyclingpinball.engine.entities.DynamicEntity entity) {
+        float rotVel = getRotationalVelocity();
+        if (rotVel != 0) {
+            // Boost ball upwards if flipper is moving
+            entity.getVelocity().setY(entity.getVelocity().getY() + Math.abs(rotVel) * 1.5f);
+            entity.getVelocity().setX(entity.getVelocity().getX() + rotVel * 0.5f);
+        }
     }
 
     @Override

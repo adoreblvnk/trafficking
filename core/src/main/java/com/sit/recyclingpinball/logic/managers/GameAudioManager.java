@@ -12,13 +12,6 @@ public class GameAudioManager implements PinballEventVisitor {
 
     public GameAudioManager(IAudioProvider audio, PinballEventBus bus) {
         this.audio = audio;
-        audio.loadSound("sounds/collect.mp3", "collect");
-        audio.loadSound("sounds/lose.mp3", "lose");
-        audio.loadSound("sounds/win.mp3", "win");
-        audio.loadSound("sounds/bounce.mp3", "bounce");
-        audio.loadSound("sounds/flip.mp3", "flip");
-        audio.loadSound("sounds/stretch.mp3", "stretch");
-        audio.loadSound("sounds/click.mp3", "click");
         bus.register(this);
     }
 

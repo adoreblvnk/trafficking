@@ -16,7 +16,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     private final SceneManager sceneManager;
 
     public PauseOverlay(IEngineContext context, SceneManager sceneManager) {
-        super(context, new EntityManager(), new CollisionManager(), new InputManager(), new MovementManager());
+        super(context, new EntityManager(), new CollisionManager(new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)), new InputManager(), new MovementManager());
         this.sceneManager = sceneManager;
     }
 
@@ -32,53 +32,53 @@ public class PauseOverlay extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        context.getGraphics().begin();
+        getContext().getGraphics().begin();
         // 60% opacity — dark enough to communicate "paused", light enough to see game state.
         // Button backgrounds behind text already ensure readability, so we don't need heavier dimming.
-        context.getGraphics().fillRectangle(0, 0, 1900, 1000, 0, 0, 0, 0.6f);
+        getContext().getGraphics().fillRectangle(0, 0, 1900, 1000, 0, 0, 0, 0.6f);
 
         // Dark text on light buttons
-        context.getGraphics().setTextColor(0.2f, 0.15f, 0.1f, 1f);
+        getContext().getGraphics().setTextColor(0.2f, 0.15f, 0.1f, 1f);
 
         // PAUSED title with button background
         float pauseBtnW = 384;
         float pauseBtnH = 80;
         float pauseBtnX = 950 - pauseBtnW / 2;
         float pauseBtnY = 580;
-        context.getGraphics().drawTexture("button_rectangle_depth_flat", pauseBtnX, pauseBtnY, pauseBtnW, pauseBtnH);
-        context.getGraphics().drawTextCentered("PAUSED", "Geist-Bold", pauseBtnX, pauseBtnY, pauseBtnW, pauseBtnH);
+        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", pauseBtnX, pauseBtnY, pauseBtnW, pauseBtnH);
+        getContext().getGraphics().drawTextCentered("PAUSED", "Geist-Bold", pauseBtnX, pauseBtnY, pauseBtnW, pauseBtnH);
 
         // Resume button
         float btnW = 384;
         float btnH = 64;
         float btnX = 950 - btnW / 2;
-        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 490, btnW, btnH);
-        context.getGraphics().drawTextCentered("Resume", "Geist-Bold", btnX, 490, btnW, btnH);
+        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 490, btnW, btnH);
+        getContext().getGraphics().drawTextCentered("Resume", "Geist-Bold", btnX, 490, btnW, btnH);
 
         // Main Menu button
-        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 410, btnW, btnH);
-        context.getGraphics().drawTextCentered("Main Menu", "Geist-Bold", btnX, 410, btnW, btnH);
+        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 410, btnW, btnH);
+        getContext().getGraphics().drawTextCentered("Main Menu", "Geist-Bold", btnX, 410, btnW, btnH);
 
         // Reset text color to white
-        context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
+        getContext().getGraphics().setTextColor(1f, 1f, 1f, 1f);
 
-        context.getGraphics().end();
+        getContext().getGraphics().end();
     }
 
     private boolean isClicked(int screenX, int screenY, float btnX, float btnY, float btnW, float btnH) {
-        float mappedY = context.getDisplay().getHeight() - screenY;
+        float mappedY = getContext().getDisplay().getHeight() - screenY;
         return screenX >= btnX && screenX <= btnX + btnW && mappedY >= btnY && mappedY <= btnY + btnH;
     }
 
     @Override
     public boolean onKeyDown(EngineKey keycode) {
         if (keycode == EngineKey.ESCAPE) {
-            context.getAudio().playSound("click", 1.0f);
+            getContext().getAudio().playSound("click", 1.0f);
             sceneManager.popScene();
             return true;
         } else if (keycode == EngineKey.M) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new MenuScene(context, sceneManager));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new MenuScene(getContext(), sceneManager));
             return true;
         }
         return false;
@@ -91,13 +91,13 @@ public class PauseOverlay extends AbstractScene implements InputListener {
         float btnX = 950 - btnW / 2;
 
         if (isClicked(x, y, btnX, 490, btnW, btnH)) {
-            context.getAudio().playSound("click", 1.0f);
+            getContext().getAudio().playSound("click", 1.0f);
             sceneManager.popScene();
             return true;
         }
         if (isClicked(x, y, btnX, 410, btnW, btnH)) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new MenuScene(context, sceneManager));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new MenuScene(getContext(), sceneManager));
             return true;
         }
         return false;

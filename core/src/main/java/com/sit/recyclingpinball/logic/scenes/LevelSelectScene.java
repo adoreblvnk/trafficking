@@ -17,7 +17,7 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     private final SceneManager sceneManager;
 
     public LevelSelectScene(IEngineContext context, SceneManager sceneManager) {
-        super(context, new EntityManager(), new CollisionManager(), new InputManager(), new MovementManager());
+        super(context, new EntityManager(), new CollisionManager(new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)), new InputManager(), new MovementManager());
         this.sceneManager = sceneManager;
     }
 
@@ -28,87 +28,87 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        context.getGraphics().clearScreen(0.1f, 0.1f, 0.1f);
-        context.getGraphics().begin();
+        getContext().getGraphics().clearScreen(0.1f, 0.1f, 0.1f);
+        getContext().getGraphics().begin();
 
         // Full-screen dirty beach background
-        context.getGraphics().drawTexture("dirty_beach", 0, 0, 1900, 1000);
+        getContext().getGraphics().drawTexture("dirty_beach", 0, 0, 1900, 1000);
 
         // Dark text for button labels
-        context.getGraphics().setTextColor(0.2f, 0.15f, 0.1f, 1f);
+        getContext().getGraphics().setTextColor(0.2f, 0.15f, 0.1f, 1f);
 
         // Title with button background
         float titleBtnW = 384;
         float titleBtnH = 80;
         float titleBtnX = 950 - titleBtnW / 2;
         float titleBtnY = 670;
-        context.getGraphics().drawTexture("button_rectangle_depth_flat", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
-        context.getGraphics().drawTextCentered("Level Select", "Geist-Bold", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
+        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
+        getContext().getGraphics().drawTextCentered("Level Select", "Geist-Bold", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
 
         // Level 1 button
         float btnW = 480;
         float btnH = 64;
         float btnX = 950 - btnW / 2;
-        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 570, btnW, btnH);
-        context.getGraphics().drawTextCentered("Level 1", "Geist-Bold", btnX, 570, btnW, btnH);
+        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 570, btnW, btnH);
+        getContext().getGraphics().drawTextCentered("Level 1", "Geist-Bold", btnX, 570, btnW, btnH);
 
         // Level 2 button
-        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 480, btnW, btnH);
-        context.getGraphics().drawTextCentered("Level 2", "Geist-Bold", btnX, 480, btnW, btnH);
+        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 480, btnW, btnH);
+        getContext().getGraphics().drawTextCentered("Level 2", "Geist-Bold", btnX, 480, btnW, btnH);
 
         // Level 3 button
-        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 390, btnW, btnH);
-        context.getGraphics().drawTextCentered("Level 3", "Geist-Bold", btnX, 390, btnW, btnH);
+        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 390, btnW, btnH);
+        getContext().getGraphics().drawTextCentered("Level 3", "Geist-Bold", btnX, 390, btnW, btnH);
 
         // Level 4 button
-        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 300, btnW, btnH);
-        context.getGraphics().drawTextCentered("Level 4", "Geist-Bold", btnX, 300, btnW, btnH);
+        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 300, btnW, btnH);
+        getContext().getGraphics().drawTextCentered("Level 4", "Geist-Bold", btnX, 300, btnW, btnH);
 
         // Level 5 button
-        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 210, btnW, btnH);
-        context.getGraphics().drawTextCentered("Level 5", "Geist-Bold", btnX, 210, btnW, btnH);
+        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 210, btnW, btnH);
+        getContext().getGraphics().drawTextCentered("Level 5", "Geist-Bold", btnX, 210, btnW, btnH);
 
         // Back button
-        context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 120, btnW, btnH);
-        context.getGraphics().drawTextCentered("Back", "Geist-Bold", btnX, 120, btnW, btnH);
+        getContext().getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 120, btnW, btnH);
+        getContext().getGraphics().drawTextCentered("Back", "Geist-Bold", btnX, 120, btnW, btnH);
 
         // Reset text color to white
-        context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
+        getContext().getGraphics().setTextColor(1f, 1f, 1f, 1f);
 
-        context.getGraphics().end();
+        getContext().getGraphics().end();
         super.render();
     }
 
     private boolean isClicked(int screenX, int screenY, float btnX, float btnY, float btnW, float btnH) {
-        float mappedY = context.getDisplay().getHeight() - screenY;
+        float mappedY = getContext().getDisplay().getHeight() - screenY;
         return screenX >= btnX && screenX <= btnX + btnW && mappedY >= btnY && mappedY <= btnY + btnH;
     }
 
     @Override
     public boolean onKeyDown(EngineKey keycode) {
         if (keycode == EngineKey.NUM_1) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level1Blueprint()));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new SimulationScene(getContext(), sceneManager, new Level1Blueprint()));
             return true;
         } else if (keycode == EngineKey.NUM_2) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level2Blueprint()));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new SimulationScene(getContext(), sceneManager, new Level2Blueprint()));
             return true;
         } else if (keycode == EngineKey.NUM_3) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level3Blueprint()));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new SimulationScene(getContext(), sceneManager, new Level3Blueprint()));
             return true;
         } else if (keycode == EngineKey.NUM_4) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level4Blueprint()));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new SimulationScene(getContext(), sceneManager, new Level4Blueprint()));
             return true;
         } else if (keycode == EngineKey.NUM_5) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level5Blueprint()));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new SimulationScene(getContext(), sceneManager, new Level5Blueprint()));
             return true;
         } else if (keycode == EngineKey.ESCAPE) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new MenuScene(context, sceneManager));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new MenuScene(getContext(), sceneManager));
             return true;
         }
         return false;
@@ -121,33 +121,33 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         float btnX = 950 - btnW / 2;
 
         if (isClicked(x, y, btnX, 570, btnW, btnH)) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level1Blueprint()));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new SimulationScene(getContext(), sceneManager, new Level1Blueprint()));
             return true;
         }
         if (isClicked(x, y, btnX, 480, btnW, btnH)) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level2Blueprint()));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new SimulationScene(getContext(), sceneManager, new Level2Blueprint()));
             return true;
         }
         if (isClicked(x, y, btnX, 390, btnW, btnH)) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level3Blueprint()));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new SimulationScene(getContext(), sceneManager, new Level3Blueprint()));
             return true;
         }
         if (isClicked(x, y, btnX, 300, btnW, btnH)) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level4Blueprint()));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new SimulationScene(getContext(), sceneManager, new Level4Blueprint()));
             return true;
         }
         if (isClicked(x, y, btnX, 210, btnW, btnH)) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new SimulationScene(context, sceneManager, new Level5Blueprint()));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new SimulationScene(getContext(), sceneManager, new Level5Blueprint()));
             return true;
         }
         if (isClicked(x, y, btnX, 120, btnW, btnH)) {
-            context.getAudio().playSound("click", 1.0f);
-            sceneManager.setScene(new MenuScene(context, sceneManager));
+            getContext().getAudio().playSound("click", 1.0f);
+            sceneManager.setScene(new MenuScene(getContext(), sceneManager));
             return true;
         }
         return false;

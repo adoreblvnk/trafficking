@@ -33,57 +33,57 @@ public class InputManager {
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        try {
-            for (InputListener l : listeners) {
+        for (InputListener l : listeners) {
+            try {
                 if (l.onTouchDown(screenX, screenY, pointer, button)) return true;
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Input failure in touchDown", e);
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Input failure in touchDown", e);
         }
         return false;
     }
 
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        try {
-            for (InputListener l : listeners) {
+        for (InputListener l : listeners) {
+            try {
                 if (l.onDrag(screenX, screenY, pointer)) return true;
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Input failure in touchDragged", e);
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Input failure in touchDragged", e);
         }
         return false;
     }
 
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        try {
-            for (InputListener l : listeners) {
+        for (InputListener l : listeners) {
+            try {
                 if (l.onTouchUp(screenX, screenY, pointer, button)) return true;
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Input failure in touchUp", e);
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Input failure in touchUp", e);
         }
         return false;
     }
 
     // Implemented to satisfy UML even if Interface doesn't use it yet
     public boolean keyDown(EngineKey keycode) {
-        try {
-            for (InputListener l : listeners) {
+        for (InputListener l : listeners) {
+            try {
                 if (l.onKeyDown(keycode)) return true;
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Input failure in keyDown", e);
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Input failure in keyDown", e);
         }
         return false;
     }
 
     public boolean keyUp(EngineKey keycode) {
-        try {
-            for (InputListener l : listeners) {
+        for (InputListener l : listeners) {
+            try {
                 if (l.onKeyUp(keycode)) return true;
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Input failure in keyUp", e);
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Input failure in keyUp", e);
         }
         return false;
     }

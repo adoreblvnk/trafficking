@@ -20,10 +20,13 @@ public class EntityManager {
 
     private final Map<String, AbstractEntity> entityMap;
     private final List<AbstractEntity> entityList;
+    private final List<AbstractEntity> renderList;
+    private boolean isZIndexDirty = false;
 
     public EntityManager() {
         this.entityMap = new ConcurrentHashMap<>();
         this.entityList = new CopyOnWriteArrayList<>();
+        this.renderList = new CopyOnWriteArrayList<>();
     }
 
     public boolean addEntity(AbstractEntity e) {
@@ -39,9 +42,12 @@ public class EntityManager {
              // If replacing, remove old from list first
              AbstractEntity old = entityMap.get(e.getId());
              entityList.remove(old);
+             renderList.remove(old);
         }
         entityMap.put(e.getId(), e);
         entityList.add(e);
+        renderList.add(e);
+        isZIndexDirty = true;
         return true;
     }
 
@@ -53,6 +59,8 @@ public class EntityManager {
         AbstractEntity e = entityMap.remove(id);
         if (e != null) {
             entityList.remove(e);
+            renderList.remove(e);
+            isZIndexDirty = true;
             return true;
         }
         return false;
@@ -69,17 +77,31 @@ public class EntityManager {
     }
 
     /**
+     * Marks the entity manager's z-index order as dirty, forcing a re-sort before the next render.
+     */
+    public void markZIndexDirty() {
+        this.isZIndexDirty = true;
+    }
+
+    /**
      * Renders all entities in z-index order using the provided graphics provider.
      *
      * @param graphics the graphics provider for platform-independent rendering
      */
     public void render(IGraphicsProvider graphics) {
-        List<AbstractEntity> renderList = new ArrayList<>(entityList);
-        // Sorts by z-index before rendering to control draw order
-        renderList.sort(Comparator.comparingInt(AbstractEntity::getZIndex));
+        if (isZIndexDirty) {
+            sortIfDirty();
+        }
 
         for (AbstractEntity e : renderList) {
             e.render(graphics);
+        }
+    }
+
+    private synchronized void sortIfDirty() {
+        if (isZIndexDirty) {
+            renderList.sort(Comparator.comparingInt(AbstractEntity::getZIndex));
+            isZIndexDirty = false;
         }
     }
 

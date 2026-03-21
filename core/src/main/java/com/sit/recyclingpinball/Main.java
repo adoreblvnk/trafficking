@@ -9,6 +9,8 @@ import com.sit.recyclingpinball.engine.managers.SoundManager;
 import com.sit.recyclingpinball.engine.managers.IOManager;
 import com.sit.recyclingpinball.engine.managers.TimeManager;
 
+import com.sit.recyclingpinball.engine.managers.AssetManager;
+
 public class Main extends Game {
     private SceneManager sceneManager;
     private LibGdxContext context;
@@ -16,7 +18,11 @@ public class Main extends Game {
     @Override
     public void create() {
         context = new LibGdxContext();
-        context.getAudio().loadSound("sounds/click.mp3", "click");
+        
+        AssetManager assetManager = AssetManager.getInstance();
+        assetManager.initialize(context.getAudio());
+        assetManager.loadAll();
+        
         SoundManager soundManager = new SoundManager(context.getAudio());
         IOManager ioManager = new IOManager(context.getIO());
         TimeManager timeManager = new TimeManager(context.getTime());

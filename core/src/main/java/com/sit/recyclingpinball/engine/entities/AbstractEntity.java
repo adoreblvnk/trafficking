@@ -27,8 +27,8 @@ public abstract class AbstractEntity implements ICollidable {
     private CollisionListener collisionListener;
     private String tag = "";
 
-    protected ICollider collider;
-    protected boolean collisionEnabled = true;
+    private ICollider collider;
+    private boolean collisionEnabled = true;
 
     //every entity requires a position and size to exist
     public AbstractEntity(String id, float x, float y, float w, float h) {
@@ -51,6 +51,10 @@ public abstract class AbstractEntity implements ICollidable {
         this.b = 1.0f;
         this.a = 1.0f;
         this.collider = new BoxCollider(x, y, w, h);
+    }
+
+    protected void setCollider(ICollider collider) {
+        this.collider = collider;
     }
 
     //make sure collision bounding is in sync whenever entity position updates

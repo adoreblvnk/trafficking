@@ -17,4 +17,12 @@ public interface ICollidable {
     void onCollision(ICollidable other);
     float getInverseMass();
     String getTag();
+
+    /**
+     * Resolves a collision with a dynamic entity using double dispatch.
+     * Overridden by specific entities to apply logic without instanceof.
+     *
+     * @param entity The dynamic entity this collidable is interacting with.
+     */
+    default void resolveCollision(com.sit.recyclingpinball.engine.entities.DynamicEntity entity) {}
 }

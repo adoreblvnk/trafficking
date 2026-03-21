@@ -37,7 +37,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     private int totalTrash;
 
     public SimulationScene(IEngineContext context, SceneManager sceneManager, ILevelBlueprint blueprint) {
-        super(context, new EntityManager(), new CollisionManager(), new InputManager(), new MovementManager());
+        super(context, new EntityManager(), new CollisionManager(new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)), new InputManager(), new MovementManager());
         this.sceneManager = sceneManager;
         this.blueprint = blueprint;
     }
@@ -54,7 +54,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
 
         totalTrash = layout.getTrashes().size();
         scoreManager = new GameScoreManager(eventBus, totalTrash);
-        audioManager = new GameAudioManager(context.getAudio(), eventBus);
+        audioManager = new GameAudioManager(getContext().getAudio(), eventBus);
 
         for (WallEntity w : layout.getWalls()) {
             getEntityManager().addEntity(w);
@@ -92,10 +92,10 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     public void update(float dt) {
         super.update(dt);
         if (scoreManager.isWon()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, true, scoreManager.getScore(),
+            sceneManager.pushOverlay(new SimulationResultOverlay(getContext(), sceneManager, true, scoreManager.getScore(),
                     totalTrash, blueprint));
         } else if (scoreManager.isLost()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(context, sceneManager, false, scoreManager.getScore(),
+            sceneManager.pushOverlay(new SimulationResultOverlay(getContext(), sceneManager, false, scoreManager.getScore(),
                     totalTrash, blueprint));
         }
     }
@@ -112,21 +112,21 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
 
     @Override
     public void render() {
-        context.getGraphics().clearScreen(0.8f, 0.9f, 1.0f);
+        getContext().getGraphics().clearScreen(0.8f, 0.9f, 1.0f);
 
         // 1. Draw Background
-        context.getGraphics().drawTexture("beach_background", 0, 0, 1900, 1000);
-        context.getGraphics().end();
+        getContext().getGraphics().drawTexture("beach_background", 0, 0, 1900, 1000);
+        getContext().getGraphics().end();
 
         // 2. Draw Game Entities (Walls, Flippers, Trash, Pinball)
         super.render();
-        context.getGraphics().end();
+        getContext().getGraphics().end();
 
         // 3. Draw UI Overlay
-        context.getGraphics().drawTexture("ui_panel_bg", 0, 0, 400, 1000);
-        context.getGraphics().drawText("Score: " + scoreManager.getScore(), "Geist-Bold", 50, 900);
-        context.getGraphics().drawText("Balls: " + scoreManager.getBallsLeft(), "Geist-Bold", 50, 850);
-        context.getGraphics().drawText(blueprint.getText(), "Geist-Bold", 50, 800, 300);
+        getContext().getGraphics().drawTexture("ui_panel_bg", 0, 0, 400, 1000);
+        getContext().getGraphics().drawText("Score: " + scoreManager.getScore(), "Geist-Bold", 50, 900);
+        getContext().getGraphics().drawText("Balls: " + scoreManager.getBallsLeft(), "Geist-Bold", 50, 850);
+        getContext().getGraphics().drawText(blueprint.getText(), "Geist-Bold", 50, 800, 300);
 
         // 4. Draw star icons for collected trash
         int collected = scoreManager.getScore();
@@ -136,20 +136,20 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
             float starX = 60 + col * 70;
             float starY = 200 - row * 70;
             if (i < collected) {
-                context.getGraphics().drawTexture("star", starX, starY, 64, 60);
+                getContext().getGraphics().drawTexture("star", starX, starY, 64, 60);
             } else {
                 // Draw dimmed placeholder — dark rectangle behind unfilled star position
-                context.getGraphics().fillRectangle(starX + 16, starY + 14, 32, 32, 0.3f, 0.3f, 0.3f, 0.4f);
+                getContext().getGraphics().fillRectangle(starX + 16, starY + 14, 32, 32, 0.3f, 0.3f, 0.3f, 0.4f);
             }
         }
 
-        context.getGraphics().end();
+        getContext().getGraphics().end();
     }
 
     @Override
     public boolean onKeyDown(EngineKey keycode) {
         if (keycode == EngineKey.ESCAPE) {
-            sceneManager.pushOverlay(new PauseOverlay(context, sceneManager));
+            sceneManager.pushOverlay(new PauseOverlay(getContext(), sceneManager));
             return true;
         }
         return false;

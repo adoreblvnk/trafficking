@@ -5,4 +5,5 @@ public interface PinballEventVisitor {
     default void visit(BallLaunchedEvent event) {}
     default void visit(ShooterRodMovedEvent event) {}
     default void visit(TrashCollectedEvent event) {}
+    default void visit(BallRestedOnRodEvent event) {}
 }

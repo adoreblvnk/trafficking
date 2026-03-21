@@ -23,7 +23,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
 
     public ShooterRodEntity(String id, float x, float y, PinballEventBus eventBus) {
         super(id, x, y, 64, 160);
-        this.collider = new BoxCollider(x, y, 64, 160);
+        setCollider(new BoxCollider(x, y, 64, 160));
         this.anchorY = y;
         this.maxPullDistance = 100f;
         this.eventBus = eventBus;
@@ -40,6 +40,22 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
 
     private float getY() {
         return getPosition().getY();
+    }
+
+    @Override
+    public void resolveCollision(com.sit.recyclingpinball.engine.entities.DynamicEntity entity) {
+        if (getVelocity().getY() <= 0) {
+            entity.getVelocity().setY(0);
+            entity.getVelocity().setX(0);
+
+            float rodTop = getPosition().getY() + 160 + 24;
+
+            if (entity.getPosition().getY() <= rodTop + 2f) { 
+                entity.setPosition(entity.getPosition().getX(), rodTop);
+                entity.getVelocity().setY(0);
+            }
+            eventBus.post(new com.sit.recyclingpinball.logic.events.BallRestedOnRodEvent());
+        }
     }
 
     @Override

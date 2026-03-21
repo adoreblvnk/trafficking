@@ -22,7 +22,7 @@ public abstract class AbstractScene {
     private CollisionManager collisionManager;
     private InputManager inputManager;
     private MovementManager movementManager;
-    protected final IEngineContext context;
+    private final IEngineContext context;
 
     // Gives every scene its own manager instances for isolation and predictable teardown.
     public AbstractScene(IEngineContext context, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
@@ -31,6 +31,10 @@ public abstract class AbstractScene {
         this.collisionManager = collisionManager;
         this.inputManager = inputManager;
         this.movementManager = movementManager;
+    }
+
+    public IEngineContext getContext() {
+        return context;
     }
 
     public abstract void create();

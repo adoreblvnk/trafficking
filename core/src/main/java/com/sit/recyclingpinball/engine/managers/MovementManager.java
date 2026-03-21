@@ -26,12 +26,12 @@ public class MovementManager {
             return;
         }
 
-        try {
-            for (AbstractEntity e : entities) {
+        for (AbstractEntity e : entities) {
+            try {
                 e.updatePosition(dt);
+            } catch (Exception ex) {
+                LOGGER.log(Level.SEVERE, "Movement processing failed for entity: " + e.getId(), ex);
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Movement processing failed", e);
         }
     }
 }

@@ -10,7 +10,7 @@ public class SpriteEntity extends DynamicEntity {
     public SpriteEntity(String id, float x, float y, float w, float h, String textureId, ICollider collider) {
         super(id, x, y, w, h);
         this.textureId = textureId;
-        this.collider = collider;
+        setCollider(collider);
     }
 
     @Override

@@ -26,7 +26,13 @@ public class CollisionManager {
 
     private static final float SEPARATION_EPSILON = 0.5f;
 
-    public CollisionManager() {
+    private final QuadTree quadTree;
+
+    public CollisionManager(PlatformRectangle bounds) {
+        if (bounds == null) {
+            bounds = new PlatformRectangle(0, 0, 1920, 1080); // Default fallback
+        }
+        this.quadTree = new QuadTree(0, bounds);
     }
 
     public List<ICollidable> getEntitiesInArea(List<? extends ICollidable> entities, PlatformRectangle area) {
@@ -54,28 +60,11 @@ public class CollisionManager {
         if (entities.isEmpty()) return;
 
         try {
-            float minX = Float.MAX_VALUE, minY = Float.MAX_VALUE;
-            float maxX = -Float.MAX_VALUE, maxY = -Float.MAX_VALUE;
-
-            for (ICollidable e : entities) {
-                if (e == null || e.getCollider() == null) continue;
-                PlatformRectangle r = e.getCollider().getAABB();
-                if (r.getX() < minX) minX = r.getX();
-                if (r.getY() < minY) minY = r.getY();
-                if (r.getX() + r.getWidth() > maxX) maxX = r.getX() + r.getWidth();
-                if (r.getY() + r.getHeight() > maxY) maxY = r.getY() + r.getHeight();
-            }
-
-            if (minX == Float.MAX_VALUE) return;
-
-            float width = Math.max(maxX - minX, 1);
-            float height = Math.max(maxY - minY, 1);
-
-            QuadTree quad = new QuadTree(0, new PlatformRectangle(minX, minY, width, height));
+            quadTree.clear();
 
             for (ICollidable e : entities) {
                 if (e != null && e.getCollider() != null) {
-                    quad.insert(e);
+                    quadTree.insert(e);
                 }
             }
 
@@ -85,7 +74,7 @@ public class CollisionManager {
                 if (a == null || a.getCollider() == null) continue;
 
                 returnObjects.clear();
-                quad.retrieve(returnObjects, a.getCollider().getAABB());
+                quadTree.retrieve(returnObjects, a.getCollider().getAABB());
 
                 for (int j = 0; j < returnObjects.size(); j++) {
                     ICollidable b = returnObjects.get(j);

@@ -59,7 +59,7 @@ public class HeadlessTestLauncher {
         private void resetEngine() {
             entityManager = new EntityManager();
             movementManager = new MovementManager();
-            collisionManager = new CollisionManager();
+            collisionManager = new CollisionManager(new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080));
         }
 
         @Override

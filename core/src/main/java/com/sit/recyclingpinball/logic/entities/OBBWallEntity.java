@@ -13,7 +13,7 @@ public class OBBWallEntity extends WallEntity {
         super(id, x, y, w, h);
         this.rotationDegrees = rotationDegrees;
         this.obbCollider = new OBBCollider(x, y, w, h, w / 2, h / 2, rotationDegrees);
-        this.collider = this.obbCollider;
+        setCollider(this.obbCollider);
     }
 
     @Override
