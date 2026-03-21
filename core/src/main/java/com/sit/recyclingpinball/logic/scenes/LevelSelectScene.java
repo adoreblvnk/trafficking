@@ -41,34 +41,34 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         float titleBtnX = 950 - titleBtnW / 2;
         float titleBtnY = 670;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
-        context.getGraphics().drawText("Level Select", "Geist-Bold", 870, 720);
+        context.getGraphics().drawTextCentered("Level Select", "Geist-Bold", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
 
         // Level 1 button
         float btnW = 480;
         float btnH = 64;
         float btnX = 950 - btnW / 2;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 570, btnW, btnH);
-        context.getGraphics().drawText("Level 1", "Geist-Bold", 900, 610);
+        context.getGraphics().drawTextCentered("Level 1", "Geist-Bold", btnX, 570, btnW, btnH);
 
         // Level 2 button
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 480, btnW, btnH);
-        context.getGraphics().drawText("Level 2", "Geist-Bold", 900, 520);
+        context.getGraphics().drawTextCentered("Level 2", "Geist-Bold", btnX, 480, btnW, btnH);
 
         // Level 3 button
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 390, btnW, btnH);
-        context.getGraphics().drawText("Level 3", "Geist-Bold", 900, 430);
+        context.getGraphics().drawTextCentered("Level 3", "Geist-Bold", btnX, 390, btnW, btnH);
 
         // Level 4 button
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 300, btnW, btnH);
-        context.getGraphics().drawText("Level 4", "Geist-Bold", 900, 340);
+        context.getGraphics().drawTextCentered("Level 4", "Geist-Bold", btnX, 300, btnW, btnH);
 
         // Level 5 button
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 210, btnW, btnH);
-        context.getGraphics().drawText("Level 5", "Geist-Bold", 900, 250);
+        context.getGraphics().drawTextCentered("Level 5", "Geist-Bold", btnX, 210, btnW, btnH);
 
         // Back button
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 120, btnW, btnH);
-        context.getGraphics().drawText("Back", "Geist-Bold", 915, 160);
+        context.getGraphics().drawTextCentered("Back", "Geist-Bold", btnX, 120, btnW, btnH);
 
         // Reset text color to white
         context.getGraphics().setTextColor(1f, 1f, 1f, 1f);

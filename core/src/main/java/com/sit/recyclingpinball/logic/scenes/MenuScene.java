@@ -36,7 +36,7 @@ public class MenuScene extends AbstractScene implements InputListener {
         float titleBtnX = 950 - titleBtnW / 2;
         float titleBtnY = 560;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
-        context.getGraphics().drawText("Recycling Pinball", "Geist-Bold", 850, 610);
+        context.getGraphics().drawTextCentered("Recycling Pinball", "Geist-Bold", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
 
         // Start prompt with button background
         float startBtnW = 480;
@@ -44,7 +44,7 @@ public class MenuScene extends AbstractScene implements InputListener {
         float startBtnX = 950 - startBtnW / 2;
         float startBtnY = 460;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", startBtnX, startBtnY, startBtnW, startBtnH);
-        context.getGraphics().drawText("Start Game", "Geist-Bold", 890, 500);
+        context.getGraphics().drawTextCentered("Start Game", "Geist-Bold", startBtnX, startBtnY, startBtnW, startBtnH);
 
         // Quit prompt with button background
         float quitBtnW = 480;
@@ -52,7 +52,7 @@ public class MenuScene extends AbstractScene implements InputListener {
         float quitBtnX = 950 - quitBtnW / 2;
         float quitBtnY = 380;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", quitBtnX, quitBtnY, quitBtnW, quitBtnH);
-        context.getGraphics().drawText("Quit", "Geist-Bold", 930, 420);
+        context.getGraphics().drawTextCentered("Quit", "Geist-Bold", quitBtnX, quitBtnY, quitBtnW, quitBtnH);
 
         // Reset text color to white
         context.getGraphics().setTextColor(1f, 1f, 1f, 1f);

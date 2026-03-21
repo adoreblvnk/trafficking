@@ -108,6 +108,8 @@ public interface IGraphicsProvider {
 
     void drawText(String text, String fontName, float x, float y, float targetWidth);
 
+    void drawTextCentered(String text, String fontName, float x, float y, float width, float height);
+
     void fillRectangle(float x, float y, float w, float h, float r, float g, float b, float alpha);
     
     void drawTexture(String textureId, float x, float y, float w, float h);

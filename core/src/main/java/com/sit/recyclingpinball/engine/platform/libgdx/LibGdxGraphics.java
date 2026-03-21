@@ -3,6 +3,7 @@ package com.sit.recyclingpinball.engine.platform.libgdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Matrix4;
@@ -232,6 +233,34 @@ public class LibGdxGraphics implements IGraphicsProvider {
         ensureSpriteBatch();
         applyTextColor(targetFont);
         targetFont.draw(spriteBatch, text, x, y, targetWidth, com.badlogic.gdx.utils.Align.center, true);
+    }
+
+    private final GlyphLayout glyphLayout = new GlyphLayout();
+
+    @Override
+    public void drawTextCentered(String text, String fontName, float x, float y, float width, float height) {
+        BitmapFont targetFont = fonts.get(fontName);
+        if (targetFont == null) {
+            String path = "fonts/" + fontName + ".ttf";
+            if (Gdx.files.internal(path).exists()) {
+                loadFont(path, 24);
+                targetFont = fonts.get(fontName);
+            }
+            if (targetFont == null)
+                targetFont = font;
+        }
+
+        if (targetFont == null)
+            return;
+
+        ensureSpriteBatch();
+        applyTextColor(targetFont);
+        
+        glyphLayout.setText(targetFont, text);
+        float textX = x + (width - glyphLayout.width) / 2f;
+        float textY = y + (height + glyphLayout.height) / 2f;
+        
+        targetFont.draw(spriteBatch, text, textX, textY);
     }
 
     @Override

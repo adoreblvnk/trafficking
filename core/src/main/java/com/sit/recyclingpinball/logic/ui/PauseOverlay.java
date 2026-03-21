@@ -45,18 +45,18 @@ public class PauseOverlay extends AbstractScene implements InputListener {
         float pauseBtnX = 950 - pauseBtnW / 2;
         float pauseBtnY = 580;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", pauseBtnX, pauseBtnY, pauseBtnW, pauseBtnH);
-        context.getGraphics().drawText("PAUSED", "Geist-Bold", 900, 630);
+        context.getGraphics().drawTextCentered("PAUSED", "Geist-Bold", pauseBtnX, pauseBtnY, pauseBtnW, pauseBtnH);
 
         // Resume button
         float btnW = 384;
         float btnH = 64;
         float btnX = 950 - btnW / 2;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 490, btnW, btnH);
-        context.getGraphics().drawText("Resume", "Geist-Bold", 900, 530);
+        context.getGraphics().drawTextCentered("Resume", "Geist-Bold", btnX, 490, btnW, btnH);
 
         // Main Menu button
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 410, btnW, btnH);
-        context.getGraphics().drawText("Main Menu", "Geist-Bold", 890, 450);
+        context.getGraphics().drawTextCentered("Main Menu", "Geist-Bold", btnX, 410, btnW, btnH);
 
         // Reset text color to white
         context.getGraphics().setTextColor(1f, 1f, 1f, 1f);

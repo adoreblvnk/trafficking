@@ -61,7 +61,7 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         float titleBtnX = 950 - titleBtnW / 2;
         float titleBtnY = 600 - titleBtnH / 2;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
-        context.getGraphics().drawText(text, "Geist-Bold", 965 - 80, 610);
+        context.getGraphics().drawTextCentered(text, "Geist-Bold", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
 
         // Star icons showing collected trash
         float starsStartX = 950 - (totalTrash * 70) / 2.0f;
@@ -77,6 +77,7 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
 
         // Score text (white on dark overlay — no button behind this)
         context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
+        // We'll leave the score text non-centered or we could center it if we calculate width. Let's keep it as is.
         context.getGraphics().drawText("Collected " + score + " / " + totalTrash + " trash", "Geist-Bold", 850, 470);
 
         // Return instruction with button background (dark text on button)
@@ -86,12 +87,12 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         float retBtnX = 950 - retBtnW / 2;
         float retBtnY = 370;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", retBtnX, retBtnY, retBtnW, retBtnH);
-        context.getGraphics().drawText("Main Menu", "Geist-Bold", 890, 410);
+        context.getGraphics().drawTextCentered("Main Menu", "Geist-Bold", retBtnX, retBtnY, retBtnW, retBtnH);
 
         // Retry instruction with button background (dark text on button)
         float retryBtnY = 280;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", retBtnX, retryBtnY, retBtnW, retBtnH);
-        context.getGraphics().drawText("Retry", "Geist-Bold", 920, 320);
+        context.getGraphics().drawTextCentered("Retry", "Geist-Bold", retBtnX, retryBtnY, retBtnW, retBtnH);
 
         // Reset text color to white
         context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
