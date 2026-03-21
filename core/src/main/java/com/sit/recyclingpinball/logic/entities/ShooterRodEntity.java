@@ -1,6 +1,7 @@
 package com.sit.recyclingpinball.logic.entities;
 
-import com.badlogic.gdx.Input;
+import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
+
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
@@ -30,14 +31,15 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         this.knobTextureId = "ball_blue_large";
         this.isDragging = false;
         this.isKeyPulling = false;
+        setTag("shooter");
     }
 
     private float getX() {
-        return getPosition().x;
+        return getPosition().getX();
     }
 
     private float getY() {
-        return getPosition().y;
+        return getPosition().getY();
     }
 
     @Override
@@ -68,7 +70,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
             // but it says "use Math.max(anchorY - maxPullDistance, touchY) to clamp it."
             newY = Math.min(anchorY, newY);
 
-            setPosition(getPosition().x, newY);
+            setPosition(getPosition().getX(), newY);
             setVelocity(0, 0);
 
             eventBus.post(new ShooterRodMovedEvent(newY));
@@ -96,21 +98,21 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         if (isKeyPulling) {
             float newY = getY() - keyPullSpeed * dt;
             newY = Math.max(anchorY - maxPullDistance, newY);
-            setPosition(getPosition().x, newY);
+            setPosition(getPosition().getX(), newY);
             setVelocity(0, 0);
             eventBus.post(new ShooterRodMovedEvent(newY));
         }
 
-        if (getVelocity().y > 0 && getY() >= anchorY) {
-            setPosition(getPosition().x, anchorY);
+        if (getVelocity().getY() > 0 && getY() >= anchorY) {
+            setPosition(getPosition().getX(), anchorY);
             setVelocity(0, 0);
             eventBus.post(new BallLaunchedEvent(launchVelocity));
         }
     }
 
     @Override
-    public boolean onKeyDown(int keycode) {
-        if (keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
+    public boolean onKeyDown(EngineKey keycode) {
+        if (keycode == EngineKey.DOWN || keycode == EngineKey.S) {
             isKeyPulling = true;
             return true;
         }
@@ -118,8 +120,8 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     }
 
     @Override
-    public boolean onKeyUp(int keycode) {
-        if (keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
+    public boolean onKeyUp(EngineKey keycode) {
+        if (keycode == EngineKey.DOWN || keycode == EngineKey.S) {
             if (isKeyPulling) {
                 isKeyPulling = false;
                 float pullDistance = anchorY - getY();

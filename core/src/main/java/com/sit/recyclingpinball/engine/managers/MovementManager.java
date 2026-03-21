@@ -1,37 +1,37 @@
 package com.sit.recyclingpinball.engine.managers;
 
-import com.badlogic.gdx.Gdx;
 import com.sit.recyclingpinball.engine.entities.AbstractEntity;
 import com.sit.recyclingpinball.engine.interfaces.Movable;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Applies position updates to movable entities based on their velocity and delta time.
  */
 public class MovementManager {
+    private static final Logger LOGGER = Logger.getLogger(MovementManager.class.getName());
 
     public MovementManager() {
     }
 
     public void processMovement(List<AbstractEntity> entities, float dt) {
         if (entities == null) {
-            Gdx.app.error("MovementManager", "Cannot process movement on null entity list");
+            LOGGER.severe("Cannot process movement on null entity list");
             return;
         }
         if (dt < 0) {
-            Gdx.app.error("MovementManager", "Negative delta time rejected: " + dt);
+            LOGGER.severe("Negative delta time rejected: " + dt);
             return;
         }
 
         try {
             for (AbstractEntity e : entities) {
-                if (e instanceof Movable) {
-                    ((Movable) e).updatePosition(dt);
-                }
+                e.updatePosition(dt);
             }
         } catch (Exception e) {
-            Gdx.app.error("MovementManager", "Movement processing failed", e);
+            LOGGER.log(Level.SEVERE, "Movement processing failed", e);
         }
     }
 }

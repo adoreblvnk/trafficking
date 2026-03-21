@@ -23,7 +23,7 @@ public class StaticEntity extends AbstractEntity {
     @Override
     public void render(IGraphicsProvider graphics) {
         graphics.setColor(getRed(), getGreen(), getBlue(), getAlpha());
-        graphics.drawRect(getPosition().x, getPosition().y, getWidth(), getHeight());
+        graphics.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
     }
 
     @Override
@@ -34,5 +34,10 @@ public class StaticEntity extends AbstractEntity {
     @Override
     public boolean isTrigger() {
         return false;
+    }
+
+    @Override
+    public float getInverseMass() {
+        return 0f;
     }
 }

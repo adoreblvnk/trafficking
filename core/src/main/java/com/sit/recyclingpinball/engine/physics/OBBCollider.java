@@ -1,8 +1,7 @@
 package com.sit.recyclingpinball.engine.physics;
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 
 public class OBBCollider implements ICollider {
     private float x;
@@ -32,11 +31,11 @@ public class OBBCollider implements ICollider {
         this.rotationDegrees = rotationDegrees;
     }
 
-    public Vector2[] getVertices() {
-        Vector2[] vertices = new Vector2[4];
-        float rad = rotationDegrees * MathUtils.degreesToRadians;
-        float cos = MathUtils.cos(rad);
-        float sin = MathUtils.sin(rad);
+    public PlatformVector2[] getVertices() {
+        PlatformVector2[] vertices = new PlatformVector2[4];
+        float rad = (float) Math.toRadians(rotationDegrees);
+        float cos = (float) Math.cos(rad);
+        float sin = (float) Math.sin(rad);
 
         float dx1 = -originX;
         float dy1 = -originY;
@@ -55,59 +54,72 @@ public class OBBCollider implements ICollider {
         float p4x = dx1 * cos - dy2 * sin;
         float p4y = dx1 * sin + dy2 * cos;
 
-        vertices[0] = new Vector2(x + originX + p1x, y + originY + p1y);
-        vertices[1] = new Vector2(x + originX + p2x, y + originY + p2y);
-        vertices[2] = new Vector2(x + originX + p3x, y + originY + p3y);
-        vertices[3] = new Vector2(x + originX + p4x, y + originY + p4y);
+        vertices[0] = new PlatformVector2(x + originX + p1x, y + originY + p1y);
+        vertices[1] = new PlatformVector2(x + originX + p2x, y + originY + p2y);
+        vertices[2] = new PlatformVector2(x + originX + p3x, y + originY + p3y);
+        vertices[3] = new PlatformVector2(x + originX + p4x, y + originY + p4y);
 
         return vertices;
     }
 
-    public Vector2[] getAxes() {
-        Vector2[] axes = new Vector2[2];
-        Vector2[] vertices = getVertices();
-        axes[0] = SATMathUtils.normalize(new Vector2(vertices[1].x - vertices[0].x, vertices[1].y - vertices[0].y));
-        axes[1] = SATMathUtils.normalize(new Vector2(vertices[2].x - vertices[1].x, vertices[2].y - vertices[1].y));
+    public PlatformVector2[] getAxes() {
+        PlatformVector2[] axes = new PlatformVector2[2];
+        PlatformVector2[] vertices = getVertices();
+        axes[0] = SATMathUtils.normalize(new PlatformVector2(vertices[1].getX() - vertices[0].getX(), vertices[1].getY() - vertices[0].getY()));
+        axes[1] = SATMathUtils.normalize(new PlatformVector2(vertices[2].getX() - vertices[1].getX(), vertices[2].getY() - vertices[1].getY()));
         return axes;
     }
 
     @Override
-    public Rectangle getAABB() {
-        Vector2[] vertices = getVertices();
-        float minX = vertices[0].x;
-        float minY = vertices[0].y;
-        float maxX = vertices[0].x;
-        float maxY = vertices[0].y;
+    public PlatformRectangle getAABB() {
+        PlatformVector2[] vertices = getVertices();
+        float minX = vertices[0].getX();
+        float minY = vertices[0].getY();
+        float maxX = vertices[0].getX();
+        float maxY = vertices[0].getY();
 
         for (int i = 1; i < vertices.length; i++) {
-            if (vertices[i].x < minX) minX = vertices[i].x;
-            if (vertices[i].y < minY) minY = vertices[i].y;
-            if (vertices[i].x > maxX) maxX = vertices[i].x;
-            if (vertices[i].y > maxY) maxY = vertices[i].y;
+            if (vertices[i].getX() < minX) minX = vertices[i].getX();
+            if (vertices[i].getY() < minY) minY = vertices[i].getY();
+            if (vertices[i].getX() > maxX) maxX = vertices[i].getX();
+            if (vertices[i].getY() > maxY) maxY = vertices[i].getY();
         }
 
-        return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+        return new PlatformRectangle(minX, minY, maxX - minX, maxY - minY);
     }
 
     @Override
     public boolean intersects(ICollider other) {
-        if (other instanceof CircleCollider) {
-            return checkOBBVsCircle(this, (CircleCollider) other);
-        } else if (other instanceof BoxCollider) {
-            return checkOBBVsBox(this, (BoxCollider) other);
-        } else if (other instanceof OBBCollider) {
-            return checkOBBVsOBB(this, (OBBCollider) other);
-        }
-        return false;
+        return checkCollision(other).intersects();
+    }
+
+    @Override
+    public CollisionResult checkCollision(ICollider other) {
+        return other.checkCollision(this).invert();
+    }
+
+    @Override
+    public CollisionResult checkCollision(CircleCollider other) {
+        return SATMathUtils.getMTV(this, other);
+    }
+
+    @Override
+    public CollisionResult checkCollision(BoxCollider other) {
+        return SATMathUtils.getMTV(this, other);
+    }
+
+    @Override
+    public CollisionResult checkCollision(OBBCollider other) {
+        return SATMathUtils.getMTV(this, other);
     }
 
     @Override
     public boolean contains(float px, float py) {
-        Vector2[] vertices = getVertices();
+        PlatformVector2[] vertices = getVertices();
         boolean result = false;
         for (int i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
-            if ((vertices[i].y > py) != (vertices[j].y > py) &&
-                (px < (vertices[j].x - vertices[i].x) * (py - vertices[i].y) / (vertices[j].y - vertices[i].y) + vertices[i].x)) {
+            if ((vertices[i].getY() > py) != (vertices[j].getY() > py) &&
+                (px < (vertices[j].getX() - vertices[i].getX()) * (py - vertices[i].getY()) / (vertices[j].getY() - vertices[i].getY()) + vertices[i].getX())) {
                 result = !result;
             }
         }
@@ -115,13 +127,13 @@ public class OBBCollider implements ICollider {
     }
 
     private boolean checkOBBVsCircle(OBBCollider obb, CircleCollider circle) {
-        Vector2[] vertices = obb.getVertices();
-        Vector2 center = new Vector2(circle.getCircle().x, circle.getCircle().y);
-        float radius = circle.getCircle().radius;
+        PlatformVector2[] vertices = obb.getVertices();
+        PlatformVector2 center = new PlatformVector2(circle.getCircle().getX(), circle.getCircle().getY());
+        float radius = circle.getCircle().getRadius();
 
-        Vector2[] axes = obb.getAxes();
+        PlatformVector2[] axes = obb.getAxes();
         
-        Vector2 closestVertex = vertices[0];
+        PlatformVector2 closestVertex = vertices[0];
         float minDst2 = center.dst2(vertices[0]);
         for (int i = 1; i < vertices.length; i++) {
             float dst2 = center.dst2(vertices[i]);
@@ -130,13 +142,13 @@ public class OBBCollider implements ICollider {
                 closestVertex = vertices[i];
             }
         }
-        Vector2 circleAxis = SATMathUtils.normalize(new Vector2(closestVertex.x - center.x, closestVertex.y - center.y));
+        PlatformVector2 circleAxis = SATMathUtils.normalize(new PlatformVector2(closestVertex.getX() - center.getX(), closestVertex.getY() - center.getY()));
 
-        Vector2[] allAxes = new Vector2[axes.length + 1];
+        PlatformVector2[] allAxes = new PlatformVector2[axes.length + 1];
         System.arraycopy(axes, 0, allAxes, 0, axes.length);
         allAxes[axes.length] = circleAxis;
 
-        for (Vector2 axis : allAxes) {
+        for (PlatformVector2 axis : allAxes) {
             float[] proj1 = SATMathUtils.projectPolygon(axis, vertices);
             float[] proj2 = SATMathUtils.projectCircle(axis, center, radius);
 
@@ -148,26 +160,26 @@ public class OBBCollider implements ICollider {
     }
 
     private boolean checkOBBVsBox(OBBCollider obb, BoxCollider box) {
-        Rectangle r = box.getAABB();
-        Vector2[] boxVertices = new Vector2[] {
-            new Vector2(r.x, r.y),
-            new Vector2(r.x + r.width, r.y),
-            new Vector2(r.x + r.width, r.y + r.height),
-            new Vector2(r.x, r.y + r.height)
+        PlatformRectangle r = box.getAABB();
+        PlatformVector2[] boxVertices = new PlatformVector2[] {
+            new PlatformVector2(r.getX(), r.getY()),
+            new PlatformVector2(r.getX() + r.getWidth(), r.getY()),
+            new PlatformVector2(r.getX() + r.getWidth(), r.getY() + r.getHeight()),
+            new PlatformVector2(r.getX(), r.getY() + r.getHeight())
         };
-        Vector2[] boxAxes = new Vector2[] {
-            new Vector2(1, 0),
-            new Vector2(0, 1)
+        PlatformVector2[] boxAxes = new PlatformVector2[] {
+            new PlatformVector2(1, 0),
+            new PlatformVector2(0, 1)
         };
 
-        Vector2[] obbVertices = obb.getVertices();
-        Vector2[] obbAxes = obb.getAxes();
+        PlatformVector2[] obbVertices = obb.getVertices();
+        PlatformVector2[] obbAxes = obb.getAxes();
 
-        Vector2[] allAxes = new Vector2[boxAxes.length + obbAxes.length];
+        PlatformVector2[] allAxes = new PlatformVector2[boxAxes.length + obbAxes.length];
         System.arraycopy(boxAxes, 0, allAxes, 0, boxAxes.length);
         System.arraycopy(obbAxes, 0, allAxes, boxAxes.length, obbAxes.length);
 
-        for (Vector2 axis : allAxes) {
+        for (PlatformVector2 axis : allAxes) {
             float[] proj1 = SATMathUtils.projectPolygon(axis, obbVertices);
             float[] proj2 = SATMathUtils.projectPolygon(axis, boxVertices);
 
@@ -179,16 +191,16 @@ public class OBBCollider implements ICollider {
     }
 
     private boolean checkOBBVsOBB(OBBCollider obb1, OBBCollider obb2) {
-        Vector2[] vertices1 = obb1.getVertices();
-        Vector2[] vertices2 = obb2.getVertices();
-        Vector2[] axes1 = obb1.getAxes();
-        Vector2[] axes2 = obb2.getAxes();
+        PlatformVector2[] vertices1 = obb1.getVertices();
+        PlatformVector2[] vertices2 = obb2.getVertices();
+        PlatformVector2[] axes1 = obb1.getAxes();
+        PlatformVector2[] axes2 = obb2.getAxes();
 
-        Vector2[] allAxes = new Vector2[axes1.length + axes2.length];
+        PlatformVector2[] allAxes = new PlatformVector2[axes1.length + axes2.length];
         System.arraycopy(axes1, 0, allAxes, 0, axes1.length);
         System.arraycopy(axes2, 0, allAxes, axes1.length, axes2.length);
 
-        for (Vector2 axis : allAxes) {
+        for (PlatformVector2 axis : allAxes) {
             float[] proj1 = SATMathUtils.projectPolygon(axis, vertices1);
             float[] proj2 = SATMathUtils.projectPolygon(axis, vertices2);
 

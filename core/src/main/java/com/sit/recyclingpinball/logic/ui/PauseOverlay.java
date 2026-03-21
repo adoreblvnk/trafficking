@@ -1,6 +1,7 @@
 package com.sit.recyclingpinball.logic.ui;
 
-import com.badlogic.gdx.Input;
+import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
+
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
 import com.sit.recyclingpinball.engine.managers.CollisionManager;
@@ -70,12 +71,12 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     }
 
     @Override
-    public boolean onKeyDown(int keycode) {
-        if (keycode == Input.Keys.ESCAPE) {
+    public boolean onKeyDown(EngineKey keycode) {
+        if (keycode == EngineKey.ESCAPE) {
             context.getAudio().playSound("click", 1.0f);
             sceneManager.popScene();
             return true;
-        } else if (keycode == Input.Keys.M) {
+        } else if (keycode == EngineKey.M) {
             context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new MenuScene(context, sceneManager));
             return true;

@@ -5,7 +5,7 @@ import com.sit.recyclingpinball.engine.physics.CircleCollider;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.sit.recyclingpinball.logic.factories.TrashType;
 
-public abstract class TrashEntity extends StaticEntity {
+public class TrashEntity extends StaticEntity {
     private final TrashType type;
     private final String textureId;
     private final int points;
@@ -17,11 +17,12 @@ public abstract class TrashEntity extends StaticEntity {
         this.points = points;
         this.collider = new CircleCollider(x, y, 32);
         setCollisionEnabled(true);
+        setTag("trash");
     }
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(textureId, getPosition().x - 32, getPosition().y - 32, 64, 64);
+        graphics.drawTexture(textureId, getPosition().getX() - 32, getPosition().getY() - 32, 64, 64);
     }
 
     public int getPoints() { return points; }

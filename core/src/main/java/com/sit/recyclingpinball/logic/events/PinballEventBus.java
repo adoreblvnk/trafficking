@@ -4,25 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PinballEventBus {
-    private final List<PinballEventListener> listeners;
+    private final List<PinballEventVisitor> listeners;
 
     public PinballEventBus() {
         this.listeners = new ArrayList<>();
     }
 
-    public void register(PinballEventListener listener) {
+    public void register(PinballEventVisitor listener) {
         if (!listeners.contains(listener)) {
             listeners.add(listener);
         }
     }
 
-    public void unregister(PinballEventListener listener) {
+    public void unregister(PinballEventVisitor listener) {
         listeners.remove(listener);
     }
 
     public void post(IPinballEvent event) {
-        for (PinballEventListener l : listeners) {
-            l.onEvent(event);
+        for (PinballEventVisitor l : listeners) {
+            event.accept(l);
         }
     }
 }

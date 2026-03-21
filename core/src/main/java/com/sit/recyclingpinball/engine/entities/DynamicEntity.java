@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.engine.entities;
 
-import com.badlogic.gdx.math.Vector2;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 import com.sit.recyclingpinball.engine.EngineConstants;
 import com.sit.recyclingpinball.engine.interfaces.Movable;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
@@ -12,8 +12,24 @@ import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
  */
 public class DynamicEntity extends AbstractEntity implements Movable {
 
-    private Vector2 velocity;
+    private PlatformVector2 velocity;
     private float friction = EngineConstants.DEFAULT_FRICTION;
+    private float mass = 1.0f;
+
+    public float getMass() {
+        return mass;
+    }
+
+    public void setMass(float mass) {
+        if (mass > 0) {
+            this.mass = mass;
+        }
+    }
+
+    @Override
+    public float getInverseMass() {
+        return mass > 0 ? 1f / mass : 0f;
+    }
 
     public float getFriction() {
         return friction;
@@ -26,7 +42,7 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     //the entity is movable with velocity-based motion
     public DynamicEntity(String id, float x, float y, float w, float h) {
         super(id, x, y, w, h);
-        this.velocity = new Vector2(0, 0);
+        this.velocity = new PlatformVector2(0, 0);
     }
 
     @Override
@@ -39,12 +55,12 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     @Override
     public void render(IGraphicsProvider graphics) {
         graphics.setColor(getRed(), getGreen(), getBlue(), getAlpha());
-        graphics.drawRect(getPosition().x, getPosition().y, getWidth(), getHeight());
+        graphics.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
     }
 
     //returning velocity for movement and collision responses
     @Override
-    public Vector2 getVelocity() {
+    public PlatformVector2 getVelocity() {
         return velocity;
     }
 
@@ -62,7 +78,7 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     public void updatePosition(float dt) {
         getPosition().mulAdd(velocity, dt);
         if (collider != null) {
-            collider.setPosition(getPosition().x, getPosition().y);
+            collider.setPosition(getPosition().getX(), getPosition().getY());
         }
     }
 

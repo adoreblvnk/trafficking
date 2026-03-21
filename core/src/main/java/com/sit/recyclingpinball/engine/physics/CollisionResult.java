@@ -1,15 +1,12 @@
 package com.sit.recyclingpinball.engine.physics;
 
-import com.badlogic.gdx.math.Vector2;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 
-public class CollisionResult {
-    public boolean intersects;
-    public Vector2 normal;
-    public float depth;
-
-    public CollisionResult(boolean intersects, Vector2 normal, float depth) {
-        this.intersects = intersects;
-        this.normal = normal;
-        this.depth = depth;
+public record CollisionResult(boolean intersects, PlatformVector2 normal, float depth) {
+    public CollisionResult invert() {
+        if (this.normal != null) {
+            return new CollisionResult(intersects, new PlatformVector2(-normal.getX(), -normal.getY()), depth);
+        }
+        return new CollisionResult(intersects, null, depth);
     }
 }

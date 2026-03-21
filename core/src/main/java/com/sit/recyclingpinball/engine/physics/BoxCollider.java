@@ -1,14 +1,13 @@
 package com.sit.recyclingpinball.engine.physics;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Circle;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformCircle;
 
 public class BoxCollider implements ICollider {
-    private Rectangle bounds;
+    private PlatformRectangle bounds;
 
     public BoxCollider(float x, float y, float width, float height) {
-        this.bounds = new Rectangle(x, y, width, height);
+        this.bounds = new PlatformRectangle(x, y, width, height);
     }
 
     public void setPosition(float x, float y) {
@@ -16,21 +15,33 @@ public class BoxCollider implements ICollider {
     }
 
     @Override
-    public Rectangle getAABB() {
+    public PlatformRectangle getAABB() {
         return this.bounds;
     }
 
     @Override
     public boolean intersects(ICollider other) {
-        if (other instanceof BoxCollider) {
-            return this.bounds.overlaps(((BoxCollider) other).getAABB());
-        } else if (other instanceof CircleCollider) {
-            Circle circle = ((CircleCollider) other).getCircle();
-            return Intersector.overlaps(circle, this.bounds);
-        } else if (other instanceof OBBCollider) {
-            return other.intersects(this);
-        }
-        return false;
+        return checkCollision(other).intersects();
+    }
+
+    @Override
+    public CollisionResult checkCollision(ICollider other) {
+        return other.checkCollision(this).invert();
+    }
+
+    @Override
+    public CollisionResult checkCollision(CircleCollider other) {
+        return other.checkCollision(this).invert();
+    }
+
+    @Override
+    public CollisionResult checkCollision(BoxCollider other) {
+        return SATMathUtils.getAABBvsAABB(this.bounds, other.getAABB());
+    }
+
+    @Override
+    public CollisionResult checkCollision(OBBCollider other) {
+        return SATMathUtils.getMTV(other, this).invert();
     }
 
     @Override

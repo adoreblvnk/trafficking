@@ -9,11 +9,13 @@ import com.sit.recyclingpinball.logic.states.IPinballState;
 import com.sit.recyclingpinball.logic.states.IdleState;
 import com.sit.recyclingpinball.logic.states.InPlayState;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
-import com.sit.recyclingpinball.logic.events.PinballEventListener;
-import com.sit.recyclingpinball.logic.events.IPinballEvent;
+import com.sit.recyclingpinball.logic.events.PinballEventVisitor;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
+import com.sit.recyclingpinball.logic.events.ShooterRodMovedEvent;
+import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
+import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 
-public class PinballEntity extends DynamicEntity implements InputListener, PinballEventListener {
+public class PinballEntity extends DynamicEntity implements InputListener, PinballEventVisitor {
     private IPinballState currentState;
     private final PinballEventBus eventBus;
 
@@ -21,10 +23,11 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
         super(id, x, y, 48, 48);
         this.collider = new CircleCollider(x, y, 24);
         this.eventBus = eventBus;
-        this.currentState = new InPlayState(); // Start in play state to allow falling onto shooter rod
+        this.currentState = new InPlayState(this); // Start in play state to allow falling onto shooter rod
         this.eventBus.register(this);
         setCollisionEnabled(true);
         setFriction(0.999f);
+        setTag("pinball");
     }
 
     public void setState(IPinballState state) {
@@ -43,7 +46,7 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture("pinball_default", getPosition().x - 24, getPosition().y - 24, 48, 48);
+        graphics.drawTexture("pinball_default", getPosition().getX() - 24, getPosition().getY() - 24, 48, 48);
     }
 
     @Override
@@ -62,38 +65,53 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
     }
 
     @Override
-    public void onEvent(IPinballEvent event) {
-        currentState.onEvent(this, event);
+    public void visit(BallLaunchedEvent event) {
+        currentState.visit(event);
+    }
+
+    @Override
+    public void visit(ShooterRodMovedEvent event) {
+        currentState.visit(event);
+    }
+
+    @Override
+    public void visit(BallDrainedEvent event) {
+        currentState.visit(event);
+    }
+
+    @Override
+    public void visit(TrashCollectedEvent event) {
+        currentState.visit(event);
     }
 
     @Override
     public void onCollision(ICollidable other) {
         super.onCollision(other);
-        if (other instanceof FlipperEntity) {
+        if ("flipper".equals(other.getTag())) {
             FlipperEntity f = (FlipperEntity) other;
             float rotVel = f.getRotationalVelocity();
             if (rotVel != 0) {
                 // Boost ball upwards if flipper is moving
-                getVelocity().y += Math.abs(rotVel) * 1.5f;
-                getVelocity().x += rotVel * 0.5f;
+                getVelocity().setY(getVelocity().getY() + Math.abs(rotVel) * 1.5f);
+                getVelocity().setX(getVelocity().getX() + rotVel * 0.5f);
             }
-        } else if (other instanceof ShooterRodEntity) {
+        } else if ("shooter".equals(other.getTag())) {
             ShooterRodEntity rod = (ShooterRodEntity) other;
-            if (rod.getVelocity().y <= 0) {
+            if (rod.getVelocity().getY() <= 0) {
                 // When rod is resting or being pulled down, switch to IdleState
-                setState(new IdleState());
-                getVelocity().y = 0;
-                getVelocity().x = 0;
+                setState(new IdleState(this));
+                getVelocity().setY(0);
+                getVelocity().setX(0);
 
                 // To be perfectly OOP, you could query the colliders instead of hardcoding 160
                 // and 24:
-                // float rodHeight = rod.getCollider().getAABB().height;
-                // float ballRadius = getCollider().getAABB().width / 2;
-                float rodTop = rod.getPosition().y + 160 + 24;
+                // float rodHeight = rod.getCollider().getAABB().getHeight();
+                // float ballRadius = getCollider().getAABB().getWidth() / 2;
+                float rodTop = rod.getPosition().getY() + 160 + 24;
 
-                if (getPosition().y <= rodTop + 2f) { // Small margin to snap securely
-                    setPosition(getPosition().x, rodTop);
-                    getVelocity().y = 0;
+                if (getPosition().getY() <= rodTop + 2f) { // Small margin to snap securely
+                    setPosition(getPosition().getX(), rodTop);
+                    getVelocity().setY(0);
                 }
             }
         }

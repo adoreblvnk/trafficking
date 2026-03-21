@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.engine.managers;
 
-import com.badlogic.gdx.math.Rectangle;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle;
 import com.sit.recyclingpinball.engine.EngineConstants;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
 
@@ -14,10 +14,10 @@ public class QuadTree {
 
     private int level;
     private List<ICollidable> objects;
-    private Rectangle bounds;
+    private PlatformRectangle bounds;
     private QuadTree[] nodes;
 
-    public QuadTree(int level, Rectangle bounds) {
+    public QuadTree(int level, PlatformRectangle bounds) {
         this.level = level;
         this.objects = new ArrayList<>();
         this.bounds = bounds;
@@ -36,26 +36,26 @@ public class QuadTree {
     }
 
     private void split() {
-        float subWidth = bounds.width / 2f;
-        float subHeight = bounds.height / 2f;
-        float x = bounds.x;
-        float y = bounds.y;
+        float subWidth = bounds.getWidth() / 2f;
+        float subHeight = bounds.getHeight() / 2f;
+        float x = bounds.getX();
+        float y = bounds.getY();
 
-        nodes[0] = new QuadTree(level + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight)); // Top Right
-        nodes[1] = new QuadTree(level + 1, new Rectangle(x, y + subHeight, subWidth, subHeight));            // Top Left
-        nodes[2] = new QuadTree(level + 1, new Rectangle(x, y, subWidth, subHeight));                        // Bottom Left
-        nodes[3] = new QuadTree(level + 1, new Rectangle(x + subWidth, y, subWidth, subHeight));             // Bottom Right
+        nodes[0] = new QuadTree(level + 1, new PlatformRectangle(x + subWidth, y + subHeight, subWidth, subHeight)); // Top Right
+        nodes[1] = new QuadTree(level + 1, new PlatformRectangle(x, y + subHeight, subWidth, subHeight));            // Top Left
+        nodes[2] = new QuadTree(level + 1, new PlatformRectangle(x, y, subWidth, subHeight));                        // Bottom Left
+        nodes[3] = new QuadTree(level + 1, new PlatformRectangle(x + subWidth, y, subWidth, subHeight));             // Bottom Right
     }
 
-    private int getIndex(Rectangle rect) {
+    private int getIndex(PlatformRectangle rect) {
         int index = -1;
-        float verticalMidpoint = bounds.x + (bounds.width / 2f);
-        float horizontalMidpoint = bounds.y + (bounds.height / 2f);
+        float verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2f);
+        float horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2f);
 
-        boolean topQuadrant = (rect.y >= horizontalMidpoint);
-        boolean bottomQuadrant = (rect.y < horizontalMidpoint && (rect.y + rect.height) < horizontalMidpoint);
-        boolean leftQuadrant = (rect.x < verticalMidpoint && (rect.x + rect.width) < verticalMidpoint);
-        boolean rightQuadrant = (rect.x >= verticalMidpoint);
+        boolean topQuadrant = (rect.getY() >= horizontalMidpoint);
+        boolean bottomQuadrant = (rect.getY() < horizontalMidpoint && (rect.getY() + rect.getHeight()) < horizontalMidpoint);
+        boolean leftQuadrant = (rect.getX() < verticalMidpoint && (rect.getX() + rect.getWidth()) < verticalMidpoint);
+        boolean rightQuadrant = (rect.getX() >= verticalMidpoint);
 
         if (leftQuadrant) {
             if (topQuadrant) {
@@ -102,7 +102,7 @@ public class QuadTree {
         }
     }
 
-    public List<ICollidable> retrieve(List<ICollidable> returnObjects, Rectangle rect) {
+    public List<ICollidable> retrieve(List<ICollidable> returnObjects, PlatformRectangle rect) {
         if (nodes[0] != null) {
             for (int i = 0; i < nodes.length; i++) {
                 if (nodes[i].bounds.overlaps(rect)) {

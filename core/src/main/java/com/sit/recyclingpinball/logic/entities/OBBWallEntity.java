@@ -2,22 +2,23 @@ package com.sit.recyclingpinball.logic.entities;
 
 import com.sit.recyclingpinball.engine.physics.OBBCollider;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
-import com.badlogic.gdx.math.Vector2;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 
 public class OBBWallEntity extends WallEntity {
     private final float rotationDegrees;
     private static final float FILL_STEP = 2f;
+    private final OBBCollider obbCollider;
 
     public OBBWallEntity(String id, float x, float y, float w, float h, float rotationDegrees) {
         super(id, x, y, w, h);
         this.rotationDegrees = rotationDegrees;
-        this.collider = new OBBCollider(x, y, w, h, w / 2, h / 2, rotationDegrees);
+        this.obbCollider = new OBBCollider(x, y, w, h, w / 2, h / 2, rotationDegrees);
+        this.collider = this.obbCollider;
     }
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        if (collider instanceof OBBCollider) {
-            Vector2[] verts = ((OBBCollider) collider).getVertices();
+        PlatformVector2[] verts = this.obbCollider.getVertices();
 
             graphics.setColor(getRed(), getGreen(), getBlue(), getAlpha());
 
@@ -27,23 +28,22 @@ public class OBBWallEntity extends WallEntity {
 
             for (int i = 0; i <= strips; i++) {
                 float t = (float) i / strips;
-                Vector2 start = lerp(verts[0], verts[3], t);
-                Vector2 end = lerp(verts[1], verts[2], t);
-                graphics.drawLine(start.x, start.y, end.x, end.y, FILL_STEP);
+                PlatformVector2 start = lerp(verts[0], verts[3], t);
+                PlatformVector2 end = lerp(verts[1], verts[2], t);
+                graphics.drawLine(start.getX(), start.getY(), end.getX(), end.getY(), FILL_STEP);
             }
 
             for (int i = 0; i < verts.length; i++) {
-                Vector2 p1 = verts[i];
-                Vector2 p2 = verts[(i + 1) % verts.length];
-                graphics.drawLine(p1.x, p1.y, p2.x, p2.y, 0.4f, 0.4f, 0.4f, 1f);
+                PlatformVector2 p1 = verts[i];
+                PlatformVector2 p2 = verts[(i + 1) % verts.length];
+                graphics.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY(), 0.4f, 0.4f, 0.4f, 1f);
             }
-        }
     }
 
-    private Vector2 lerp(Vector2 from, Vector2 to, float t) {
-        return new Vector2(
-                from.x + (to.x - from.x) * t,
-                from.y + (to.y - from.y) * t
+    private PlatformVector2 lerp(PlatformVector2 from, PlatformVector2 to, float t) {
+        return new PlatformVector2(
+                from.getX() + (to.getX() - from.getX()) * t,
+                from.getY() + (to.getY() - from.getY()) * t
         );
     }
 }

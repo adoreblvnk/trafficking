@@ -2,12 +2,11 @@ package com.sit.recyclingpinball.logic.managers;
 
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
-import com.sit.recyclingpinball.logic.events.IPinballEvent;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
-import com.sit.recyclingpinball.logic.events.PinballEventListener;
+import com.sit.recyclingpinball.logic.events.PinballEventVisitor;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 
-public class GameScoreManager implements PinballEventListener {
+public class GameScoreManager implements PinballEventVisitor {
     private int score = 0;
     private int ballsLeft = 3;
     private final int totalTrash;
@@ -19,17 +18,21 @@ public class GameScoreManager implements PinballEventListener {
     }
 
     @Override
-    public void onEvent(IPinballEvent event) {
-        if (event instanceof TrashCollectedEvent) {
-            score++;
-        } else if (event instanceof BallLaunchedEvent) {
-            if (!ballInPlay) {
-                ballsLeft--;
-                ballInPlay = true;
-            }
-        } else if (event instanceof BallDrainedEvent) {
-            ballInPlay = false;
+    public void visit(TrashCollectedEvent event) {
+        score++;
+    }
+
+    @Override
+    public void visit(BallLaunchedEvent event) {
+        if (!ballInPlay) {
+            ballsLeft--;
+            ballInPlay = true;
         }
+    }
+
+    @Override
+    public void visit(BallDrainedEvent event) {
+        ballInPlay = false;
     }
 
     public int getScore() { return score; }

@@ -10,4 +10,9 @@ public class ShooterRodMovedEvent implements IPinballEvent {
     public float getRodY() {
         return rodY;
     }
+
+    @Override
+    public void accept(PinballEventVisitor visitor) {
+        visitor.visit(this);
+    }
 }

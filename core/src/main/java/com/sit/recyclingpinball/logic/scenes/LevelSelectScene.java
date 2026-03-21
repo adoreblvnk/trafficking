@@ -1,5 +1,7 @@
 package com.sit.recyclingpinball.logic.scenes;
 
+import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
+
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
@@ -83,28 +85,28 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     }
 
     @Override
-    public boolean onKeyDown(int keycode) {
-        if (keycode == com.badlogic.gdx.Input.Keys.NUM_1) {
+    public boolean onKeyDown(EngineKey keycode) {
+        if (keycode == EngineKey.NUM_1) {
             context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level1Blueprint()));
             return true;
-        } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_2) {
+        } else if (keycode == EngineKey.NUM_2) {
             context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level2Blueprint()));
             return true;
-        } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_3) {
+        } else if (keycode == EngineKey.NUM_3) {
             context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level3Blueprint()));
             return true;
-        } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_4) {
+        } else if (keycode == EngineKey.NUM_4) {
             context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level4Blueprint()));
             return true;
-        } else if (keycode == com.badlogic.gdx.Input.Keys.NUM_5) {
+        } else if (keycode == EngineKey.NUM_5) {
             context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new SimulationScene(context, sceneManager, new Level5Blueprint()));
             return true;
-        } else if (keycode == com.badlogic.gdx.Input.Keys.ESCAPE) {
+        } else if (keycode == EngineKey.ESCAPE) {
             context.getAudio().playSound("click", 1.0f);
             sceneManager.setScene(new MenuScene(context, sceneManager));
             return true;

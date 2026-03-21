@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.engine.interfaces;
 
-import com.badlogic.gdx.math.Vector2;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 import com.sit.recyclingpinball.engine.physics.ICollider;
 
 /**
@@ -10,9 +10,11 @@ public interface ICollidable {
     ICollider getCollider();
     boolean isCollisionEnabled();
     void setCollisionEnabled(boolean enabled);
-    Vector2 getPosition();
+    PlatformVector2 getPosition();
     void setPosition(float x, float y);
     boolean isStatic();
     boolean isTrigger();
     void onCollision(ICollidable other);
+    float getInverseMass();
+    String getTag();
 }

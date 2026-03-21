@@ -1,6 +1,7 @@
 package com.sit.recyclingpinball.logic.scenes;
 
-import com.badlogic.gdx.Input;
+import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
+
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
 import com.sit.recyclingpinball.engine.managers.CollisionManager;
@@ -15,7 +16,7 @@ import com.sit.recyclingpinball.logic.entities.TrashEntity;
 import com.sit.recyclingpinball.logic.entities.WallEntity;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
-import com.sit.recyclingpinball.logic.events.PinballEventListener;
+import com.sit.recyclingpinball.logic.events.PinballEventVisitor;
 import com.sit.recyclingpinball.logic.events.IPinballEvent;
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 import com.sit.recyclingpinball.logic.level.BoardBuilder;
@@ -26,7 +27,7 @@ import com.sit.recyclingpinball.logic.managers.GameScoreManager;
 import com.sit.recyclingpinball.logic.ui.PauseOverlay;
 import com.sit.recyclingpinball.logic.ui.SimulationResultOverlay;
 
-public class SimulationScene extends AbstractScene implements InputListener, PinballEventListener {
+public class SimulationScene extends AbstractScene implements InputListener, PinballEventVisitor {
     private final SceneManager sceneManager;
     private final ILevelBlueprint blueprint;
     private PinballEventBus eventBus;
@@ -79,7 +80,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         getInputManager().addListener(pinball);
 
         pinball.setCollisionListener((a, b) -> {
-            if (b instanceof TrashEntity) {
+            if ("trash".equals(b.getTag())) {
                 TrashEntity t = (TrashEntity) b;
                 eventBus.post(new TrashCollectedEvent(t.getType()));
                 getEntityManager().removeEntity(t.getId());
@@ -100,14 +101,12 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     }
 
     @Override
-    public void onEvent(IPinballEvent event) {
-        if (event instanceof BallDrainedEvent) {
-            if (scoreManager.getBallsLeft() > 0) {
-                // Respawn logic
-                pinball.setPosition(1810, 400);
-                pinball.setVelocity(0, 0);
-                pinball.setState(new com.sit.recyclingpinball.logic.states.InPlayState());
-            }
+    public void visit(BallDrainedEvent event) {
+        if (scoreManager.getBallsLeft() > 0) {
+            // Respawn logic
+            pinball.setPosition(1810, 400);
+            pinball.setVelocity(0, 0);
+            pinball.setState(new com.sit.recyclingpinball.logic.states.InPlayState(pinball));
         }
     }
 
@@ -148,8 +147,8 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     }
 
     @Override
-    public boolean onKeyDown(int keycode) {
-        if (keycode == Input.Keys.ESCAPE) {
+    public boolean onKeyDown(EngineKey keycode) {
+        if (keycode == EngineKey.ESCAPE) {
             sceneManager.pushOverlay(new PauseOverlay(context, sceneManager));
             return true;
         }

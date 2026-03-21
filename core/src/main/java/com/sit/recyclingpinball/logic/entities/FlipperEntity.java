@@ -1,6 +1,7 @@
 package com.sit.recyclingpinball.logic.entities;
 
-import com.badlogic.gdx.Input;
+import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
+
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.physics.OBBCollider;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
@@ -42,6 +43,7 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
         // side of its bounds!
         this.collider = new OBBCollider(x, y, 180, 40, 20, 20, currentAngle);
         setCollisionEnabled(true);
+        setTag("flipper");
     }
 
     @Override
@@ -68,26 +70,26 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
             }
         }
 
-        if (this.collider instanceof OBBCollider) {
-            ((OBBCollider) this.collider).setRotation(currentAngle);
+        if (this.collider != null) {
+            this.collider.setRotation(currentAngle);
         }
         super.update(dt);
     }
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(textureId, getPosition().x, getPosition().y, 180, 40, 20, 20, currentAngle);
+        graphics.drawTexture(textureId, getPosition().getX(), getPosition().getY(), 180, 40, 20, 20, currentAngle);
     }
 
     @Override
-    public boolean onKeyDown(int keycode) {
+    public boolean onKeyDown(EngineKey keycode) {
         // Check LEFT flipper keys
-        if (isLeft && (keycode == Input.Keys.A || keycode == Input.Keys.LEFT)) {
+        if (isLeft && (keycode == EngineKey.A || keycode == EngineKey.LEFT)) {
             rotationalVelocity = 512f; // Sweeps CCW (up)
             return true;
         }
         // Check RIGHT flipper keys
-        if (!isLeft && (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT)) {
+        if (!isLeft && (keycode == EngineKey.D || keycode == EngineKey.RIGHT)) {
             rotationalVelocity = -512f; // Sweeps CW (up for right flipper)
             return true;
         }
@@ -95,11 +97,11 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     }
 
     @Override
-    public boolean onKeyUp(int keycode) {
-        if (isLeft && (keycode == Input.Keys.A || keycode == Input.Keys.LEFT)) {
+    public boolean onKeyUp(EngineKey keycode) {
+        if (isLeft && (keycode == EngineKey.A || keycode == EngineKey.LEFT)) {
             rotationalVelocity = -512f; // Sweeps CW (down)
             return true;
-        } else if (!isLeft && (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT)) {
+        } else if (!isLeft && (keycode == EngineKey.D || keycode == EngineKey.RIGHT)) {
             rotationalVelocity = 512f; // Sweeps CCW (down for right flipper)
             return true;
         }

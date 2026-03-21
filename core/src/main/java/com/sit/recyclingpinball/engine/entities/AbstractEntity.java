@@ -1,7 +1,7 @@
 package com.sit.recyclingpinball.engine.entities;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 import com.sit.recyclingpinball.engine.interfaces.CollisionListener;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
@@ -16,7 +16,7 @@ import com.sit.recyclingpinball.engine.physics.BoxCollider;
 public abstract class AbstractEntity implements ICollidable {
 
     private String id;
-    private Vector2 position;
+    private PlatformVector2 position;
     private float width;
     private float height;
     private float r = 1.0f;
@@ -25,6 +25,7 @@ public abstract class AbstractEntity implements ICollidable {
     private float a = 1.0f;
     private int zIndex = 0;
     private CollisionListener collisionListener;
+    private String tag = "";
 
     protected ICollider collider;
     protected boolean collisionEnabled = true;
@@ -42,7 +43,7 @@ public abstract class AbstractEntity implements ICollidable {
         }
 
         this.id = id;
-        this.position = new Vector2(x, y);
+        this.position = new PlatformVector2(x, y);
         this.width = w;
         this.height = h;
         this.r = 1.0f;
@@ -55,7 +56,7 @@ public abstract class AbstractEntity implements ICollidable {
     //make sure collision bounding is in sync whenever entity position updates
     public void update(float dt) {
         if (collider != null) {
-            collider.setPosition(position.x, position.y);
+            collider.setPosition(position.getX(), position.getY());
         }
     }
 
@@ -73,7 +74,7 @@ public abstract class AbstractEntity implements ICollidable {
     }
 
     // Retained for backward compatibility with logic package for now
-    public com.badlogic.gdx.math.Rectangle getBounds() {
+    public com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle getBounds() {
         return collider.getAABB();
     }
 
@@ -91,10 +92,23 @@ public abstract class AbstractEntity implements ICollidable {
         return id;
     }
 
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag != null ? tag : "";
+    }
+
     //gets and return current world position
     @Override
-    public Vector2 getPosition() {
+    public PlatformVector2 getPosition() {
         return position;
+    }
+
+    public void updatePosition(float dt) {
+        // Default empty implementation, meant to be overridden by dynamic entities.
     }
 
     //updates both position and bounding box to prevent desync whenever moving the entity

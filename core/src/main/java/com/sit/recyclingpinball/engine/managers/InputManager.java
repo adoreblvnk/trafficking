@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
+import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
 
 /**
  * Distributes input events to registered listeners in subscription order.
@@ -65,7 +66,7 @@ public class InputManager {
     }
 
     // Implemented to satisfy UML even if Interface doesn't use it yet
-    public boolean keyDown(int keycode) {
+    public boolean keyDown(EngineKey keycode) {
         try {
             for (InputListener l : listeners) {
                 if (l.onKeyDown(keycode)) return true;
@@ -76,7 +77,7 @@ public class InputManager {
         return false;
     }
 
-    public boolean keyUp(int keycode) {
+    public boolean keyUp(EngineKey keycode) {
         try {
             for (InputListener l : listeners) {
                 if (l.onKeyUp(keycode)) return true;

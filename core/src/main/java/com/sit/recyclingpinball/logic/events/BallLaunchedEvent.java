@@ -10,4 +10,9 @@ public class BallLaunchedEvent implements IPinballEvent {
     public float getLaunchVelocity() {
         return launchVelocity;
     }
+
+    @Override
+    public void accept(PinballEventVisitor visitor) {
+        visitor.visit(this);
+    }
 }

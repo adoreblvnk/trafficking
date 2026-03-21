@@ -1,30 +1,10 @@
 package com.sit.recyclingpinball.logic.level;
 
-import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.factories.TrashType;
 
-public class Level5Blueprint implements ILevelBlueprint {
+public class Level5Blueprint extends BaseLevelBlueprint {
        @Override
-       public BoardLayout construct(BoardBuilder builder, PinballEventBus eventBus) {
-
-              builder.addWall(400, 0, 50, 1000) // left wall
-                            .addWall(1850, 0, 50, 1000) // right wall
-                            .addWall(400, 950, 1500, 50); // top wall
-
-              // Launch Tube
-              builder.addWall(1750, 0, 15, 800);
-
-              // Top Curve
-              builder.addSlantedWall(1700, 890, 190, 15, 135f);
-
-              /* --- TIER 3 (BASE) --- */
-              // Funnels
-              builder.addSlantedWall(555, 167, 300, 15, -15f); // left funnel
-              builder.addSlantedWall(1330, 180, 430, 15, 15f); // right funnel
-              // Flippers
-              builder.addLeftFlipper(850, 100)
-                            .addRightFlipper(1300, 100);
-
+       protected void addCustomElements(BoardBuilder builder) {
               /* --- TIER 2 (MIDDLE) --- */
               // Funnels
               builder.addSlantedWall(555, 467, 300, 15, -15f); // middle left funnel
@@ -50,9 +30,6 @@ public class Level5Blueprint implements ILevelBlueprint {
               builder.addTrash(TrashType.PAPER, 950, 250)
                             .addTrash(TrashType.GLASS, 1075, 250)
                             .addTrash(TrashType.PLASTIC, 1200, 250);
-
-              builder.setShooterRod(1775, 100, eventBus);
-              return builder.build();
        }
 
        @Override

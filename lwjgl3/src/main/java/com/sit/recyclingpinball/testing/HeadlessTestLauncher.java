@@ -110,8 +110,8 @@ public class HeadlessTestLauncher {
 
             if (frames == 10) {
                 DynamicEntity car = (DynamicEntity) entityManager.getEntity("mover");
-                float actualX = car.getPosition().x;
-                float actualY = car.getPosition().y;
+                float actualX = car.getPosition().getX();
+                float actualY = car.getPosition().getY();
                 System.out.println("   Actual:   Position = (" + actualX + ", " + actualY + ") after 10 frames");
                 if (actualX > 0) {
                     System.out.println("   ->   PASS: Velocity integrated correctly (moved " + actualX + " px in X-axis)");
@@ -143,8 +143,8 @@ public class HeadlessTestLauncher {
 
             if (frames == 10) {
                 DynamicEntity car = (DynamicEntity) entityManager.getEntity("crasher");
-                float actualX = car.getPosition().x;
-                float actualY = car.getPosition().y;
+                float actualX = car.getPosition().getX();
+                float actualY = car.getPosition().getY();
                 // with AABB resollution, the car should be stopped at x=10 (touching left side of wall)
                 System.out.println("   Actual:   Entity stopped at position (" + actualX + ", " + actualY + ")");
 

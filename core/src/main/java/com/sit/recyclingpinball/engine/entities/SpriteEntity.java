@@ -15,6 +15,6 @@ public class SpriteEntity extends DynamicEntity {
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(textureId, getPosition().x, getPosition().y, getWidth(), getHeight());
+        graphics.drawTexture(textureId, getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
     }
 }
