@@ -68,7 +68,7 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
 
         // Back button
         context.getGraphics().drawTexture("button_rectangle_depth_flat", btnX, 120, btnW, btnH);
-        context.getGraphics().drawText("Back", "Geist-Bold", 930, 160);
+        context.getGraphics().drawText("Back", "Geist-Bold", 915, 160);
 
         // Reset text color to white
         context.getGraphics().setTextColor(1f, 1f, 1f, 1f);
@@ -150,6 +150,14 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         }
         return false;
     }
-    @Override public boolean onDrag(int x, int y, int ptr) { return false; }
-    @Override public boolean onTouchUp(int x, int y, int ptr, int btn) { return false; }
+
+    @Override
+    public boolean onDrag(int x, int y, int ptr) {
+        return false;
+    }
+
+    @Override
+    public boolean onTouchUp(int x, int y, int ptr, int btn) {
+        return false;
+    }
 }

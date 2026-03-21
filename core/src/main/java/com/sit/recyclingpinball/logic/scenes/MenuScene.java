@@ -36,7 +36,7 @@ public class MenuScene extends AbstractScene implements InputListener {
         float titleBtnX = 950 - titleBtnW / 2;
         float titleBtnY = 560;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
-        context.getGraphics().drawText("Recycling Pinball", "Geist-Bold", 830, 610);
+        context.getGraphics().drawText("Recycling Pinball", "Geist-Bold", 850, 610);
 
         // Start prompt with button background
         float startBtnW = 480;
@@ -91,7 +91,14 @@ public class MenuScene extends AbstractScene implements InputListener {
         }
         return false;
     }
-    
-    @Override public boolean onDrag(int x, int y, int ptr) { return false; }
-    @Override public boolean onTouchUp(int x, int y, int ptr, int btn) { return false; }
+
+    @Override
+    public boolean onDrag(int x, int y, int ptr) {
+        return false;
+    }
+
+    @Override
+    public boolean onTouchUp(int x, int y, int ptr, int btn) {
+        return false;
+    }
 }

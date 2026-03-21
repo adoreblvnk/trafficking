@@ -132,8 +132,10 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         // 4. Draw star icons for collected trash
         int collected = scoreManager.getScore();
         for (int i = 0; i < totalTrash; i++) {
-            float starX = 50 + i * 70;
-            float starY = 100;
+            int row = i / 4;
+            int col = i % 4;
+            float starX = 60 + col * 70;
+            float starY = 200 - row * 70;
             if (i < collected) {
                 context.getGraphics().drawTexture("star", starX, starY, 64, 60);
             } else {

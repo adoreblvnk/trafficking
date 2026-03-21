@@ -19,7 +19,8 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
     private final int totalTrash;
     private final ILevelBlueprint blueprint;
 
-    public SimulationResultOverlay(IEngineContext context, SceneManager sceneManager, boolean isWin, int score, int totalTrash, ILevelBlueprint blueprint) {
+    public SimulationResultOverlay(IEngineContext context, SceneManager sceneManager, boolean isWin, int score,
+            int totalTrash, ILevelBlueprint blueprint) {
         super(context, new EntityManager(), new CollisionManager(), new InputManager(), new MovementManager());
         this.sceneManager = sceneManager;
         this.isWin = isWin;
@@ -41,7 +42,8 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
     }
 
     @Override
-    public void update(float dt) {}
+    public void update(float dt) {
+    }
 
     @Override
     public void render() {
@@ -59,7 +61,7 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         float titleBtnX = 950 - titleBtnW / 2;
         float titleBtnY = 600 - titleBtnH / 2;
         context.getGraphics().drawTexture("button_rectangle_depth_flat", titleBtnX, titleBtnY, titleBtnW, titleBtnH);
-        context.getGraphics().drawText(text, "Geist-Bold", 950 - 80, 615);
+        context.getGraphics().drawText(text, "Geist-Bold", 965 - 80, 610);
 
         // Star icons showing collected trash
         float starsStartX = 950 - (totalTrash * 70) / 2.0f;
@@ -123,6 +125,13 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         return false;
     }
 
-    @Override public boolean onDrag(int x, int y, int ptr) { return false; }
-    @Override public boolean onTouchUp(int x, int y, int ptr, int btn) { return false; }
+    @Override
+    public boolean onDrag(int x, int y, int ptr) {
+        return false;
+    }
+
+    @Override
+    public boolean onTouchUp(int x, int y, int ptr, int btn) {
+        return false;
+    }
 }
