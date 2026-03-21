@@ -39,13 +39,14 @@ public class CircleCollider implements ICollider {
     @Override
     public CollisionResult checkCollision(CircleCollider other) {
         boolean overlaps = this.circle.overlaps(other.getCircle());
-        if (!overlaps) return new CollisionResult(false, null, 0);
-        
+        if (!overlaps)
+            return new CollisionResult(false, null, 0);
+
         float dx = this.circle.getX() - other.getCircle().getX();
         float dy = this.circle.getY() - other.getCircle().getY();
         float dist = (float) Math.sqrt(dx * dx + dy * dy);
         float overlap = (this.circle.getRadius() + other.getCircle().getRadius()) - dist;
-        
+
         com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2 normal;
         if (dist > 0) {
             normal = new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2(dx / dist, dy / dist);

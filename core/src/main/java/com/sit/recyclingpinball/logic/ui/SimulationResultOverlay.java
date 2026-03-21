@@ -22,7 +22,10 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
 
     public SimulationResultOverlay(IEngineContext context, SceneManager sceneManager, boolean isWin, int score,
             int totalTrash, ILevelBlueprint blueprint) {
-        super(context, new EntityManager(), new CollisionManager(new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)), new InputManager(), new MovementManager());
+        super(context, new EntityManager(),
+                new CollisionManager(
+                        new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)),
+                new InputManager(), new MovementManager());
         this.sceneManager = sceneManager;
         this.isWin = isWin;
         this.score = score;
@@ -48,10 +51,13 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
     public void render() {
         getContext().getGraphics().begin();
         // Semi-transparent dark backdrop
-        getContext().getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_WIDTH, LogicConstants.SCENE_HEIGHT, LogicConstants.COLOR_DIM_R, LogicConstants.COLOR_DIM_G, LogicConstants.COLOR_DIM_B, LogicConstants.COLOR_DIM_OVERLAY_A);
+        getContext().getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_WIDTH, LogicConstants.SCENE_HEIGHT,
+                LogicConstants.COLOR_DIM_R, LogicConstants.COLOR_DIM_G, LogicConstants.COLOR_DIM_B,
+                LogicConstants.COLOR_DIM_OVERLAY_A);
 
         // Dark text on light buttons
-        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_DARK_R, LogicConstants.COLOR_TEXT_DARK_G, LogicConstants.COLOR_TEXT_DARK_B, LogicConstants.COLOR_TEXT_A);
+        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_DARK_R, LogicConstants.COLOR_TEXT_DARK_G,
+                LogicConstants.COLOR_TEXT_DARK_B, LogicConstants.COLOR_TEXT_A);
 
         // Title text with button background
         String text = isWin ? LogicConstants.TEXT_YOU_WIN : LogicConstants.TEXT_GAME_OVER;
@@ -59,8 +65,10 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         float titleBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
         float titleBtnX = LogicConstants.UI_CENTER_X - titleBtnW / 2;
         float titleBtnY = 600 - titleBtnH / 2;
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, titleBtnX, titleBtnY, titleBtnW, titleBtnH);
-        getContext().getGraphics().drawTextCentered(text, LogicConstants.FONT_GEIST_BOLD, titleBtnX, titleBtnY, titleBtnW, titleBtnH);
+        getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, titleBtnX, titleBtnY,
+                titleBtnW, titleBtnH);
+        getContext().getGraphics().drawTextCentered(text, LogicConstants.FONT_GEIST_BOLD, titleBtnX, titleBtnY,
+                titleBtnW, titleBtnH);
 
         // Star icons showing collected trash
         float starsStartX = LogicConstants.UI_CENTER_X - (totalTrash * 70) / 2.0f;
@@ -75,26 +83,38 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         }
 
         // Score text (white on dark overlay — no button behind this)
-        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_LIGHT_R, LogicConstants.COLOR_TEXT_LIGHT_G, LogicConstants.COLOR_TEXT_LIGHT_B, LogicConstants.COLOR_TEXT_A);
-        // We'll leave the score text non-centered or we could center it if we calculate width. Let's keep it as is.
-        getContext().getGraphics().drawText(LogicConstants.TEXT_TRASH_COLLECTED_PREFIX + score + LogicConstants.TEXT_TRASH_DIVIDER + totalTrash + LogicConstants.TEXT_TRASH_COLLECTED_SUFFIX, LogicConstants.FONT_GEIST_BOLD, 850, 470);
+        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_LIGHT_R, LogicConstants.COLOR_TEXT_LIGHT_G,
+                LogicConstants.COLOR_TEXT_LIGHT_B, LogicConstants.COLOR_TEXT_A);
+        // We'll leave the score text non-centered or we could center it if we calculate
+        // width. Let's keep it as is.
+        getContext().getGraphics()
+                .drawText(
+                        LogicConstants.TEXT_TRASH_COLLECTED_PREFIX + score + LogicConstants.TEXT_TRASH_DIVIDER
+                                + totalTrash + LogicConstants.TEXT_TRASH_COLLECTED_SUFFIX,
+                        LogicConstants.FONT_GEIST_BOLD, 850, 470);
 
         // Return instruction with button background (dark text on button)
-        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_DARK_R, LogicConstants.COLOR_TEXT_DARK_G, LogicConstants.COLOR_TEXT_DARK_B, LogicConstants.COLOR_TEXT_A);
+        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_DARK_R, LogicConstants.COLOR_TEXT_DARK_G,
+                LogicConstants.COLOR_TEXT_DARK_B, LogicConstants.COLOR_TEXT_A);
         float retBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
         float retBtnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
         float retBtnX = LogicConstants.UI_CENTER_X - retBtnW / 2;
         float retBtnY = 370;
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, retBtnX, retBtnY, retBtnW, retBtnH);
-        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_MAIN_MENU, LogicConstants.FONT_GEIST_BOLD, retBtnX, retBtnY, retBtnW, retBtnH);
+        getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, retBtnX, retBtnY, retBtnW,
+                retBtnH);
+        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_MAIN_MENU, LogicConstants.FONT_GEIST_BOLD,
+                retBtnX, retBtnY, retBtnW, retBtnH);
 
         // Retry instruction with button background (dark text on button)
         float retryBtnY = 280;
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, retBtnX, retryBtnY, retBtnW, retBtnH);
-        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_RETRY, LogicConstants.FONT_GEIST_BOLD, retBtnX, retryBtnY, retBtnW, retBtnH);
+        getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, retBtnX, retryBtnY, retBtnW,
+                retBtnH);
+        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_RETRY, LogicConstants.FONT_GEIST_BOLD, retBtnX,
+                retryBtnY, retBtnW, retBtnH);
 
         // Reset text color to white
-        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_LIGHT_R, LogicConstants.COLOR_TEXT_LIGHT_G, LogicConstants.COLOR_TEXT_LIGHT_B, LogicConstants.COLOR_TEXT_A);
+        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_LIGHT_R, LogicConstants.COLOR_TEXT_LIGHT_G,
+                LogicConstants.COLOR_TEXT_LIGHT_B, LogicConstants.COLOR_TEXT_A);
 
         getContext().getGraphics().end();
     }

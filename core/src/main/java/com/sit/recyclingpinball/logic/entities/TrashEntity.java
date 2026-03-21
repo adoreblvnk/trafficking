@@ -26,6 +26,10 @@ public class TrashEntity extends StaticEntity {
         graphics.drawTexture(textureId, getPosition().getX() - 32, getPosition().getY() - 32, 64, 64);
     }
 
-    public int getPoints() { return points; }
-    public TrashType getType() { return type; }
+    public int getPoints() {
+        return points;
+    }
+    public TrashType getType() {
+        return type;
+    }
 }

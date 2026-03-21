@@ -3,9 +3,8 @@ package com.sit.recyclingpinball.engine.managers;
 import com.sit.recyclingpinball.engine.interfaces.providers.IAudioProvider;
 
 /**
- * Game-level sound manager wrapper.
- * Delegates all audio operations to the injected IAudioProvider.
- * No longer directly depends on libGDX.
+ * Game-level sound manager wrapper. Delegates all audio operations to the
+ * injected IAudioProvider. No longer directly depends on libGDX.
  */
 public class SoundManager {
 
@@ -21,8 +20,10 @@ public class SoundManager {
     /**
      * Loads a sound from the given path and stores it under the given name.
      *
-     * @param id the identifier for the sound
-     * @param path the file path to the sound resource
+     * @param id
+     *            the identifier for the sound
+     * @param path
+     *            the file path to the sound resource
      * @return true if loaded successfully, false otherwise
      */
     public boolean loadSound(String id, String path) {
@@ -38,8 +39,10 @@ public class SoundManager {
     /**
      * Plays a previously loaded sound by its identifier.
      *
-     * @param id the identifier of the sound to play
-     * @param volume the volume to play at (0.0 to 1.0)
+     * @param id
+     *            the identifier of the sound to play
+     * @param volume
+     *            the volume to play at (0.0 to 1.0)
      */
     public void playSound(String id, float volume) {
         if (id == null || id.isEmpty()) {

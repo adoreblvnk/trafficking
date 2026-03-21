@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * HEADLESS INTEGRATION TEST SUITE
- * automated testing for abstract engine using LibGDX headless mode for reproducible deterministic testing
+ * HEADLESS INTEGRATION TEST SUITE automated testing for abstract engine using
+ * LibGDX headless mode for reproducible deterministic testing
  */
 public class HeadlessTestLauncher {
 
@@ -59,12 +59,14 @@ public class HeadlessTestLauncher {
         private void resetEngine() {
             entityManager = new EntityManager();
             movementManager = new MovementManager();
-            collisionManager = new CollisionManager(new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080));
+            collisionManager = new CollisionManager(
+                    new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080));
         }
 
         @Override
         public void render() {
-            if (isExiting) return;
+            if (isExiting)
+                return;
 
             float dt = 0.016f; // Simulate 60 FPS lock
 
@@ -114,10 +116,12 @@ public class HeadlessTestLauncher {
                 float actualY = car.getPosition().getY();
                 System.out.println("   Actual:   Position = (" + actualX + ", " + actualY + ") after 10 frames");
                 if (actualX > 0) {
-                    System.out.println("   ->   PASS: Velocity integrated correctly (moved " + actualX + " px in X-axis)");
+                    System.out.println(
+                            "   ->   PASS: Velocity integrated correctly (moved " + actualX + " px in X-axis)");
                     return true;
                 } else {
-                    throw new RuntimeException("FAIL: Entity did not move. Expected Position.x > 0, Actual: " + actualX);
+                    throw new RuntimeException(
+                            "FAIL: Entity did not move. Expected Position.x > 0, Actual: " + actualX);
                 }
             }
             return false;
@@ -127,7 +131,8 @@ public class HeadlessTestLauncher {
         private boolean runTest_CollisionResolution() {
             if (frames == 1) {
                 System.out.println("[TEST 2] Collision Resolution Check");
-                System.out.println("   Setup:    DynamicEntity 'crasher' at (0, 0), size 10x10, velocity (500, 0) px/s");
+                System.out
+                        .println("   Setup:    DynamicEntity 'crasher' at (0, 0), size 10x10, velocity (500, 0) px/s");
                 System.out.println("             StaticEntity 'wall' at (20, 0), size 10x100");
                 System.out.println("   Expected: Entity.x < 25 (stopped before tunneling through wall)");
                 // Place car at 0, moving right
@@ -145,15 +150,18 @@ public class HeadlessTestLauncher {
                 DynamicEntity car = (DynamicEntity) entityManager.getEntity("crasher");
                 float actualX = car.getPosition().getX();
                 float actualY = car.getPosition().getY();
-                // with AABB resollution, the car should be stopped at x=10 (touching left side of wall)
+                // with AABB resollution, the car should be stopped at x=10 (touching left side
+                // of wall)
                 System.out.println("   Actual:   Entity stopped at position (" + actualX + ", " + actualY + ")");
 
                 if (actualX < 25) {
                     float distanceFromWall = 20 - actualX;
-                    System.out.println("   ->   PASS: Collision resolved - entity stopped " + distanceFromWall + " px from wall origin");
+                    System.out.println("   ->   PASS: Collision resolved - entity stopped " + distanceFromWall
+                            + " px from wall origin");
                     return true;
                 } else {
-                    throw new RuntimeException("FAIL: Entity tunneled through wall. Expected Position.x < 25, Actual: " + actualX);
+                    throw new RuntimeException(
+                            "FAIL: Entity tunneled through wall. Expected Position.x < 25, Actual: " + actualX);
                 }
             }
             return false;
@@ -172,7 +180,8 @@ public class HeadlessTestLauncher {
                     System.out.println("   Actual:   Operation completed without exception");
                     System.out.println("   ->   PASS: Null entity addition handled gracefully");
                 } catch (Exception e) {
-                    throw new RuntimeException("FAIL: Crash on null add. Exception: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+                    throw new RuntimeException("FAIL: Crash on null add. Exception: " + e.getClass().getSimpleName()
+                            + " - " + e.getMessage());
                 }
 
                 // AT04: remove non-existent entity without crashing
@@ -183,7 +192,8 @@ public class HeadlessTestLauncher {
                     System.out.println("   Actual:   Operation completed without exception");
                     System.out.println("   ->   PASS: Invalid removal handled gracefully");
                 } catch (Exception e) {
-                    throw new RuntimeException("FAIL: Crash on invalid remove. Exception: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+                    throw new RuntimeException("FAIL: Crash on invalid remove. Exception: "
+                            + e.getClass().getSimpleName() + " - " + e.getMessage());
                 }
             }
 

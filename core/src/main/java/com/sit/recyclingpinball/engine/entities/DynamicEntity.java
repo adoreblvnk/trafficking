@@ -6,9 +6,9 @@ import com.sit.recyclingpinball.engine.interfaces.Movable;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 
 /**
- * Dynamic entity that moves with velocity-based motion.
- * Automatically applies friction to velocity each update.
- * Renders as a filled rectangle with its color.
+ * Dynamic entity that moves with velocity-based motion. Automatically applies
+ * friction to velocity each update. Renders as a filled rectangle with its
+ * color.
  */
 public class DynamicEntity extends AbstractEntity implements Movable {
 
@@ -39,7 +39,7 @@ public class DynamicEntity extends AbstractEntity implements Movable {
         this.friction = Math.max(0f, Math.min(1f, friction));
     }
 
-    //the entity is movable with velocity-based motion
+    // the entity is movable with velocity-based motion
     public DynamicEntity(String id, float x, float y, float w, float h) {
         super(id, x, y, w, h);
         this.velocity = new PlatformVector2(0, 0);
@@ -51,20 +51,20 @@ public class DynamicEntity extends AbstractEntity implements Movable {
         super.update(dt);
     }
 
-    //default rendering - subclasses can override
+    // default rendering - subclasses can override
     @Override
     public void render(IGraphicsProvider graphics) {
         graphics.setColor(getRed(), getGreen(), getBlue(), getAlpha());
         graphics.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
     }
 
-    //returning velocity for movement and collision responses
+    // returning velocity for movement and collision responses
     @Override
     public PlatformVector2 getVelocity() {
         return velocity;
     }
 
-    //set velocity directly
+    // set velocity directly
     @Override
     public void setVelocity(float x, float y) {
         if (Float.isNaN(x) || Float.isNaN(y) || Float.isInfinite(x) || Float.isInfinite(y)) {
@@ -73,7 +73,8 @@ public class DynamicEntity extends AbstractEntity implements Movable {
         this.velocity.set(x, y);
     }
 
-    //update position based on current velocity and keep bounds aligned with updated position
+    // update position based on current velocity and keep bounds aligned with
+    // updated position
     @Override
     public void updatePosition(float dt) {
         getPosition().mulAdd(velocity, dt);

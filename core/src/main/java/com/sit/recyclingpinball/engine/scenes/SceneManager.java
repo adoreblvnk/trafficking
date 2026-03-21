@@ -12,8 +12,9 @@ import com.sit.recyclingpinball.engine.managers.SoundManager;
 import com.sit.recyclingpinball.engine.managers.TimeManager;
 
 /**
- * Owns the scene stack and global services, single entry point for scene transitions and overlays.
- * Now depends on IEngineContext for platform independence.
+ * Owns the scene stack and global services, single entry point for scene
+ * transitions and overlays. Now depends on IEngineContext for platform
+ * independence.
  */
 public class SceneManager {
 
@@ -25,7 +26,8 @@ public class SceneManager {
     private final TimeManager timeManager;
     private final IEngineContext context;
 
-    public SceneManager(IEngineContext context, SoundManager soundManager, IOManager ioManager, TimeManager timeManager) {
+    public SceneManager(IEngineContext context, SoundManager soundManager, IOManager ioManager,
+            TimeManager timeManager) {
         if (context == null) {
             throw new IllegalArgumentException("EngineContext cannot be null");
         }
@@ -36,7 +38,8 @@ public class SceneManager {
         this.timeManager = timeManager;
     }
 
-    // Layers a scene on top of the current one and routes input to it (e.g. pause menu).
+    // Layers a scene on top of the current one and routes input to it (e.g. pause
+    // menu).
     public void pushOverlay(AbstractScene scene) {
         if (scene == null) {
             return;
@@ -51,7 +54,8 @@ public class SceneManager {
         }
     }
 
-    // Removes the top scene and restores input to the one below (or clears if none).
+    // Removes the top scene and restores input to the one below (or clears if
+    // none).
     public void popScene() {
         if (!sceneStack.isEmpty()) {
             AbstractScene s = sceneStack.pop();
@@ -64,20 +68,22 @@ public class SceneManager {
         }
     }
 
-    // Replaces the entire stack with one scene for full transitions (e.g. from menu to game).
+    // Replaces the entire stack with one scene for full transitions (e.g. from menu
+    // to game).
     public void setScene(AbstractScene scene) {
         if (scene == null) {
             return;
         }
 
-        while(!sceneStack.isEmpty()) {
+        while (!sceneStack.isEmpty()) {
             popScene();
         }
         pushOverlay(scene);
     }
 
     public void render(float dt) {
-        if (sceneStack.isEmpty()) return;
+        if (sceneStack.isEmpty())
+            return;
 
         try {
             sceneStack.peek().update(dt);
@@ -122,7 +128,8 @@ public class SceneManager {
 
     // Forwards window resize to the active scene so projection stays correct.
     public void resize(int width, int height) {
-        if (sceneStack.isEmpty()) return;
+        if (sceneStack.isEmpty())
+            return;
 
         try {
             sceneStack.peek().resize(width, height);

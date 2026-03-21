@@ -4,31 +4,30 @@ import com.sit.recyclingpinball.logic.events.PinballEventBus;
 
 public abstract class BaseLevelBlueprint implements ILevelBlueprint {
 
-       @Override
-       public final BoardLayout construct(BoardBuilder builder, PinballEventBus eventBus) {
-              // play area x=400 to 1900, y=0 to 1000
-              builder.addWall(400, 0, 50, 1000) // left wall
-                            .addWall(1850, 0, 50, 1000) // right wall
-                            .addWall(400, 950, 1500, 50); // top wall
+    @Override
+    public final BoardLayout construct(BoardBuilder builder, PinballEventBus eventBus) {
+        // play area x=400 to 1900, y=0 to 1000
+        builder.addWall(400, 0, 50, 1000) // left wall
+                .addWall(1850, 0, 50, 1000) // right wall
+                .addWall(400, 950, 1500, 50); // top wall
 
-              // Launch Tube
-              builder.addWall(1750, 0, 15, 800);
+        // Launch Tube
+        builder.addWall(1750, 0, 15, 800);
 
-              // Bottom Funnels
-              builder.addSlantedWall(555, 167, 300, 15, -15f); // left funnel
-              builder.addSlantedWall(1330, 180, 430, 15, 15f); // right funnel
+        // Bottom Funnels
+        builder.addSlantedWall(555, 167, 300, 15, -15f); // left funnel
+        builder.addSlantedWall(1330, 180, 430, 15, 15f); // right funnel
 
-              // Top Curve
-              builder.addSlantedWall(1700, 890, 190, 15, 135f);
+        // Top Curve
+        builder.addSlantedWall(1700, 890, 190, 15, 135f);
 
-              builder.addLeftFlipper(850, 100)
-                            .addRightFlipper(1300, 100);
+        builder.addLeftFlipper(850, 100).addRightFlipper(1300, 100);
 
-              addCustomElements(builder);
+        addCustomElements(builder);
 
-              builder.setShooterRod(1775, 100, eventBus);
-              return builder.build();
-       }
+        builder.setShooterRod(1775, 100, eventBus);
+        return builder.build();
+    }
 
-       protected abstract void addCustomElements(BoardBuilder builder);
+    protected abstract void addCustomElements(BoardBuilder builder);
 }

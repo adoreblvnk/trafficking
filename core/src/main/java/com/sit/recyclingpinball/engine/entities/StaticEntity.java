@@ -3,8 +3,8 @@ package com.sit.recyclingpinball.engine.entities;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 
 /**
- * Static entity that does not move or update.
- * Renders as a filled rectangle with its color.
+ * Static entity that does not move or update. Renders as a filled rectangle
+ * with its color.
  */
 public class StaticEntity extends AbstractEntity {
 
@@ -13,13 +13,13 @@ public class StaticEntity extends AbstractEntity {
         setColor(r, g, b, 1.0f);
     }
 
-    //skipped as static entities don't change between frames
+    // skipped as static entities don't change between frames
     @Override
     public void update(float dt) {
         // Do nothing
     }
 
-    //default rendering - subclasses can override
+    // default rendering - subclasses can override
     @Override
     public void render(IGraphicsProvider graphics) {
         graphics.setColor(getRed(), getGreen(), getBlue(), getAlpha());

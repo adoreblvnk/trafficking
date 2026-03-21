@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.sit.recyclingpinball.engine.interfaces.providers.ITimeProvider;
 
 /**
- * libGDX implementation of ITimeProvider.
- * Wraps Gdx.graphics.getDeltaTime() with optional time scaling.
+ * libGDX implementation of ITimeProvider. Wraps Gdx.graphics.getDeltaTime()
+ * with optional time scaling.
  */
 public class LibGdxTime implements ITimeProvider {
 
@@ -22,7 +22,8 @@ public class LibGdxTime implements ITimeProvider {
     /**
      * Sets the time scale multiplier for slow-motion or fast-forward effects.
      *
-     * @param scale the scale factor (0.0 pauses, 1.0 is normal, >1.0 is fast)
+     * @param scale
+     *            the scale factor (0.0 pauses, 1.0 is normal, >1.0 is fast)
      */
     public void setTimeScale(float scale) {
         if (scale < 0) {

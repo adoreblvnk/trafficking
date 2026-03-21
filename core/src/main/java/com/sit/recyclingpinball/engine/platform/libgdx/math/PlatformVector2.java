@@ -17,11 +17,19 @@ public class PlatformVector2 {
         this.delegate = new Vector2(v.delegate);
     }
 
-    public float getX() { return delegate.x; }
-    public void setX(float x) { delegate.x = x; }
-    
-    public float getY() { return delegate.y; }
-    public void setY(float y) { delegate.y = y; }
+    public float getX() {
+        return delegate.x;
+    }
+    public void setX(float x) {
+        delegate.x = x;
+    }
+
+    public float getY() {
+        return delegate.y;
+    }
+    public void setY(float y) {
+        delegate.y = y;
+    }
 
     public PlatformVector2 set(float x, float y) {
         delegate.set(x, y);
@@ -88,11 +96,11 @@ public class PlatformVector2 {
     public float dst(PlatformVector2 v) {
         return delegate.dst(v.delegate);
     }
-    
+
     public float dst2(PlatformVector2 v) {
         return delegate.dst2(v.delegate);
     }
-    
+
     public PlatformVector2 cpy() {
         return new PlatformVector2(delegate.x, delegate.y);
     }
@@ -104,7 +112,7 @@ public class PlatformVector2 {
     public boolean isZero(float margin) {
         return delegate.isZero(margin);
     }
-    
+
     public float angleDeg() {
         return delegate.angleDeg();
     }
@@ -122,11 +130,13 @@ public class PlatformVector2 {
         delegate.rotateDeg(degrees);
         return this;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
         PlatformVector2 that = (PlatformVector2) obj;
         return delegate.equals(that.delegate);
     }

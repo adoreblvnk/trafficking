@@ -41,10 +41,11 @@ public class QuadTree {
         float x = bounds.getX();
         float y = bounds.getY();
 
-        nodes[0] = new QuadTree(level + 1, new PlatformRectangle(x + subWidth, y + subHeight, subWidth, subHeight)); // Top Right
-        nodes[1] = new QuadTree(level + 1, new PlatformRectangle(x, y + subHeight, subWidth, subHeight));            // Top Left
-        nodes[2] = new QuadTree(level + 1, new PlatformRectangle(x, y, subWidth, subHeight));                        // Bottom Left
-        nodes[3] = new QuadTree(level + 1, new PlatformRectangle(x + subWidth, y, subWidth, subHeight));             // Bottom Right
+        nodes[0] = new QuadTree(level + 1, new PlatformRectangle(x + subWidth, y + subHeight, subWidth, subHeight)); // Top
+                                                                                                                        // Right
+        nodes[1] = new QuadTree(level + 1, new PlatformRectangle(x, y + subHeight, subWidth, subHeight)); // Top Left
+        nodes[2] = new QuadTree(level + 1, new PlatformRectangle(x, y, subWidth, subHeight)); // Bottom Left
+        nodes[3] = new QuadTree(level + 1, new PlatformRectangle(x + subWidth, y, subWidth, subHeight)); // Bottom Right
     }
 
     private int getIndex(PlatformRectangle rect) {
@@ -53,7 +54,8 @@ public class QuadTree {
         float horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2f);
 
         boolean topQuadrant = (rect.getY() >= horizontalMidpoint);
-        boolean bottomQuadrant = (rect.getY() < horizontalMidpoint && (rect.getY() + rect.getHeight()) < horizontalMidpoint);
+        boolean bottomQuadrant = (rect.getY() < horizontalMidpoint
+                && (rect.getY() + rect.getHeight()) < horizontalMidpoint);
         boolean leftQuadrant = (rect.getX() < verticalMidpoint && (rect.getX() + rect.getWidth()) < verticalMidpoint);
         boolean rightQuadrant = (rect.getX() >= verticalMidpoint);
 

@@ -58,7 +58,8 @@ public class LibGdxIOProvider implements IIOProvider {
                     }
                 }
             }
-        } catch (GdxRuntimeException e) {}
+        } catch (GdxRuntimeException e) {
+        }
         return list;
     }
 

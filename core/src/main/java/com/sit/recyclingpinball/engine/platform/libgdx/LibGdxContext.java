@@ -9,9 +9,9 @@ import com.sit.recyclingpinball.engine.interfaces.providers.IInputProvider;
 import com.sit.recyclingpinball.engine.interfaces.providers.ITimeProvider;
 
 /**
- * libGDX implementation of IEngineContext.
- * Factory and holder for all libGDX platform providers.
- * This is the ONLY place where libGDX-specific implementations are instantiated for the engine.
+ * libGDX implementation of IEngineContext. Factory and holder for all libGDX
+ * platform providers. This is the ONLY place where libGDX-specific
+ * implementations are instantiated for the engine.
  */
 public class LibGdxContext implements IEngineContext {
 
@@ -65,8 +65,8 @@ public class LibGdxContext implements IEngineContext {
     }
 
     /**
-     * Casts the time provider to LibGdxTime to access time scaling.
-     * This is safe because LibGdxContext always creates LibGdxTime internally.
+     * Casts the time provider to LibGdxTime to access time scaling. This is safe
+     * because LibGdxContext always creates LibGdxTime internally.
      */
     public LibGdxTime getTimeManager() {
         return (LibGdxTime) timeProvider;

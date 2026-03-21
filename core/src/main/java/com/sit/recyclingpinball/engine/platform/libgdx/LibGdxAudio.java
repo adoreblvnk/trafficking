@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * libGDX implementation of IAudioProvider.
- * Manages sound loading and playback with lazy loading and centralized control.
+ * libGDX implementation of IAudioProvider. Manages sound loading and playback
+ * with lazy loading and centralized control.
  */
 public class LibGdxAudio implements IAudioProvider {
 

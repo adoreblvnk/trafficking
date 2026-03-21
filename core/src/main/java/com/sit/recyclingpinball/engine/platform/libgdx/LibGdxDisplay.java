@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.sit.recyclingpinball.engine.interfaces.providers.IDisplay;
 
 /**
- * libGDX implementation of IDisplay.
- * Wraps Gdx.graphics to provide screen dimensions.
+ * libGDX implementation of IDisplay. Wraps Gdx.graphics to provide screen
+ * dimensions.
  */
 public class LibGdxDisplay implements IDisplay {
 

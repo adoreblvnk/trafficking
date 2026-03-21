@@ -11,8 +11,9 @@ import com.sit.recyclingpinball.engine.managers.InputManager;
 import com.sit.recyclingpinball.engine.managers.MovementManager;
 
 /**
- * Base for all game screens; provides shared managers and a consistent lifecycle.
- * Now depends on IEngineContext for platform-independent access to display, graphics, and audio.
+ * Base for all game screens; provides shared managers and a consistent
+ * lifecycle. Now depends on IEngineContext for platform-independent access to
+ * display, graphics, and audio.
  */
 public abstract class AbstractScene {
 
@@ -24,8 +25,10 @@ public abstract class AbstractScene {
     private MovementManager movementManager;
     private final IEngineContext context;
 
-    // Gives every scene its own manager instances for isolation and predictable teardown.
-    public AbstractScene(IEngineContext context, EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+    // Gives every scene its own manager instances for isolation and predictable
+    // teardown.
+    public AbstractScene(IEngineContext context, EntityManager entityManager, CollisionManager collisionManager,
+            InputManager inputManager, MovementManager movementManager) {
         this.context = context;
         this.entityManager = entityManager;
         this.collisionManager = collisionManager;
@@ -44,8 +47,8 @@ public abstract class AbstractScene {
         context.getGraphics().loadFont(EngineConstants.DEFAULT_FONT_PATH, size);
     }
 
-
-    // Runs entity updates, then movement, then collision so physics and callbacks stay consistent.
+    // Runs entity updates, then movement, then collision so physics and callbacks
+    // stay consistent.
     public void update(float dt) {
         try {
             entityManager.update(dt);

@@ -47,7 +47,8 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(LogicConstants.TEX_PINBALL_DEFAULT, getPosition().getX() - 24, getPosition().getY() - 24, 48, 48);
+        graphics.drawTexture(LogicConstants.TEX_PINBALL_DEFAULT, getPosition().getX() - 24, getPosition().getY() - 24,
+                48, 48);
     }
 
     @Override

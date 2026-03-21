@@ -35,7 +35,8 @@ public class InputManager {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         for (InputListener l : listeners) {
             try {
-                if (l.onTouchDown(screenX, screenY, pointer, button)) return true;
+                if (l.onTouchDown(screenX, screenY, pointer, button))
+                    return true;
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Input failure in touchDown", e);
             }
@@ -46,7 +47,8 @@ public class InputManager {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         for (InputListener l : listeners) {
             try {
-                if (l.onDrag(screenX, screenY, pointer)) return true;
+                if (l.onDrag(screenX, screenY, pointer))
+                    return true;
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Input failure in touchDragged", e);
             }
@@ -57,7 +59,8 @@ public class InputManager {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         for (InputListener l : listeners) {
             try {
-                if (l.onTouchUp(screenX, screenY, pointer, button)) return true;
+                if (l.onTouchUp(screenX, screenY, pointer, button))
+                    return true;
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Input failure in touchUp", e);
             }
@@ -69,7 +72,8 @@ public class InputManager {
     public boolean keyDown(EngineKey keycode) {
         for (InputListener l : listeners) {
             try {
-                if (l.onKeyDown(keycode)) return true;
+                if (l.onKeyDown(keycode))
+                    return true;
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Input failure in keyDown", e);
             }
@@ -80,7 +84,8 @@ public class InputManager {
     public boolean keyUp(EngineKey keycode) {
         for (InputListener l : listeners) {
             try {
-                if (l.onKeyUp(keycode)) return true;
+                if (l.onKeyUp(keycode))
+                    return true;
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Input failure in keyUp", e);
             }

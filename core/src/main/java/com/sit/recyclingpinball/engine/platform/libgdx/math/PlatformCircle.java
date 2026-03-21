@@ -16,24 +16,36 @@ public class PlatformCircle {
     public PlatformCircle(PlatformVector2 position, float radius) {
         this.delegate = new Circle(position.getX(), position.getY(), radius);
     }
-    
+
     public PlatformCircle(PlatformCircle circle) {
         this.delegate = new Circle(circle.delegate);
     }
 
-    public float getX() { return delegate.x; }
-    public void setX(float x) { delegate.x = x; }
+    public float getX() {
+        return delegate.x;
+    }
+    public void setX(float x) {
+        delegate.x = x;
+    }
 
-    public float getY() { return delegate.y; }
-    public void setY(float y) { delegate.y = y; }
+    public float getY() {
+        return delegate.y;
+    }
+    public void setY(float y) {
+        delegate.y = y;
+    }
 
-    public float getRadius() { return delegate.radius; }
-    public void setRadius(float radius) { delegate.radius = radius; }
+    public float getRadius() {
+        return delegate.radius;
+    }
+    public void setRadius(float radius) {
+        delegate.radius = radius;
+    }
 
     public void set(float x, float y, float radius) {
         delegate.set(x, y, radius);
     }
-    
+
     public boolean contains(float x, float y) {
         return delegate.contains(x, y);
     }

@@ -18,8 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Detects and resolves intersections between bounded entities.
- * Supports static/dynamic entity separation with configurable bounce and push factors.
+ * Detects and resolves intersections between bounded entities. Supports
+ * static/dynamic entity separation with configurable bounce and push factors.
  */
 public class CollisionManager {
     private static final Logger LOGGER = Logger.getLogger(CollisionManager.class.getName());
@@ -57,7 +57,8 @@ public class CollisionManager {
             return;
         }
 
-        if (entities.isEmpty()) return;
+        if (entities.isEmpty())
+            return;
 
         try {
             quadTree.clear();
@@ -71,7 +72,8 @@ public class CollisionManager {
             List<ICollidable> returnObjects = new ArrayList<>();
             for (int i = 0; i < entities.size(); i++) {
                 ICollidable a = entities.get(i);
-                if (a == null || a.getCollider() == null) continue;
+                if (a == null || a.getCollider() == null)
+                    continue;
 
                 returnObjects.clear();
                 quadTree.retrieve(returnObjects, a.getCollider().getAABB());
@@ -79,9 +81,11 @@ public class CollisionManager {
                 for (int j = 0; j < returnObjects.size(); j++) {
                     ICollidable b = returnObjects.get(j);
 
-                    if (a == b) continue;
-                    
-                    if (!a.isCollisionEnabled() || !b.isCollisionEnabled()) continue;
+                    if (a == b)
+                        continue;
+
+                    if (!a.isCollisionEnabled() || !b.isCollisionEnabled())
+                        continue;
 
                     int hashA = System.identityHashCode(a);
                     int hashB = System.identityHashCode(b);
@@ -90,8 +94,9 @@ public class CollisionManager {
                     if (hashA > hashB) {
                         shouldProcess = true;
                     } else if (hashA == hashB) {
-                        if (a.getCollider().getAABB().getX() > b.getCollider().getAABB().getX() || 
-                           (a.getCollider().getAABB().getX() == b.getCollider().getAABB().getX() && a.getCollider().getAABB().getY() > b.getCollider().getAABB().getY())) {
+                        if (a.getCollider().getAABB().getX() > b.getCollider().getAABB().getX()
+                                || (a.getCollider().getAABB().getX() == b.getCollider().getAABB().getX()
+                                        && a.getCollider().getAABB().getY() > b.getCollider().getAABB().getY())) {
                             shouldProcess = true;
                         }
                     }
@@ -129,8 +134,10 @@ public class CollisionManager {
 
     // Separates overlapping entities using minimum translation vector
     private void resolvePhysics(ICollidable a, ICollidable b) {
-        com.sit.recyclingpinball.engine.physics.CollisionResult result = a.getCollider().checkCollision(b.getCollider());
-        if (result == null || !result.intersects() || result.normal() == null) return;
+        com.sit.recyclingpinball.engine.physics.CollisionResult result = a.getCollider()
+                .checkCollision(b.getCollider());
+        if (result == null || !result.intersects() || result.normal() == null)
+            return;
 
         float pushX = result.normal().getX() * result.depth();
         float pushY = result.normal().getY() * result.depth();

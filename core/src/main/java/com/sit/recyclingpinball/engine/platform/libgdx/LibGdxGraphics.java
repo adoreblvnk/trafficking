@@ -16,11 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * libGDX implementation of IGraphicsProvider.
- * Encapsulates ShapeRenderer and GL20 operations for platform-independent
- * rendering.
- * The ShapeRenderer is NOT exposed; all interactions happen through this
- * interface.
+ * libGDX implementation of IGraphicsProvider. Encapsulates ShapeRenderer and
+ * GL20 operations for platform-independent rendering. The ShapeRenderer is NOT
+ * exposed; all interactions happen through this interface.
  */
 public class LibGdxGraphics implements IGraphicsProvider {
 
@@ -256,11 +254,11 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
         ensureSpriteBatch();
         applyTextColor(targetFont);
-        
+
         glyphLayout.setText(targetFont, text);
         float textX = x + (width - glyphLayout.width) / 2f;
         float textY = y + (height + glyphLayout.height) / 2f;
-        
+
         targetFont.draw(spriteBatch, text, textX, textY);
     }
 
@@ -289,7 +287,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
     public void drawTexture(String textureId, float x, float y, float w, float h) {
         Texture texture = textures.get(textureId);
         if (texture == null) {
-            texture = new Texture(Gdx.files.internal(EngineConstants.TEXTURES_DIR + textureId + EngineConstants.TEXTURE_EXTENSION));
+            texture = new Texture(
+                    Gdx.files.internal(EngineConstants.TEXTURES_DIR + textureId + EngineConstants.TEXTURE_EXTENSION));
             textures.put(textureId, texture);
         }
         ensureSpriteBatch();
@@ -301,7 +300,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
             float rotationDegrees) {
         Texture texture = textures.get(textureId);
         if (texture == null) {
-            texture = new Texture(Gdx.files.internal(EngineConstants.TEXTURES_DIR + textureId + EngineConstants.TEXTURE_EXTENSION));
+            texture = new Texture(
+                    Gdx.files.internal(EngineConstants.TEXTURES_DIR + textureId + EngineConstants.TEXTURE_EXTENSION));
             textures.put(textureId, texture);
         }
         ensureSpriteBatch();

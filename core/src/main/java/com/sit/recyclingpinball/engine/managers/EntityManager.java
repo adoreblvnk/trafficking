@@ -12,9 +12,10 @@ import com.sit.recyclingpinball.engine.entities.AbstractEntity;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 
 /**
- * Registry for game entities providing lifecycle management and ordered rendering.
- * Maintains thread-safe concurrent access for entity modifications during iteration.
- * No longer directly depends on libGDX (uses IGraphicsProvider instead of ShapeRenderer).
+ * Registry for game entities providing lifecycle management and ordered
+ * rendering. Maintains thread-safe concurrent access for entity modifications
+ * during iteration. No longer directly depends on libGDX (uses
+ * IGraphicsProvider instead of ShapeRenderer).
  */
 public class EntityManager {
 
@@ -39,10 +40,10 @@ public class EntityManager {
 
         // Prevent duplicate IDs in the list
         if (entityMap.containsKey(e.getId())) {
-             // If replacing, remove old from list first
-             AbstractEntity old = entityMap.get(e.getId());
-             entityList.remove(old);
-             renderList.remove(old);
+            // If replacing, remove old from list first
+            AbstractEntity old = entityMap.get(e.getId());
+            entityList.remove(old);
+            renderList.remove(old);
         }
         entityMap.put(e.getId(), e);
         entityList.add(e);
@@ -77,7 +78,8 @@ public class EntityManager {
     }
 
     /**
-     * Marks the entity manager's z-index order as dirty, forcing a re-sort before the next render.
+     * Marks the entity manager's z-index order as dirty, forcing a re-sort before
+     * the next render.
      */
     public void markZIndexDirty() {
         this.isZIndexDirty = true;
@@ -86,7 +88,8 @@ public class EntityManager {
     /**
      * Renders all entities in z-index order using the provided graphics provider.
      *
-     * @param graphics the graphics provider for platform-independent rendering
+     * @param graphics
+     *            the graphics provider for platform-independent rendering
      */
     public void render(IGraphicsProvider graphics) {
         if (isZIndexDirty) {

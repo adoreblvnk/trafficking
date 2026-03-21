@@ -1,26 +1,26 @@
 package com.sit.recyclingpinball.engine.interfaces.providers;
 
 /**
- * Platform-independent engine context interface.
- * Provides unified access to all platform-specific providers.
+ * Platform-independent engine context interface. Provides unified access to all
+ * platform-specific providers.
  */
 public interface IEngineContext {
-    
+
     /**
      * Returns the display provider for querying screen dimensions.
      */
     IDisplay getDisplay();
-    
+
     /**
      * Returns the time provider for querying delta time.
      */
     ITimeProvider getTime();
-    
+
     /**
      * Returns the audio provider for loading and playing sounds.
      */
     IAudioProvider getAudio();
-    
+
     /**
      * Returns the graphics provider for rendering shapes.
      */

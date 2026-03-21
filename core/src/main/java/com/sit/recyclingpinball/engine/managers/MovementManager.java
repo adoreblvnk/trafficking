@@ -8,7 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Applies position updates to movable entities based on their velocity and delta time.
+ * Applies position updates to movable entities based on their velocity and
+ * delta time.
  */
 public class MovementManager {
     private static final Logger LOGGER = Logger.getLogger(MovementManager.class.getName());

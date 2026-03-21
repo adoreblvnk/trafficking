@@ -14,6 +14,7 @@ Use _"CTRL + SHIFT + B"_ for keyboard shortcut to run the application.
 # ALSOFT_DRIVERS=pulse ./gradlew lwjgl3:run
 # ./gradlew lwjgl3:headlessTest # test
 # ./gradlew --stop # if audio is not working, force lwjgl3 restart
+./gradlew spotlessApply # format w eclipse code style
 ```
 
 **Windows:**

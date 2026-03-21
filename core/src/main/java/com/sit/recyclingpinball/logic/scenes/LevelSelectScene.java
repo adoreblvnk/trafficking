@@ -18,7 +18,10 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     private final SceneManager sceneManager;
 
     public LevelSelectScene(IEngineContext context, SceneManager sceneManager) {
-        super(context, new EntityManager(), new CollisionManager(new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)), new InputManager(), new MovementManager());
+        super(context, new EntityManager(),
+                new CollisionManager(
+                        new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)),
+                new InputManager(), new MovementManager());
         this.sceneManager = sceneManager;
     }
 
@@ -29,52 +32,64 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        getContext().getGraphics().clearScreen(LogicConstants.COLOR_BG_R, LogicConstants.COLOR_BG_G, LogicConstants.COLOR_BG_B);
+        getContext().getGraphics().clearScreen(LogicConstants.COLOR_BG_R, LogicConstants.COLOR_BG_G,
+                LogicConstants.COLOR_BG_B);
         getContext().getGraphics().begin();
 
         // Full-screen dirty beach background
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_WIDTH, LogicConstants.SCENE_HEIGHT);
+        getContext().getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_WIDTH,
+                LogicConstants.SCENE_HEIGHT);
 
         // Dark text for button labels
-        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_DARK_R, LogicConstants.COLOR_TEXT_DARK_G, LogicConstants.COLOR_TEXT_DARK_B, LogicConstants.COLOR_TEXT_A);
+        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_DARK_R, LogicConstants.COLOR_TEXT_DARK_G,
+                LogicConstants.COLOR_TEXT_DARK_B, LogicConstants.COLOR_TEXT_A);
 
         // Title with button background
         float titleBtnW = LogicConstants.UI_BTN_WIDTH_SMALL;
         float titleBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
         float titleBtnX = LogicConstants.UI_CENTER_X - titleBtnW / 2;
         float titleBtnY = 670;
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, titleBtnX, titleBtnY, titleBtnW, titleBtnH);
-        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_SELECT, LogicConstants.FONT_GEIST_BOLD, titleBtnX, titleBtnY, titleBtnW, titleBtnH);
+        getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, titleBtnX, titleBtnY,
+                titleBtnW, titleBtnH);
+        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_SELECT, LogicConstants.FONT_GEIST_BOLD,
+                titleBtnX, titleBtnY, titleBtnW, titleBtnH);
 
         // Level 1 button
         float btnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
         float btnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
         float btnX = LogicConstants.UI_CENTER_X - btnW / 2;
         getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, btnX, 570, btnW, btnH);
-        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_1, LogicConstants.FONT_GEIST_BOLD, btnX, 570, btnW, btnH);
+        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_1, LogicConstants.FONT_GEIST_BOLD, btnX,
+                570, btnW, btnH);
 
         // Level 2 button
         getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, btnX, 480, btnW, btnH);
-        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_2, LogicConstants.FONT_GEIST_BOLD, btnX, 480, btnW, btnH);
+        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_2, LogicConstants.FONT_GEIST_BOLD, btnX,
+                480, btnW, btnH);
 
         // Level 3 button
         getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, btnX, 390, btnW, btnH);
-        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_3, LogicConstants.FONT_GEIST_BOLD, btnX, 390, btnW, btnH);
+        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_3, LogicConstants.FONT_GEIST_BOLD, btnX,
+                390, btnW, btnH);
 
         // Level 4 button
         getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, btnX, 300, btnW, btnH);
-        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_4, LogicConstants.FONT_GEIST_BOLD, btnX, 300, btnW, btnH);
+        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_4, LogicConstants.FONT_GEIST_BOLD, btnX,
+                300, btnW, btnH);
 
         // Level 5 button
         getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, btnX, 210, btnW, btnH);
-        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_5, LogicConstants.FONT_GEIST_BOLD, btnX, 210, btnW, btnH);
+        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_LEVEL_5, LogicConstants.FONT_GEIST_BOLD, btnX,
+                210, btnW, btnH);
 
         // Back button
         getContext().getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, btnX, 120, btnW, btnH);
-        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_BACK, LogicConstants.FONT_GEIST_BOLD, btnX, 120, btnW, btnH);
+        getContext().getGraphics().drawTextCentered(LogicConstants.TEXT_BACK, LogicConstants.FONT_GEIST_BOLD, btnX, 120,
+                btnW, btnH);
 
         // Reset text color to white
-        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_LIGHT_R, LogicConstants.COLOR_TEXT_LIGHT_G, LogicConstants.COLOR_TEXT_LIGHT_B, LogicConstants.COLOR_TEXT_A);
+        getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_LIGHT_R, LogicConstants.COLOR_TEXT_LIGHT_G,
+                LogicConstants.COLOR_TEXT_LIGHT_B, LogicConstants.COLOR_TEXT_A);
 
         getContext().getGraphics().end();
         super.render();

@@ -9,9 +9,9 @@ import com.sit.recyclingpinball.engine.physics.ICollider;
 import com.sit.recyclingpinball.engine.physics.BoxCollider;
 
 /**
- * Abstract base class for all game entities.
- * Defines common properties like position, size, rendering, and collision behavior.
- * Rendering is now platform-independent via IGraphicsProvider.
+ * Abstract base class for all game entities. Defines common properties like
+ * position, size, rendering, and collision behavior. Rendering is now
+ * platform-independent via IGraphicsProvider.
  */
 public abstract class AbstractEntity implements ICollidable {
 
@@ -30,7 +30,7 @@ public abstract class AbstractEntity implements ICollidable {
     private ICollider collider;
     private boolean collisionEnabled = true;
 
-    //every entity requires a position and size to exist
+    // every entity requires a position and size to exist
     public AbstractEntity(String id, float x, float y, float w, float h) {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Entity ID cannot be null or empty");
@@ -57,7 +57,7 @@ public abstract class AbstractEntity implements ICollidable {
         this.collider = collider;
     }
 
-    //make sure collision bounding is in sync whenever entity position updates
+    // make sure collision bounding is in sync whenever entity position updates
     public void update(float dt) {
         if (collider != null) {
             collider.setPosition(position.getX(), position.getY());
@@ -65,13 +65,15 @@ public abstract class AbstractEntity implements ICollidable {
     }
 
     /**
-     * Renders the entity using the provided graphics provider (platform-independent).
+     * Renders the entity using the provided graphics provider
+     * (platform-independent).
      *
-     * @param graphics the graphics provider
+     * @param graphics
+     *            the graphics provider
      */
     public abstract void render(IGraphicsProvider graphics);
 
-    //shows current AABB for collision checks
+    // shows current AABB for collision checks
     @Override
     public ICollider getCollider() {
         return collider;
@@ -105,7 +107,7 @@ public abstract class AbstractEntity implements ICollidable {
         this.tag = tag != null ? tag : "";
     }
 
-    //gets and return current world position
+    // gets and return current world position
     @Override
     public PlatformVector2 getPosition() {
         return position;
@@ -115,7 +117,8 @@ public abstract class AbstractEntity implements ICollidable {
         // Default empty implementation, meant to be overridden by dynamic entities.
     }
 
-    //updates both position and bounding box to prevent desync whenever moving the entity
+    // updates both position and bounding box to prevent desync whenever moving the
+    // entity
     @Override
     public void setPosition(float x, float y) {
         if (Float.isNaN(x) || Float.isNaN(y) || Float.isInfinite(x) || Float.isInfinite(y)) {
@@ -138,10 +141,14 @@ public abstract class AbstractEntity implements ICollidable {
     /**
      * Sets the color as RGBA components.
      *
-     * @param r red (0.0 to 1.0)
-     * @param g green (0.0 to 1.0)
-     * @param b blue (0.0 to 1.0)
-     * @param a alpha (0.0 to 1.0)
+     * @param r
+     *            red (0.0 to 1.0)
+     * @param g
+     *            green (0.0 to 1.0)
+     * @param b
+     *            blue (0.0 to 1.0)
+     * @param a
+     *            alpha (0.0 to 1.0)
      */
     public void setColor(float r, float g, float b, float a) {
         this.r = Math.max(0, Math.min(1, r));
@@ -182,11 +189,10 @@ public abstract class AbstractEntity implements ICollidable {
         return zIndex;
     }
 
-    //updates the entity's render layer
+    // updates the entity's render layer
     public void setZIndex(int zIndex) {
         this.zIndex = zIndex;
     }
-
 
     public void setCollisionListener(CollisionListener collisionListener) {
         this.collisionListener = collisionListener;
@@ -196,7 +202,7 @@ public abstract class AbstractEntity implements ICollidable {
         return collisionListener;
     }
 
-    //activates when an overlap with each other occurs
+    // activates when an overlap with each other occurs
     @Override
     public void onCollision(ICollidable other) {
         if (collisionListener != null) {

@@ -35,25 +35,36 @@ public class GameScoreManager implements PinballEventVisitor {
         ballInPlay = false;
     }
 
-    public int getScore() { return score; }
-    public int getBallsLeft() { return ballsLeft; }
-    public int getTotalTrash() { return totalTrash; }
+    public int getScore() {
+        return score;
+    }
+    public int getBallsLeft() {
+        return ballsLeft;
+    }
+    public int getTotalTrash() {
+        return totalTrash;
+    }
 
     /**
      * Game is over when all trash is collected, or all balls have drained.
      */
     public boolean isGameOver() {
-        if (score >= totalTrash) return true;
+        if (score >= totalTrash)
+            return true;
         return ballsLeft <= 0 && !ballInPlay;
     }
 
     /**
      * Win: game is over AND at least 1 trash was collected.
      */
-    public boolean isWon() { return isGameOver() && score >= 1; }
+    public boolean isWon() {
+        return isGameOver() && score >= 1;
+    }
 
     /**
      * Loss: game is over AND zero trash was collected.
      */
-    public boolean isLost() { return isGameOver() && score < 1; }
+    public boolean isLost() {
+        return isGameOver() && score < 1;
+    }
 }

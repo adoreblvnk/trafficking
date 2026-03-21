@@ -51,7 +51,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
 
             float rodTop = getPosition().getY() + 160 + 24;
 
-            if (entity.getPosition().getY() <= rodTop + 2f) { 
+            if (entity.getPosition().getY() <= rodTop + 2f) {
                 entity.setPosition(entity.getPosition().getX(), rodTop);
                 entity.getVelocity().setY(0);
             }
@@ -111,7 +111,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     @Override
     public void update(float dt) {
         super.update(dt);
-        
+
         if (isKeyPulling) {
             float newY = getY() - keyPullSpeed * dt;
             newY = Math.max(anchorY - maxPullDistance, newY);

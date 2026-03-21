@@ -19,14 +19,30 @@ public class BoardLayout {
         this.trashes = new ArrayList<>();
     }
 
-    public void addWall(WallEntity wall) { walls.add(wall); }
-    public void addFlipper(FlipperEntity flipper) { flippers.add(flipper); }
-    public void addTrash(TrashEntity trash) { trashes.add(trash); }
+    public void addWall(WallEntity wall) {
+        walls.add(wall);
+    }
+    public void addFlipper(FlipperEntity flipper) {
+        flippers.add(flipper);
+    }
+    public void addTrash(TrashEntity trash) {
+        trashes.add(trash);
+    }
 
-    public ShooterRodEntity getShooterRod() { return shooterRod; }
-    public void setShooterRod(ShooterRodEntity shooterRod) { this.shooterRod = shooterRod; }
+    public ShooterRodEntity getShooterRod() {
+        return shooterRod;
+    }
+    public void setShooterRod(ShooterRodEntity shooterRod) {
+        this.shooterRod = shooterRod;
+    }
 
-    public List<WallEntity> getWalls() { return walls; }
-    public List<FlipperEntity> getFlippers() { return flippers; }
-    public List<TrashEntity> getTrashes() { return trashes; }
+    public List<WallEntity> getWalls() {
+        return walls;
+    }
+    public List<FlipperEntity> getFlippers() {
+        return flippers;
+    }
+    public List<TrashEntity> getTrashes() {
+        return trashes;
+    }
 }

@@ -12,7 +12,8 @@ public class OBBCollider implements ICollider {
     private float originY;
     private float rotationDegrees;
 
-    public OBBCollider(float x, float y, float width, float height, float originX, float originY, float rotationDegrees) {
+    public OBBCollider(float x, float y, float width, float height, float originX, float originY,
+            float rotationDegrees) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -65,8 +66,10 @@ public class OBBCollider implements ICollider {
     public PlatformVector2[] getAxes() {
         PlatformVector2[] axes = new PlatformVector2[2];
         PlatformVector2[] vertices = getVertices();
-        axes[0] = SATMathUtils.normalize(new PlatformVector2(vertices[1].getX() - vertices[0].getX(), vertices[1].getY() - vertices[0].getY()));
-        axes[1] = SATMathUtils.normalize(new PlatformVector2(vertices[2].getX() - vertices[1].getX(), vertices[2].getY() - vertices[1].getY()));
+        axes[0] = SATMathUtils.normalize(
+                new PlatformVector2(vertices[1].getX() - vertices[0].getX(), vertices[1].getY() - vertices[0].getY()));
+        axes[1] = SATMathUtils.normalize(
+                new PlatformVector2(vertices[2].getX() - vertices[1].getX(), vertices[2].getY() - vertices[1].getY()));
         return axes;
     }
 
@@ -79,10 +82,14 @@ public class OBBCollider implements ICollider {
         float maxY = vertices[0].getY();
 
         for (int i = 1; i < vertices.length; i++) {
-            if (vertices[i].getX() < minX) minX = vertices[i].getX();
-            if (vertices[i].getY() < minY) minY = vertices[i].getY();
-            if (vertices[i].getX() > maxX) maxX = vertices[i].getX();
-            if (vertices[i].getY() > maxY) maxY = vertices[i].getY();
+            if (vertices[i].getX() < minX)
+                minX = vertices[i].getX();
+            if (vertices[i].getY() < minY)
+                minY = vertices[i].getY();
+            if (vertices[i].getX() > maxX)
+                maxX = vertices[i].getX();
+            if (vertices[i].getY() > maxY)
+                maxY = vertices[i].getY();
         }
 
         return new PlatformRectangle(minX, minY, maxX - minX, maxY - minY);
@@ -118,8 +125,9 @@ public class OBBCollider implements ICollider {
         PlatformVector2[] vertices = getVertices();
         boolean result = false;
         for (int i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
-            if ((vertices[i].getY() > py) != (vertices[j].getY() > py) &&
-                (px < (vertices[j].getX() - vertices[i].getX()) * (py - vertices[i].getY()) / (vertices[j].getY() - vertices[i].getY()) + vertices[i].getX())) {
+            if ((vertices[i].getY() > py) != (vertices[j].getY() > py)
+                    && (px < (vertices[j].getX() - vertices[i].getX()) * (py - vertices[i].getY())
+                            / (vertices[j].getY() - vertices[i].getY()) + vertices[i].getX())) {
                 result = !result;
             }
         }
@@ -132,7 +140,7 @@ public class OBBCollider implements ICollider {
         float radius = circle.getCircle().getRadius();
 
         PlatformVector2[] axes = obb.getAxes();
-        
+
         PlatformVector2 closestVertex = vertices[0];
         float minDst2 = center.dst2(vertices[0]);
         for (int i = 1; i < vertices.length; i++) {
@@ -142,7 +150,8 @@ public class OBBCollider implements ICollider {
                 closestVertex = vertices[i];
             }
         }
-        PlatformVector2 circleAxis = SATMathUtils.normalize(new PlatformVector2(closestVertex.getX() - center.getX(), closestVertex.getY() - center.getY()));
+        PlatformVector2 circleAxis = SATMathUtils.normalize(
+                new PlatformVector2(closestVertex.getX() - center.getX(), closestVertex.getY() - center.getY()));
 
         PlatformVector2[] allAxes = new PlatformVector2[axes.length + 1];
         System.arraycopy(axes, 0, allAxes, 0, axes.length);
@@ -161,16 +170,11 @@ public class OBBCollider implements ICollider {
 
     private boolean checkOBBVsBox(OBBCollider obb, BoxCollider box) {
         PlatformRectangle r = box.getAABB();
-        PlatformVector2[] boxVertices = new PlatformVector2[] {
-            new PlatformVector2(r.getX(), r.getY()),
-            new PlatformVector2(r.getX() + r.getWidth(), r.getY()),
-            new PlatformVector2(r.getX() + r.getWidth(), r.getY() + r.getHeight()),
-            new PlatformVector2(r.getX(), r.getY() + r.getHeight())
-        };
-        PlatformVector2[] boxAxes = new PlatformVector2[] {
-            new PlatformVector2(1, 0),
-            new PlatformVector2(0, 1)
-        };
+        PlatformVector2[] boxVertices = new PlatformVector2[]{new PlatformVector2(r.getX(), r.getY()),
+                new PlatformVector2(r.getX() + r.getWidth(), r.getY()),
+                new PlatformVector2(r.getX() + r.getWidth(), r.getY() + r.getHeight()),
+                new PlatformVector2(r.getX(), r.getY() + r.getHeight())};
+        PlatformVector2[] boxAxes = new PlatformVector2[]{new PlatformVector2(1, 0), new PlatformVector2(0, 1)};
 
         PlatformVector2[] obbVertices = obb.getVertices();
         PlatformVector2[] obbAxes = obb.getAxes();

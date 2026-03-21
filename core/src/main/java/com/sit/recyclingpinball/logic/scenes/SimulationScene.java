@@ -38,7 +38,10 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     private int totalTrash;
 
     public SimulationScene(IEngineContext context, SceneManager sceneManager, ILevelBlueprint blueprint) {
-        super(context, new EntityManager(), new CollisionManager(new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)), new InputManager(), new MovementManager());
+        super(context, new EntityManager(),
+                new CollisionManager(
+                        new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)),
+                new InputManager(), new MovementManager());
         this.sceneManager = sceneManager;
         this.blueprint = blueprint;
     }
@@ -76,7 +79,8 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
             // EntityManager
         }
 
-        pinball = new PinballEntity(LogicConstants.TAG_PINBALL, LogicConstants.PINBALL_START_X, LogicConstants.PINBALL_START_Y, eventBus);
+        pinball = new PinballEntity(LogicConstants.TAG_PINBALL, LogicConstants.PINBALL_START_X,
+                LogicConstants.PINBALL_START_Y, eventBus);
         getEntityManager().addEntity(pinball);
         getInputManager().addListener(pinball);
 
@@ -93,11 +97,11 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     public void update(float dt) {
         super.update(dt);
         if (scoreManager.isWon()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(getContext(), sceneManager, true, scoreManager.getScore(),
-                    totalTrash, blueprint));
+            sceneManager.pushOverlay(new SimulationResultOverlay(getContext(), sceneManager, true,
+                    scoreManager.getScore(), totalTrash, blueprint));
         } else if (scoreManager.isLost()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(getContext(), sceneManager, false, scoreManager.getScore(),
-                    totalTrash, blueprint));
+            sceneManager.pushOverlay(new SimulationResultOverlay(getContext(), sceneManager, false,
+                    scoreManager.getScore(), totalTrash, blueprint));
         }
     }
 
@@ -113,10 +117,12 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
 
     @Override
     public void render() {
-        getContext().getGraphics().clearScreen(LogicConstants.COLOR_SIM_BG_R, LogicConstants.COLOR_SIM_BG_G, LogicConstants.COLOR_SIM_BG_B);
+        getContext().getGraphics().clearScreen(LogicConstants.COLOR_SIM_BG_R, LogicConstants.COLOR_SIM_BG_G,
+                LogicConstants.COLOR_SIM_BG_B);
 
         // 1. Draw Background
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_BEACH_BACKGROUND, 0, 0, LogicConstants.SCENE_WIDTH, LogicConstants.SCENE_HEIGHT);
+        getContext().getGraphics().drawTexture(LogicConstants.TEX_BEACH_BACKGROUND, 0, 0, LogicConstants.SCENE_WIDTH,
+                LogicConstants.SCENE_HEIGHT);
         getContext().getGraphics().end();
 
         // 2. Draw Game Entities (Walls, Flippers, Trash, Pinball)
@@ -125,8 +131,10 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
 
         // 3. Draw UI Overlay
         getContext().getGraphics().drawTexture(LogicConstants.TEX_UI_PANEL_BG, 0, 0, 400, LogicConstants.SCENE_HEIGHT);
-        getContext().getGraphics().drawText(LogicConstants.TEXT_SCORE_PREFIX + scoreManager.getScore(), LogicConstants.FONT_GEIST_BOLD, 50, 900);
-        getContext().getGraphics().drawText(LogicConstants.TEXT_BALLS_PREFIX + scoreManager.getBallsLeft(), LogicConstants.FONT_GEIST_BOLD, 50, 850);
+        getContext().getGraphics().drawText(LogicConstants.TEXT_SCORE_PREFIX + scoreManager.getScore(),
+                LogicConstants.FONT_GEIST_BOLD, 50, 900);
+        getContext().getGraphics().drawText(LogicConstants.TEXT_BALLS_PREFIX + scoreManager.getBallsLeft(),
+                LogicConstants.FONT_GEIST_BOLD, 50, 850);
         getContext().getGraphics().drawText(blueprint.getText(), LogicConstants.FONT_GEIST_BOLD, 50, 800, 300);
 
         // 4. Draw star icons for collected trash

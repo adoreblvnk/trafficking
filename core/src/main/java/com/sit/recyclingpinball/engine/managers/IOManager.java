@@ -5,7 +5,8 @@ import java.util.Optional;
 import com.sit.recyclingpinball.engine.interfaces.providers.IIOProvider;
 
 /**
- * Abstraction for file system operations supporting both internal assets and local storage.
+ * Abstraction for file system operations supporting both internal assets and
+ * local storage.
  */
 public class IOManager {
 

@@ -18,15 +18,15 @@ public class Main extends Game {
     @Override
     public void create() {
         context = new LibGdxContext();
-        
+
         AssetManager assetManager = AssetManager.getInstance();
         assetManager.initialize(context.getAudio());
         assetManager.loadAll();
-        
+
         SoundManager soundManager = new SoundManager(context.getAudio());
         IOManager ioManager = new IOManager(context.getIO());
         TimeManager timeManager = new TimeManager(context.getTime());
-        
+
         sceneManager = new SceneManager(context, soundManager, ioManager, timeManager);
         sceneManager.setScene(new MenuScene(context, sceneManager));
     }

@@ -55,7 +55,7 @@ public class LogicConstants {
     public static final float FLIPPER_ROT_VELOCITY = 512f;
     public static final float FLIPPER_BOOST_Y = 1.5f;
     public static final float FLIPPER_BOOST_X = 0.5f;
-    
+
     public static final float FLIPPER_LEFT_START_ANGLE = -10f;
     public static final float FLIPPER_LEFT_MAX_ANGLE = 45f;
     public static final float FLIPPER_RIGHT_START_ANGLE = 190f;
@@ -68,7 +68,7 @@ public class LogicConstants {
     // UI Coordinates and Dimensions
     public static final int SCENE_WIDTH = 1900;
     public static final int SCENE_HEIGHT = 1000;
-    
+
     public static final float UI_CENTER_X = 950f;
     public static final float UI_BTN_WIDTH_DEFAULT = 480f;
     public static final float UI_BTN_WIDTH_SMALL = 384f;
@@ -82,13 +82,13 @@ public class LogicConstants {
     public static final float COLOR_SIM_BG_R = 0.8f;
     public static final float COLOR_SIM_BG_G = 0.9f;
     public static final float COLOR_SIM_BG_B = 1.0f;
-    
+
     public static final float COLOR_DIM_R = 0f;
     public static final float COLOR_DIM_G = 0f;
     public static final float COLOR_DIM_B = 0f;
     public static final float COLOR_DIM_PAUSED_A = 0.6f;
     public static final float COLOR_DIM_OVERLAY_A = 0.7f;
-    
+
     public static final float COLOR_TEXT_DARK_R = 0.2f;
     public static final float COLOR_TEXT_DARK_G = 0.15f;
     public static final float COLOR_TEXT_DARK_B = 0.1f;
@@ -109,7 +109,7 @@ public class LogicConstants {
 
     public static final float PINBALL_START_X = 1810f;
     public static final float PINBALL_START_Y = 400f;
-    
+
     public static final String TEXT_YOU_WIN = "YOU WIN!";
     public static final String TEXT_GAME_OVER = "GAME OVER!";
     public static final String TEXT_RECYCLING_PINBALL = "Recycling Pinball";
@@ -136,6 +136,7 @@ public class LogicConstants {
 
     // Common Volume
     public static final float VOLUME_DEFAULT = 1.0f;
-    
-    private LogicConstants() {}
+
+    private LogicConstants() {
+    }
 }

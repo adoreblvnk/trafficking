@@ -19,10 +19,12 @@ public interface ICollidable {
     String getTag();
 
     /**
-     * Resolves a collision with a dynamic entity using double dispatch.
-     * Overridden by specific entities to apply logic without instanceof.
+     * Resolves a collision with a dynamic entity using double dispatch. Overridden
+     * by specific entities to apply logic without instanceof.
      *
-     * @param entity The dynamic entity this collidable is interacting with.
+     * @param entity
+     *            The dynamic entity this collidable is interacting with.
      */
-    default void resolveCollision(com.sit.recyclingpinball.engine.entities.DynamicEntity entity) {}
+    default void resolveCollision(com.sit.recyclingpinball.engine.entities.DynamicEntity entity) {
+    }
 }
