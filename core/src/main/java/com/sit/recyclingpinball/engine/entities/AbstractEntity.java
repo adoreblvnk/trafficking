@@ -104,9 +104,6 @@ public abstract class AbstractEntity implements ICollidable {
         return position;
     }
 
-    public void updatePosition(float dt) {
-        // Default empty implementation, meant to be overridden by dynamic entities.
-    }
 
     // updates both position and bounding box to prevent desync whenever moving the
     // entity

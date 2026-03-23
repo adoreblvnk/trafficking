@@ -111,4 +111,22 @@ public class EntityManager {
     public List<AbstractEntity> getEntities() {
         return Collections.unmodifiableList(entityList);
     }
+
+    /**
+     * Retrieves all entities that implement or extend a specific type.
+     * Uses Generics to avoid downcasting in the caller.
+     *
+     * @param type the Class object of the type to filter by
+     * @param <T>  the generic type parameter
+     * @return a list of entities cast to the specified type
+     */
+    public <T> List<T> getEntitiesByType(Class<T> type) {
+        List<T> result = new java.util.ArrayList<>();
+        for (AbstractEntity e : entityList) {
+            if (type.isInstance(e)) {
+                result.add(type.cast(e));
+            }
+        }
+        return result;
+    }
 }

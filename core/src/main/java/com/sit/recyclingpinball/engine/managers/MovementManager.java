@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.engine.managers;
 
-import com.sit.recyclingpinball.engine.entities.AbstractEntity;
+import com.sit.recyclingpinball.engine.interfaces.Movable;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -16,7 +16,7 @@ public class MovementManager {
     public MovementManager() {
     }
 
-    public void processMovement(List<AbstractEntity> entities, float dt) {
+    public void processMovement(List<Movable> entities, float dt) {
         if (entities == null) {
             LOGGER.severe("Cannot process movement on null entity list");
             return;
@@ -26,11 +26,11 @@ public class MovementManager {
             return;
         }
 
-        for (AbstractEntity e : entities) {
+        for (Movable e : entities) {
             try {
                 e.updatePosition(dt);
             } catch (Exception ex) {
-                LOGGER.log(Level.SEVERE, "Movement processing failed for entity: " + e.getId(), ex);
+                LOGGER.log(Level.SEVERE, "Movement processing failed for entity: " + e.toString(), ex);
             }
         }
     }
