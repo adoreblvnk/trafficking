@@ -6,8 +6,6 @@ import com.sit.recyclingpinball.engine.interfaces.ICollidable;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.sit.recyclingpinball.engine.physics.CircleCollider;
 import com.sit.recyclingpinball.logic.states.IPinballState;
-import com.sit.recyclingpinball.logic.states.IdleState;
-import com.sit.recyclingpinball.logic.states.InPlayState;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.PinballEventVisitor;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
@@ -19,16 +17,24 @@ import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 public class PinballEntity extends DynamicEntity implements InputListener, PinballEventVisitor {
     private IPinballState currentState;
     private final PinballEventBus eventBus;
+    private final com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory;
 
-    public PinballEntity(String id, float x, float y, PinballEventBus eventBus) {
-        super(id, x, y, 48, 48);
-        setCollider(new CircleCollider(x, y, 24));
+    public PinballEntity(String id, float x, float y, PinballEventBus eventBus,
+            com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory) {
+        super(id, x, y, LogicConstants.PINBALL_SIZE, LogicConstants.PINBALL_SIZE);
+        setCollider(new CircleCollider(x, y, LogicConstants.PINBALL_RADIUS));
         this.eventBus = eventBus;
-        this.currentState = new InPlayState(); // Start in play state to allow falling onto shooter rod
+        this.assemblyFactory = assemblyFactory;
+        this.currentState = assemblyFactory.createInPlayState(); // Start in play state to allow falling onto shooter
+                                                                    // rod
         this.eventBus.register(this);
         setCollisionEnabled(true);
-        setFriction(0.999f);
+        setFriction(LogicConstants.PINBALL_FRICTION);
         setTag(LogicConstants.TAG_PINBALL);
+    }
+
+    public com.sit.recyclingpinball.logic.factories.AssemblyFactory getFactory() {
+        return assemblyFactory;
     }
 
     public void setState(IPinballState state) {
@@ -47,8 +53,9 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(LogicConstants.TEX_PINBALL_DEFAULT, getPosition().getX() - 24, getPosition().getY() - 24,
-                48, 48);
+        graphics.drawTexture(LogicConstants.TEX_PINBALL_DEFAULT, getPosition().getX() - LogicConstants.PINBALL_RADIUS,
+                getPosition().getY() - LogicConstants.PINBALL_RADIUS, LogicConstants.PINBALL_SIZE,
+                LogicConstants.PINBALL_SIZE);
     }
 
     @Override
@@ -89,7 +96,7 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
     @Override
     public void visit(com.sit.recyclingpinball.logic.events.BallRestedOnRodEvent event) {
         // Change state when the ball rests on the rod
-        setState(new IdleState(this));
+        setState(assemblyFactory.createIdleState(this));
     }
 
     @Override

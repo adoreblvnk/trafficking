@@ -10,7 +10,6 @@ import com.sit.recyclingpinball.engine.managers.MovementManager;
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.logic.LogicConstants;
-import com.sit.recyclingpinball.logic.scenes.MenuScene;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,30 +17,33 @@ import java.util.List;
 public class PauseOverlay extends AbstractScene implements InputListener {
     private final SceneManager sceneManager;
     private final List<Button> buttons = new ArrayList<>();
+    private final com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory;
 
-    public PauseOverlay(IEngineContext context, SceneManager sceneManager) {
-        super(context, new EntityManager(),
-                new CollisionManager(
-                        new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)),
-                new InputManager(), new MovementManager());
+    public PauseOverlay(IEngineContext context, SceneManager sceneManager,
+            com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory, EntityManager entityManager,
+            CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+        super(context, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
+        this.assemblyFactory = assemblyFactory;
 
         float pauseBtnW = LogicConstants.UI_BTN_WIDTH_SMALL;
         float pauseBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
         float pauseBtnX = LogicConstants.UI_CENTER_X - pauseBtnW / 2;
-        float pauseBtnY = 580;
+        float pauseBtnY = LogicConstants.UI_PAUSE_TITLE_Y;
         buttons.add(new Button(pauseBtnX, pauseBtnY, pauseBtnW, pauseBtnH, LogicConstants.TEXT_PAUSED, null));
 
         float btnW = LogicConstants.UI_BTN_WIDTH_SMALL;
         float btnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
         float btnX = LogicConstants.UI_CENTER_X - btnW / 2;
 
-        buttons.add(new Button(btnX, 490, btnW, btnH, LogicConstants.TEXT_RESUME, () -> {
-            sceneManager.popScene();
-        }));
-        buttons.add(new Button(btnX, 410, btnW, btnH, LogicConstants.TEXT_MAIN_MENU, () -> {
-            sceneManager.setScene(new MenuScene(getContext(), sceneManager));
-        }));
+        buttons.add(
+                new Button(btnX, LogicConstants.UI_PAUSE_RESUME_BTN_Y, btnW, btnH, LogicConstants.TEXT_RESUME, () -> {
+                    sceneManager.popScene();
+                }));
+        buttons.add(
+                new Button(btnX, LogicConstants.UI_PAUSE_MENU_BTN_Y, btnW, btnH, LogicConstants.TEXT_MAIN_MENU, () -> {
+                    sceneManager.setScene(assemblyFactory.createMenuScene());
+                }));
     }
 
     @Override
@@ -60,7 +62,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
         // 60% opacity — dark enough to communicate "paused", light enough to see game
         // state.
         getContext().getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_WIDTH, LogicConstants.SCENE_HEIGHT,
-                LogicConstants.COLOR_DIM_R, LogicConstants.COLOR_DIM_G, LogicConstants.COLOR_DIM_B,
+                LogicConstants.COLOR_DIM[0], LogicConstants.COLOR_DIM[1], LogicConstants.COLOR_DIM[2],
                 LogicConstants.COLOR_DIM_PAUSED_A);
 
         for (Button button : buttons) {
@@ -78,7 +80,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
             return true;
         } else if (keycode == EngineKey.M) {
             getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
-            sceneManager.setScene(new MenuScene(getContext(), sceneManager));
+            sceneManager.setScene(assemblyFactory.createMenuScene());
             return true;
         }
         return false;

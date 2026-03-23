@@ -25,11 +25,11 @@ public class LibGdxContext implements IEngineContext {
     /**
      * Constructs the engine context by instantiating all libGDX providers.
      */
-    public LibGdxContext() {
+    public LibGdxContext(com.sit.recyclingpinball.engine.managers.AssetManager assetManager) {
         this.displayProvider = new LibGdxDisplay();
         this.timeProvider = new LibGdxTime();
         this.audioProvider = new LibGdxAudio();
-        this.graphicsProvider = new LibGdxGraphics();
+        this.graphicsProvider = new LibGdxGraphics(assetManager);
         this.inputProvider = new LibGdxInputProvider();
         this.ioProvider = new LibGdxIOProvider();
     }

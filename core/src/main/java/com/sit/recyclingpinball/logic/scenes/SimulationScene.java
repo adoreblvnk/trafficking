@@ -24,8 +24,6 @@ import com.sit.recyclingpinball.logic.level.BoardLayout;
 import com.sit.recyclingpinball.logic.level.ILevelBlueprint;
 import com.sit.recyclingpinball.logic.managers.GameAudioManager;
 import com.sit.recyclingpinball.logic.managers.GameScoreManager;
-import com.sit.recyclingpinball.logic.ui.PauseOverlay;
-import com.sit.recyclingpinball.logic.ui.SimulationResultOverlay;
 
 public class SimulationScene extends AbstractScene implements InputListener, PinballEventVisitor {
     private final SceneManager sceneManager;
@@ -35,12 +33,15 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     private PinballEntity pinball;
     private int totalTrash;
 
-    public SimulationScene(IEngineContext context, SceneManager sceneManager, ILevelBlueprint blueprint) {
-        super(context, new EntityManager(),
-                new CollisionManager(
-                        new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)),
-                new InputManager(), new MovementManager());
+    private final com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory;
+
+    public SimulationScene(IEngineContext context, SceneManager sceneManager,
+            com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory, ILevelBlueprint blueprint,
+            EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager,
+            MovementManager movementManager) {
+        super(context, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
+        this.assemblyFactory = assemblyFactory;
         this.blueprint = blueprint;
     }
 
@@ -78,7 +79,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         }
 
         pinball = new PinballEntity(LogicConstants.TAG_PINBALL, LogicConstants.PINBALL_START_X,
-                LogicConstants.PINBALL_START_Y, eventBus);
+                LogicConstants.PINBALL_START_Y, eventBus, assemblyFactory);
         getEntityManager().addEntity(pinball);
         getInputManager().addListener(pinball);
     }
@@ -87,11 +88,11 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     public void update(float dt) {
         super.update(dt);
         if (scoreManager.isWon()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(getContext(), sceneManager, true,
-                    scoreManager.getScore(), totalTrash, blueprint));
+            sceneManager.pushOverlay(assemblyFactory.createSimulationResultOverlay(true, scoreManager.getScore(),
+                    totalTrash, blueprint));
         } else if (scoreManager.isLost()) {
-            sceneManager.pushOverlay(new SimulationResultOverlay(getContext(), sceneManager, false,
-                    scoreManager.getScore(), totalTrash, blueprint));
+            sceneManager.pushOverlay(assemblyFactory.createSimulationResultOverlay(false, scoreManager.getScore(),
+                    totalTrash, blueprint));
         }
     }
 
@@ -101,7 +102,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
             // Respawn logic
             pinball.setPosition(LogicConstants.PINBALL_START_X, LogicConstants.PINBALL_START_Y);
             pinball.setVelocity(0, 0);
-            pinball.setState(new com.sit.recyclingpinball.logic.states.InPlayState());
+            pinball.setState(assemblyFactory.createInPlayState());
         }
     }
 
@@ -112,8 +113,8 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
 
     @Override
     public void render() {
-        getContext().getGraphics().clearScreen(LogicConstants.COLOR_SIM_BG_R, LogicConstants.COLOR_SIM_BG_G,
-                LogicConstants.COLOR_SIM_BG_B);
+        getContext().getGraphics().clearScreen(LogicConstants.COLOR_SIM_BG[0], LogicConstants.COLOR_SIM_BG[1],
+                LogicConstants.COLOR_SIM_BG[2]);
 
         // 1. Draw Background
         getContext().getGraphics().drawTexture(LogicConstants.TEX_BEACH_BACKGROUND, 0, 0, LogicConstants.SCENE_WIDTH,
@@ -127,18 +128,19 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         // 3. Draw UI Overlay
         getContext().getGraphics().drawTexture(LogicConstants.TEX_UI_PANEL_BG, 0, 0, 400, LogicConstants.SCENE_HEIGHT);
         getContext().getGraphics().drawText(LogicConstants.TEXT_SCORE_PREFIX + scoreManager.getScore(),
-                LogicConstants.FONT_GEIST_BOLD, 50, 900);
+                LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_GAME_TEXT_X, LogicConstants.UI_SCORE_Y);
         getContext().getGraphics().drawText(LogicConstants.TEXT_BALLS_PREFIX + scoreManager.getBallsLeft(),
-                LogicConstants.FONT_GEIST_BOLD, 50, 850);
-        getContext().getGraphics().drawText(blueprint.getText(), LogicConstants.FONT_GEIST_BOLD, 50, 800, 300);
+                LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_GAME_TEXT_X, LogicConstants.UI_BALLS_Y);
+        getContext().getGraphics().drawText(blueprint.getText(), LogicConstants.FONT_GEIST_BOLD,
+                LogicConstants.UI_GAME_TEXT_X, LogicConstants.UI_DESC_Y, LogicConstants.UI_DESC_WIDTH);
 
         // 4. Draw star icons for collected trash
         int collected = scoreManager.getScore();
         for (int i = 0; i < totalTrash; i++) {
             int row = i / 4;
             int col = i % 4;
-            float starX = 60 + col * 70;
-            float starY = 200 - row * 70;
+            float starX = LogicConstants.UI_STAR_START_X + col * LogicConstants.UI_STAR_SPACING;
+            float starY = LogicConstants.UI_STAR_START_Y - row * LogicConstants.UI_STAR_SPACING;
             if (i < collected) {
                 getContext().getGraphics().drawTexture(LogicConstants.TEX_STAR, starX, starY, 64, 60);
             } else {
@@ -153,7 +155,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     @Override
     public boolean onKeyDown(EngineKey keycode) {
         if (keycode == EngineKey.ESCAPE) {
-            sceneManager.pushOverlay(new PauseOverlay(getContext(), sceneManager));
+            sceneManager.pushOverlay(assemblyFactory.createPauseOverlay());
             return true;
         }
         return false;

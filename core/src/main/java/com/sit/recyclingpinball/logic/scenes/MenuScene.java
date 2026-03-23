@@ -14,31 +14,30 @@ import java.util.List;
 public class MenuScene extends AbstractScene implements InputListener {
     private final List<Button> buttons = new ArrayList<>();
 
-    public MenuScene(IEngineContext context, SceneManager sceneManager) {
-        super(context, new EntityManager(),
-                new CollisionManager(
-                        new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)),
-                new InputManager(), new MovementManager());
+    public MenuScene(IEngineContext context, SceneManager sceneManager,
+            com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory, EntityManager entityManager,
+            CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+        super(context, entityManager, collisionManager, inputManager, movementManager);
 
         float titleBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
         float titleBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
         float titleBtnX = LogicConstants.UI_CENTER_X - titleBtnW / 2;
-        float titleBtnY = 560;
+        float titleBtnY = LogicConstants.UI_MENU_TITLE_Y;
         buttons.add(
                 new Button(titleBtnX, titleBtnY, titleBtnW, titleBtnH, LogicConstants.TEXT_RECYCLING_PINBALL, null));
 
         float startBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
         float startBtnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
         float startBtnX = LogicConstants.UI_CENTER_X - startBtnW / 2;
-        float startBtnY = 460;
+        float startBtnY = LogicConstants.UI_MENU_START_BTN_Y;
         buttons.add(new Button(startBtnX, startBtnY, startBtnW, startBtnH, LogicConstants.TEXT_START_GAME, () -> {
-            sceneManager.setScene(new LevelSelectScene(getContext(), sceneManager));
+            sceneManager.setScene(assemblyFactory.createLevelSelectScene());
         }));
 
         float quitBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
         float quitBtnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
         float quitBtnX = LogicConstants.UI_CENTER_X - quitBtnW / 2;
-        float quitBtnY = 380;
+        float quitBtnY = LogicConstants.UI_MENU_QUIT_BTN_Y;
         buttons.add(new Button(quitBtnX, quitBtnY, quitBtnW, quitBtnH, LogicConstants.TEXT_QUIT, () -> {
             getContext().exit();
         }));
@@ -51,8 +50,8 @@ public class MenuScene extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        getContext().getGraphics().clearScreen(LogicConstants.COLOR_BG_R, LogicConstants.COLOR_BG_G,
-                LogicConstants.COLOR_BG_B);
+        getContext().getGraphics().clearScreen(LogicConstants.COLOR_BG[0], LogicConstants.COLOR_BG[1],
+                LogicConstants.COLOR_BG[2]);
         getContext().getGraphics().begin();
 
         // Full-screen dirty beach background

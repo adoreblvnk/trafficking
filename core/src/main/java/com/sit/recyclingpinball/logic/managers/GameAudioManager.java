@@ -17,17 +17,20 @@ public class GameAudioManager implements PinballEventVisitor {
 
     @Override
     public void visit(TrashCollectedEvent event) {
-        audio.playSound(com.sit.recyclingpinball.logic.LogicConstants.SOUND_COLLECT, 1.0f);
+        audio.playSound(com.sit.recyclingpinball.logic.LogicConstants.SOUND_COLLECT,
+                com.sit.recyclingpinball.logic.LogicConstants.VOLUME_DEFAULT);
     }
 
     @Override
     public void visit(BallDrainedEvent event) {
-        audio.playSound(com.sit.recyclingpinball.logic.LogicConstants.SOUND_LOSE, 1.0f);
+        audio.playSound(com.sit.recyclingpinball.logic.LogicConstants.SOUND_LOSE,
+                com.sit.recyclingpinball.logic.LogicConstants.VOLUME_DEFAULT);
     }
 
     @Override
     public void visit(BallLaunchedEvent event) {
-        audio.playSound(com.sit.recyclingpinball.logic.LogicConstants.SOUND_STRETCH, 1.0f);
+        audio.playSound(com.sit.recyclingpinball.logic.LogicConstants.SOUND_STRETCH,
+                com.sit.recyclingpinball.logic.LogicConstants.VOLUME_DEFAULT);
         // TODO: Load and play "sounds/launch.mp3" here in the future.
     }
 }

@@ -9,6 +9,7 @@ import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.logic.LogicConstants;
 
 public class FlipperEntity extends DynamicEntity implements InputListener {
+
     private final boolean isLeft;
     private final float maxAngle;
     private final float startAngle;
@@ -21,19 +22,19 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     }
 
     public FlipperEntity(String id, float x, float y, boolean isLeft) {
-        super(id, x, y, 180, 40);
+        super(id, x, y, LogicConstants.FLIPPER_WIDTH, LogicConstants.FLIPPER_HEIGHT);
         this.isLeft = isLeft;
         this.textureId = LogicConstants.TEX_FLIPPER;
 
         if (isLeft) {
-            this.startAngle = -10f;
-            this.maxAngle = 45f;
+            this.startAngle = LogicConstants.FLIPPER_LEFT_START_ANGLE;
+            this.maxAngle = LogicConstants.FLIPPER_LEFT_MAX_ANGLE;
         } else {
             // Right flipper must point leftwards (180 degrees).
             // A rest angle tilting down-left translates to 180 + 10 = 190 degrees.
             // A swept angle pointing up-left translates to 180 - 45 = 135 degrees.
-            this.startAngle = 190f;
-            this.maxAngle = 135f;
+            this.startAngle = LogicConstants.FLIPPER_RIGHT_START_ANGLE;
+            this.maxAngle = LogicConstants.FLIPPER_RIGHT_MAX_ANGLE;
         }
         this.currentAngle = this.startAngle;
         this.rotationalVelocity = 0f;
@@ -42,7 +43,8 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
         // degrees,
         // it naturally mirrors the left one, setting its hinge perfectly to the right
         // side of its bounds!
-        setCollider(new OBBCollider(x, y, 180, 40, 20, 20, currentAngle));
+        setCollider(new OBBCollider(x, y, LogicConstants.FLIPPER_WIDTH, LogicConstants.FLIPPER_HEIGHT,
+                LogicConstants.FLIPPER_PIVOT_X, LogicConstants.FLIPPER_PIVOT_Y, currentAngle));
         setCollisionEnabled(true);
         setTag(LogicConstants.TAG_FLIPPER);
     }
@@ -82,26 +84,28 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
         float rotVel = getRotationalVelocity();
         if (rotVel != 0) {
             // Boost ball upwards if flipper is moving
-            entity.getVelocity().setY(entity.getVelocity().getY() + Math.abs(rotVel) * 1.5f);
-            entity.getVelocity().setX(entity.getVelocity().getX() + rotVel * 0.5f);
+            entity.getVelocity().setY(entity.getVelocity().getY() + Math.abs(rotVel) * LogicConstants.FLIPPER_BOOST_Y);
+            entity.getVelocity().setX(entity.getVelocity().getX() + rotVel * LogicConstants.FLIPPER_BOOST_X);
         }
     }
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(textureId, getPosition().getX(), getPosition().getY(), 180, 40, 20, 20, currentAngle);
+        graphics.drawTexture(textureId, getPosition().getX(), getPosition().getY(), LogicConstants.FLIPPER_WIDTH,
+                LogicConstants.FLIPPER_HEIGHT, LogicConstants.FLIPPER_PIVOT_X, LogicConstants.FLIPPER_PIVOT_Y,
+                currentAngle);
     }
 
     @Override
     public boolean onKeyDown(EngineKey keycode) {
         // Check LEFT flipper keys
         if (isLeft && (keycode == EngineKey.A || keycode == EngineKey.LEFT)) {
-            rotationalVelocity = 512f; // Sweeps CCW (up)
+            rotationalVelocity = LogicConstants.FLIPPER_ROT_VELOCITY; // Sweeps CCW (up)
             return true;
         }
         // Check RIGHT flipper keys
         if (!isLeft && (keycode == EngineKey.D || keycode == EngineKey.RIGHT)) {
-            rotationalVelocity = -512f; // Sweeps CW (up for right flipper)
+            rotationalVelocity = -LogicConstants.FLIPPER_ROT_VELOCITY; // Sweeps CW (up for right flipper)
             return true;
         }
         return false;
@@ -110,10 +114,10 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     @Override
     public boolean onKeyUp(EngineKey keycode) {
         if (isLeft && (keycode == EngineKey.A || keycode == EngineKey.LEFT)) {
-            rotationalVelocity = -512f; // Sweeps CW (down)
+            rotationalVelocity = -LogicConstants.FLIPPER_ROT_VELOCITY; // Sweeps CW (down)
             return true;
         } else if (!isLeft && (keycode == EngineKey.D || keycode == EngineKey.RIGHT)) {
-            rotationalVelocity = 512f; // Sweeps CCW (down for right flipper)
+            rotationalVelocity = LogicConstants.FLIPPER_ROT_VELOCITY; // Sweeps CCW (down for right flipper)
             return true;
         }
         return false;

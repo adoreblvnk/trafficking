@@ -13,17 +13,19 @@ public class TrashEntity extends StaticEntity {
     private final PinballEventBus eventBus;
 
     public TrashEntity(String id, float x, float y, String textureId, PinballEventBus eventBus) {
-        super(id, x, y, 64, 64, 1, 1, 1);
+        super(id, x, y, LogicConstants.TRASH_SIZE, LogicConstants.TRASH_SIZE, 1, 1, 1);
         this.textureId = textureId;
         this.eventBus = eventBus;
-        setCollider(new CircleCollider(x, y, 32));
+        setCollider(new CircleCollider(x, y, LogicConstants.TRASH_RADIUS));
         setCollisionEnabled(true);
         setTag(LogicConstants.TAG_TRASH);
     }
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(textureId, getPosition().getX() - 32, getPosition().getY() - 32, 64, 64);
+        graphics.drawTexture(textureId, getPosition().getX() - LogicConstants.TRASH_RADIUS,
+                getPosition().getY() - LogicConstants.TRASH_RADIUS, LogicConstants.TRASH_SIZE,
+                LogicConstants.TRASH_SIZE);
     }
 
     @Override

@@ -21,14 +21,14 @@ public class Button {
     }
 
     public void render(IEngineContext context) {
-        context.getGraphics().setTextColor(LogicConstants.COLOR_TEXT_DARK_R, LogicConstants.COLOR_TEXT_DARK_G,
-                LogicConstants.COLOR_TEXT_DARK_B, LogicConstants.COLOR_TEXT_A);
+        context.getGraphics().setTextColor(LogicConstants.COLOR_TEXT_DARK[0], LogicConstants.COLOR_TEXT_DARK[1],
+                LogicConstants.COLOR_TEXT_DARK[2], LogicConstants.COLOR_TEXT_DARK[3]);
 
         context.getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, x, y, width, height);
         context.getGraphics().drawTextCentered(text, LogicConstants.FONT_GEIST_BOLD, x, y, width, height);
 
-        context.getGraphics().setTextColor(LogicConstants.COLOR_TEXT_LIGHT_R, LogicConstants.COLOR_TEXT_LIGHT_G,
-                LogicConstants.COLOR_TEXT_LIGHT_B, LogicConstants.COLOR_TEXT_A);
+        context.getGraphics().setTextColor(LogicConstants.COLOR_TEXT_LIGHT[0], LogicConstants.COLOR_TEXT_LIGHT[1],
+                LogicConstants.COLOR_TEXT_LIGHT[2], LogicConstants.COLOR_TEXT_LIGHT[3]);
     }
 
     public boolean handleTouch(int screenX, int screenY, IEngineContext context) {

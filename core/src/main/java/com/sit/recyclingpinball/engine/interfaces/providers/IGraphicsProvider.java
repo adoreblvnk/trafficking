@@ -149,6 +149,22 @@ public interface IGraphicsProvider {
     void end();
 
     /**
+     * Disposes of a previously loaded texture resource.
+     * 
+     * @param texture
+     *            the texture resource object to dispose
+     */
+    void disposeTextureResource(Object texture);
+
+    /**
+     * Disposes of a previously loaded font resource.
+     * 
+     * @param font
+     *            the font resource object to dispose
+     */
+    void disposeFontResource(Object font);
+
+    /**
      * Disposes of native graphics resources.
      */
     void dispose();

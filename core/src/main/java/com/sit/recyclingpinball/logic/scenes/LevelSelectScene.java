@@ -17,18 +17,19 @@ import java.util.List;
 public class LevelSelectScene extends AbstractScene implements InputListener {
     private final SceneManager sceneManager;
     private final List<Button> buttons = new ArrayList<>();
+    private final com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory;
 
-    public LevelSelectScene(IEngineContext context, SceneManager sceneManager) {
-        super(context, new EntityManager(),
-                new CollisionManager(
-                        new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle(0, 0, 1920, 1080)),
-                new InputManager(), new MovementManager());
+    public LevelSelectScene(IEngineContext context, SceneManager sceneManager,
+            com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory, EntityManager entityManager,
+            CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+        super(context, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
+        this.assemblyFactory = assemblyFactory;
 
         float titleBtnW = LogicConstants.UI_BTN_WIDTH_SMALL;
         float titleBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
         float titleBtnX = LogicConstants.UI_CENTER_X - titleBtnW / 2;
-        float titleBtnY = 670;
+        float titleBtnY = LogicConstants.UI_LEVEL_SELECT_TITLE_Y;
         buttons.add(new Button(titleBtnX, titleBtnY, titleBtnW, titleBtnH, LogicConstants.TEXT_LEVEL_SELECT, null));
 
         float btnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
@@ -42,16 +43,17 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         for (int i = 0; i < levelFiles.size(); i++) {
             String path = levelFiles.get(i);
             DataDrivenLevelBlueprint bp = new DataDrivenLevelBlueprint(path, getContext());
-            float btnY = 570 - (i * 90);
+            float btnY = LogicConstants.UI_LEVEL_SELECT_BTN_START_Y - (i * LogicConstants.UI_LEVEL_SELECT_BTN_SPACING);
             buttons.add(new Button(btnX, btnY, btnW, btnH, bp.getLevelName(), () -> {
-                sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                        new DataDrivenLevelBlueprint(path, getContext())));
+                sceneManager.setScene(
+                        this.assemblyFactory.createSimulationScene(new DataDrivenLevelBlueprint(path, getContext())));
             }));
         }
 
-        float backBtnY = 570 - (levelFiles.size() * 90);
+        float backBtnY = LogicConstants.UI_LEVEL_SELECT_BTN_START_Y
+                - (levelFiles.size() * LogicConstants.UI_LEVEL_SELECT_BTN_SPACING);
         buttons.add(new Button(btnX, backBtnY, btnW, btnH, LogicConstants.TEXT_BACK, () -> {
-            sceneManager.setScene(new MenuScene(getContext(), sceneManager));
+            sceneManager.setScene(this.assemblyFactory.createMenuScene());
         }));
     }
 
@@ -62,8 +64,8 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        getContext().getGraphics().clearScreen(LogicConstants.COLOR_BG_R, LogicConstants.COLOR_BG_G,
-                LogicConstants.COLOR_BG_B);
+        getContext().getGraphics().clearScreen(LogicConstants.COLOR_BG[0], LogicConstants.COLOR_BG[1],
+                LogicConstants.COLOR_BG[2]);
         getContext().getGraphics().begin();
 
         // Full-screen dirty beach background
@@ -82,7 +84,7 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     public boolean onKeyDown(EngineKey keycode) {
         if (keycode == EngineKey.ESCAPE) {
             getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
-            sceneManager.setScene(new MenuScene(getContext(), sceneManager));
+            sceneManager.setScene(this.assemblyFactory.createMenuScene());
             return true;
         }
         return false;

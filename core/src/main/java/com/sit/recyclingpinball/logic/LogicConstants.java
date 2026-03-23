@@ -5,15 +5,6 @@ public class LogicConstants {
     public static final String DIR_LEVELS = "levels";
     public static final String PATH_BASE_LEVEL = "levels/base.json";
 
-    // Asset Directories and Extensions
-    public static final String DEFAULT_FONT_PATH = "fonts/Geist-Bold.ttf";
-    public static final String FONTS_DIR = "fonts/";
-    public static final String TEXTURES_DIR = "textures/";
-    public static final String FONT_EXTENSION = ".ttf";
-    public static final String TEXTURE_EXTENSION = ".png";
-    public static final String SOUNDS_DIR = "sounds/";
-    public static final String SOUND_EXTENSION = ".mp3";
-
     // Textures
     public static final String TEX_DIRTY_BEACH = "textures/dirty_beach.png";
     public static final String TEX_BUTTON_RECT_DEPTH_FLAT = "textures/button_rectangle_depth_flat.png";
@@ -26,16 +17,17 @@ public class LogicConstants {
     public static final String TEX_FLIPPER = "textures/flipper.png";
 
     // Sounds
-    public static final String SOUND_CLICK = "click";
-    public static final String SOUND_WIN = "win";
-    public static final String SOUND_LOSE = "lose";
-    public static final String SOUND_STRETCH = "stretch";
-    public static final String SOUND_COLLECT = "collect";
-    public static final String SOUND_FLIP = "flip";
-    public static final String SOUND_BOUNCE = "bounce";
+    public static final String SOUND_CLICK = "sounds/click.mp3";
+    public static final String SOUND_WIN = "sounds/win.mp3";
+    public static final String SOUND_LOSE = "sounds/lose.mp3";
+    public static final String SOUND_STRETCH = "sounds/stretch.mp3";
+    public static final String SOUND_COLLECT = "sounds/collect.mp3";
+    public static final String SOUND_FLIP = "sounds/flip.mp3";
+    public static final String SOUND_BOUNCE = "sounds/bounce.mp3";
 
     // Fonts
     public static final String FONT_GEIST_BOLD = "fonts/Geist-Bold.ttf";
+    public static final int FONT_SIZE_SMALL = 24;
 
     // Tags
     public static final String TAG_PINBALL = "pinball";
@@ -88,27 +80,44 @@ public class LogicConstants {
     public static final float UI_BTN_HEIGHT_DEFAULT = 64f;
     public static final float UI_BTN_HEIGHT_LARGE = 80f;
 
-    // UI Colors
-    public static final float COLOR_BG_R = 0.1f;
-    public static final float COLOR_BG_G = 0.1f;
-    public static final float COLOR_BG_B = 0.1f;
-    public static final float COLOR_SIM_BG_R = 0.8f;
-    public static final float COLOR_SIM_BG_G = 0.9f;
-    public static final float COLOR_SIM_BG_B = 1.0f;
+    public static final float UI_GAME_TEXT_X = 50f;
+    public static final float UI_SCORE_Y = 900f;
+    public static final float UI_BALLS_Y = 850f;
+    public static final float UI_DESC_Y = 800f;
+    public static final float UI_DESC_WIDTH = 300f;
 
-    public static final float COLOR_DIM_R = 0f;
-    public static final float COLOR_DIM_G = 0f;
-    public static final float COLOR_DIM_B = 0f;
+    public static final float UI_STAR_START_X = 60f;
+    public static final float UI_STAR_START_Y = 200f;
+    public static final float UI_STAR_SPACING = 70f;
+    public static final float UI_RESULT_STARS_Y = 480f;
+    public static final float UI_RESULT_SCORE_Y = 470f;
+    public static final float UI_RESULT_SCORE_X = 850f;
+
+    public static final float UI_LEVEL_SELECT_TITLE_Y = 670f;
+    public static final float UI_LEVEL_SELECT_BTN_START_Y = 570f;
+    public static final float UI_LEVEL_SELECT_BTN_SPACING = 90f;
+
+    public static final float UI_MENU_TITLE_Y = 560f;
+    public static final float UI_MENU_START_BTN_Y = 460f;
+    public static final float UI_MENU_QUIT_BTN_Y = 380f;
+
+    public static final float UI_RESULT_TITLE_Y = 600f;
+    public static final float UI_RESULT_MENU_BTN_Y = 370f;
+    public static final float UI_RESULT_RETRY_BTN_Y = 280f;
+
+    public static final float UI_PAUSE_TITLE_Y = 580f;
+    public static final float UI_PAUSE_RESUME_BTN_Y = 490f;
+    public static final float UI_PAUSE_MENU_BTN_Y = 410f;
+
+    // UI Colors (R, G, B) or (R, G, B, A)
+    public static final float[] COLOR_BG = {0.1f, 0.1f, 0.1f};
+    public static final float[] COLOR_SIM_BG = {0.8f, 0.9f, 1.0f};
+    public static final float[] COLOR_DIM = {0f, 0f, 0f};
     public static final float COLOR_DIM_PAUSED_A = 0.6f;
     public static final float COLOR_DIM_OVERLAY_A = 0.7f;
 
-    public static final float COLOR_TEXT_DARK_R = 0.2f;
-    public static final float COLOR_TEXT_DARK_G = 0.15f;
-    public static final float COLOR_TEXT_DARK_B = 0.1f;
-    public static final float COLOR_TEXT_LIGHT_R = 1f;
-    public static final float COLOR_TEXT_LIGHT_G = 1f;
-    public static final float COLOR_TEXT_LIGHT_B = 1f;
-    public static final float COLOR_TEXT_A = 1f;
+    public static final float[] COLOR_TEXT_DARK = {0.2f, 0.15f, 0.1f, 1f};
+    public static final float[] COLOR_TEXT_LIGHT = {1f, 1f, 1f, 1f};
 
     // Entity IDs and Prefixes
     public static final String ID_WALL_PREFIX = "wall_";
@@ -116,9 +125,9 @@ public class LogicConstants {
     public static final String ID_FLIPPER_R_PREFIX = "flipper_r_";
     public static final String ID_SHOOTER_ROD_PREFIX = "shooter_rod_";
     public static final String ID_TRASH_PREFIX = "trash_";
-    public static final String ID_TRASH_PLASTIC = "textures/trash_plastic.png";
-    public static final String ID_TRASH_PAPER = "textures/trash_paper.png";
-    public static final String ID_TRASH_GLASS = "textures/trash_glass.png";
+    public static final String TEX_TRASH_PLASTIC = "textures/trash_plastic.png";
+    public static final String TEX_TRASH_PAPER = "textures/trash_paper.png";
+    public static final String TEX_TRASH_GLASS = "textures/trash_glass.png";
 
     public static final float PINBALL_START_X = 1810f;
     public static final float PINBALL_START_Y = 400f;
@@ -141,7 +150,7 @@ public class LogicConstants {
     public static final String TEXT_TRASH_COLLECTED_SUFFIX = " trash";
     public static final String TEXT_TRASH_DIVIDER = " / ";
 
-    // Common Volume
+    public static final int STARTING_BALLS = 3;
     public static final float VOLUME_DEFAULT = 1.0f;
 
     private LogicConstants() {

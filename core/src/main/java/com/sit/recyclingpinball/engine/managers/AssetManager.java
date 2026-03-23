@@ -12,7 +12,6 @@ import java.util.Map;
  */
 public class AssetManager {
 
-    private static AssetManager instance;
     private IAudioProvider audioProvider;
     private IGraphicsProvider graphicsProvider;
 
@@ -20,19 +19,7 @@ public class AssetManager {
     private final Map<String, Object> loadedTextures = new HashMap<>();
     private final Map<String, Object> loadedFonts = new HashMap<>();
 
-    private AssetManager() {
-    }
-
-    /**
-     * Gets the singleton instance of the AssetManager.
-     *
-     * @return the singleton instance
-     */
-    public static AssetManager getInstance() {
-        if (instance == null) {
-            instance = new AssetManager();
-        }
-        return instance;
+    public AssetManager() {
     }
 
     /**
@@ -47,29 +34,29 @@ public class AssetManager {
     }
 
     /**
-     * Loads a sound and stores it by ID.
+     * Loads a sound and stores it using its path as the ID.
      */
-    public void loadSound(String path, String id) {
-        audioProvider.loadSound(path, id);
+    public void loadSound(String path) {
+        audioProvider.loadSound(path, path);
     }
 
     /**
-     * Loads a texture and stores it by ID.
+     * Loads a texture and stores it using its path as the ID.
      */
-    public void loadTexture(String path, String id) {
+    public void loadTexture(String path) {
         Object texture = graphicsProvider.loadTextureResource(path);
         if (texture != null) {
-            loadedTextures.put(id, texture);
+            loadedTextures.put(path, texture);
         }
     }
 
     /**
-     * Loads a font and stores it by ID.
+     * Loads a font and stores it using its path as the ID.
      */
-    public void loadFont(String path, int size, String id) {
+    public void loadFont(String path, int size) {
         Object font = graphicsProvider.loadFontResource(path, size);
         if (font != null) {
-            loadedFonts.put(id, font);
+            loadedFonts.put(path, font);
         }
     }
 
@@ -85,7 +72,14 @@ public class AssetManager {
      * Disposes of all managed assets to prevent memory leaks.
      */
     public void dispose() {
-        // Implementation will call provider disposals
+        if (graphicsProvider != null) {
+            for (Object texture : loadedTextures.values()) {
+                graphicsProvider.disposeTextureResource(texture);
+            }
+            for (Object font : loadedFonts.values()) {
+                graphicsProvider.disposeFontResource(font);
+            }
+        }
         loadedTextures.clear();
         loadedFonts.clear();
         loadedSounds.clear();

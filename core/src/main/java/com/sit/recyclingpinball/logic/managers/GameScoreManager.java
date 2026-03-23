@@ -8,7 +8,7 @@ import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 
 public class GameScoreManager implements PinballEventVisitor {
     private int score = 0;
-    private int ballsLeft = 3;
+    private int ballsLeft = com.sit.recyclingpinball.logic.LogicConstants.STARTING_BALLS;
     private final int totalTrash;
     private boolean ballInPlay = false;
 
