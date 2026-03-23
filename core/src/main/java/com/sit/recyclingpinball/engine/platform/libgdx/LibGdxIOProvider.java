@@ -2,6 +2,7 @@ package com.sit.recyclingpinball.engine.platform.libgdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.Json;
 import com.sit.recyclingpinball.engine.interfaces.providers.IIOProvider;
 
 import java.util.Optional;
@@ -10,6 +11,7 @@ import java.util.Optional;
  * libGDX implementation of IIOProvider.
  */
 public class LibGdxIOProvider implements IIOProvider {
+    private final Json json = new Json();
 
     @Override
     public Optional<String> readInternalText(String internalPath) {
@@ -46,6 +48,7 @@ public class LibGdxIOProvider implements IIOProvider {
             return false;
         }
     }
+
     @Override
     public java.util.List<String> listInternalFiles(String directory, String extension) {
         java.util.List<String> list = new java.util.ArrayList<>();
@@ -61,6 +64,11 @@ public class LibGdxIOProvider implements IIOProvider {
         } catch (GdxRuntimeException e) {
         }
         return list;
+    }
+
+    @Override
+    public <T> T fromJson(String jsonStr, Class<T> type) {
+        return json.fromJson(type, jsonStr);
     }
 
 }

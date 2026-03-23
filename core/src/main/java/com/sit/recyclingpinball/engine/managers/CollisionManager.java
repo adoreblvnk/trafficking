@@ -1,10 +1,8 @@
 package com.sit.recyclingpinball.engine.managers;
 
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle;
-import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 import com.sit.recyclingpinball.engine.EngineConstants;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
-import com.sit.recyclingpinball.engine.interfaces.Movable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,12 +131,12 @@ public class CollisionManager {
         if (!a.isStatic() && b.isStatic()) {
             a.setPosition(a.getPosition().getX() + pushX, a.getPosition().getY() + pushY);
             if (a.getInverseMass() > 0) {
-                applyBounce((Movable) a, pushX, pushY);
+                a.applyBounce(pushX, pushY);
             }
         } else if (a.isStatic() && !b.isStatic()) {
             b.setPosition(b.getPosition().getX() - pushX, b.getPosition().getY() - pushY);
             if (b.getInverseMass() > 0) {
-                applyBounce((Movable) b, -pushX, -pushY);
+                b.applyBounce(-pushX, -pushY);
             }
         } else if (!a.isStatic() && !b.isStatic()) {
             a.setPosition(a.getPosition().getX() + pushX * EngineConstants.PUSH_OUT_FACTOR,
@@ -147,38 +145,9 @@ public class CollisionManager {
                     b.getPosition().getY() - pushY * EngineConstants.PUSH_OUT_FACTOR);
 
             if (a.getInverseMass() > 0 && b.getInverseMass() > 0) {
-                PlatformVector2 vA = ((Movable) a).getVelocity();
-                PlatformVector2 vB = ((Movable) b).getVelocity();
-
-                if (Math.abs(pushX) > Math.abs(pushY)) {
-                    float temp = vA.getX();
-                    vA.setX(vB.getX() * EngineConstants.DEFAULT_BOUNCE);
-                    vB.setX(temp * EngineConstants.DEFAULT_BOUNCE);
-                } else {
-                    float temp = vA.getY();
-                    vA.setY(vB.getY() * EngineConstants.DEFAULT_BOUNCE);
-                    vB.setY(temp * EngineConstants.DEFAULT_BOUNCE);
-                }
+                a.applyBounce(pushX, pushY);
+                b.applyBounce(-pushX, -pushY);
             }
         }
-    }
-
-    private void applyBounce(Movable movable, float normalX, float normalY) {
-        PlatformVector2 normal = new PlatformVector2(normalX, normalY);
-        if (normal.len2() == 0f) {
-            return;
-        }
-
-        normal.nor();
-
-        PlatformVector2 velocity = movable.getVelocity();
-        float speedAlongNormal = velocity.dot(normal);
-
-        if (speedAlongNormal >= 0f) {
-            return;
-        }
-
-        float restitution = EngineConstants.DEFAULT_BOUNCE;
-        velocity.sub(normal.scl((1f + restitution) * speedAlongNormal));
     }
 }

@@ -1,0 +1,42 @@
+{
+  "name": "Level 2: Trash Obstacles",
+  "text": "Keep the earth clean!\\nSorting trash saves wildlife.",
+  "slantedWall": [
+    {
+      "x": 900.0,
+      "y": 400.0,
+      "width": 200.0,
+      "height": 15.0,
+      "rotation": 15.0
+    },
+    {
+      "x": 1200.0,
+      "y": 600.0,
+      "width": 200.0,
+      "height": 15.0,
+      "rotation": -25.0
+    }
+  ],
+  "trash": [
+    {
+      "type": "PLASTIC",
+      "x": 700.0,
+      "y": 500.0
+    },
+    {
+      "type": "PAPER",
+      "x": 1400.0,
+      "y": 500.0
+    },
+    {
+      "type": "GLASS",
+      "x": 1000.0,
+      "y": 900.0
+    },
+    {
+      "type": "PLASTIC",
+      "x": 1200.0,
+      "y": 800.0
+    }
+  ]
+}

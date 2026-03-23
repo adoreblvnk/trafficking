@@ -17,6 +17,7 @@ public interface ICollidable {
     void onCollision(ICollidable other);
     float getInverseMass();
     String getTag();
+    void applyBounce(float normalX, float normalY);
 
     /**
      * Resolves a collision with a dynamic entity using double dispatch. Overridden

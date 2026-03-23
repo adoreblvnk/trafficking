@@ -92,4 +92,24 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     public boolean isTrigger() {
         return false;
     }
+
+    @Override
+    public void applyBounce(float normalX, float normalY) {
+        PlatformVector2 normal = new PlatformVector2(normalX, normalY);
+        if (normal.len2() == 0f) {
+            return;
+        }
+
+        normal.nor();
+
+        PlatformVector2 velocity = getVelocity();
+        float speedAlongNormal = velocity.dot(normal);
+
+        if (speedAlongNormal >= 0f) {
+            return;
+        }
+
+        float restitution = EngineConstants.DEFAULT_BOUNCE;
+        velocity.sub(normal.scl((1f + restitution) * speedAlongNormal));
+    }
 }

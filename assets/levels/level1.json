@@ -1,0 +1,9 @@
+{
+  "name": "Level 1: The Basics",
+  "text": "Keep the earth clean!\\nRecycle plastic, paper, and glass.",
+  "trash": [
+    {"type": "PLASTIC", "x": 800.0, "y": 600.0},
+    {"type": "PAPER", "x": 1200.0, "y": 700.0},
+    {"type": "GLASS", "x": 1000.0, "y": 800.0}
+  ]
+}

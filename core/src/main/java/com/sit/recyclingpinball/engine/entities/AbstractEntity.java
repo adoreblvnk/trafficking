@@ -208,4 +208,9 @@ public abstract class AbstractEntity implements ICollidable {
             collisionListener.onCollide(this, other);
         }
     }
+
+    @Override
+    public void applyBounce(float normalX, float normalY) {
+        // Default empty implementation, meant to be overridden by dynamic entities.
+    }
 }

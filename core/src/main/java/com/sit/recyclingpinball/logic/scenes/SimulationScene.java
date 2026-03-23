@@ -81,14 +81,6 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
                 LogicConstants.PINBALL_START_Y, eventBus);
         getEntityManager().addEntity(pinball);
         getInputManager().addListener(pinball);
-
-        pinball.setCollisionListener((a, b) -> {
-            if (LogicConstants.TAG_TRASH.equals(b.getTag())) {
-                TrashEntity t = (TrashEntity) b;
-                eventBus.post(new TrashCollectedEvent(t.getType()));
-                getEntityManager().removeEntity(t.getId());
-            }
-        });
     }
 
     @Override
@@ -111,6 +103,11 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
             pinball.setVelocity(0, 0);
             pinball.setState(new com.sit.recyclingpinball.logic.states.InPlayState());
         }
+    }
+
+    @Override
+    public void visit(TrashCollectedEvent event) {
+        getEntityManager().removeEntity(event.getEntityId());
     }
 
     @Override

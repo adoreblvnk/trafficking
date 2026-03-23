@@ -38,4 +38,17 @@ public interface IIOProvider {
     boolean writeLocalText(String localPath, String data);
 
     java.util.List<String> listInternalFiles(String directory, String extension);
+
+    /**
+     * Deserializes a JSON string into an object of the specified class.
+     *
+     * @param json
+     *            the JSON string
+     * @param type
+     *            the class type
+     * @param <T>
+     *            the type parameter
+     * @return the deserialized object
+     */
+    <T> T fromJson(String json, Class<T> type);
 }

@@ -39,8 +39,8 @@ public class BoardBuilder {
         return this;
     }
 
-    public BoardBuilder addTrash(TrashType type, float x, float y) {
-        layout.addTrash(TrashFactory.createTrash(type, x, y));
+    public BoardBuilder addTrash(TrashType type, float x, float y, PinballEventBus eventBus) {
+        layout.addTrash(TrashFactory.createTrash(type, x, y, eventBus));
         return this;
     }
 
