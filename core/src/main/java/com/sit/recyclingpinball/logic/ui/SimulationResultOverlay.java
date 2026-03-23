@@ -95,8 +95,7 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         // We'll leave the score text non-centered or we could center it if we calculate
         // width.
         getContext().getGraphics().drawText(
-                LogicConstants.TEXT_TRASH_COLLECTED_PREFIX + score + LogicConstants.TEXT_TRASH_DIVIDER + totalTrash
-                        + LogicConstants.TEXT_TRASH_COLLECTED_SUFFIX,
+                LogicConstants.TEXT_TRASH_COLLECTED_PREFIX + score + LogicConstants.TEXT_TRASH_DIVIDER + totalTrash,
                 LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_RESULT_SCORE_POS[0],
                 LogicConstants.UI_RESULT_SCORE_POS[1]);
 

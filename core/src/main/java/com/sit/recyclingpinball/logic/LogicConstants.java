@@ -143,4 +143,8 @@ public class LogicConstants {
     public static final String TEXT_MAIN_MENU = "Main Menu";
     public static final String TEXT_RETRY = "Retry";
     public static final String TEXT_BACK = "Back";
+    public static final String TEXT_SCORE_PREFIX = "Score: ";
+    public static final String TEXT_BALLS_PREFIX = "Balls: ";
+    public static final String TEXT_TRASH_COLLECTED_PREFIX = "Collected: ";
+    public static final String TEXT_TRASH_DIVIDER = " / ";
 }
