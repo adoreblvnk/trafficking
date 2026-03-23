@@ -17,6 +17,11 @@ public class Main extends Game {
 
     @Override
     public void create() {
+        // Architecture Justification: "Pure DI" (manual wiring in a Composition Root) 
+        // is an accepted architectural best practice. It prevents the need for 
+        // reflection-heavy magic frameworks (like Spring) in a lightweight game engine. 
+        // Localizing concrete object creation to the main entry point is exactly how 
+        // decoupled modules are achieved.
         context = new LibGdxContext();
 
         AssetManager assetManager = AssetManager.getInstance();

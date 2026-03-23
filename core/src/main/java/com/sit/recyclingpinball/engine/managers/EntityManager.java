@@ -11,10 +11,22 @@ import com.sit.recyclingpinball.engine.entities.AbstractEntity;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 
 /**
- * Registry for game entities providing lifecycle management and ordered
- * rendering. Maintains thread-safe concurrent access for entity modifications
- * during iteration. No longer directly depends on libGDX (uses
- * IGraphicsProvider instead of ShapeRenderer).
+ * Registry for game entities providing lifecycle management and ordered rendering.
+ *
+ * This manager maintains a registry of all active game entities, providing efficient
+ * lookup by ID and supporting Z-index based rendering. It serves as the central
+ * repository for entity lifecycle within the game engine.
+ *
+ * Architecture Justification:
+ * The use of thread-safe concurrent collections (ConcurrentHashMap, CopyOnWriteArrayList)
+ * is a deliberate design decision. While the current simulation is single-threaded,
+ * these structures provide robust defensive programming for a generic, reusable engine.
+ * This architecture facilitates future scalability, allowing for parallelized update
+ * loops or asynchronous entity modifications without risking 
+ * ConcurrentModificationException.
+ *
+ * @see com.sit.recyclingpinball.engine.entities.AbstractEntity
+ * @see com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider
  */
 public class EntityManager {
 
