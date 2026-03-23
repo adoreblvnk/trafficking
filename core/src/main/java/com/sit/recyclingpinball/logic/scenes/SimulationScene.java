@@ -78,8 +78,8 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
             // EntityManager
         }
 
-        pinball = new PinballEntity(LogicConstants.TAG_PINBALL, LogicConstants.PINBALL_START_X,
-                LogicConstants.PINBALL_START_Y, eventBus, assemblyFactory);
+        pinball = new PinballEntity(LogicConstants.TAG_PINBALL, LogicConstants.PINBALL_START[0],
+                LogicConstants.PINBALL_START[1], eventBus, assemblyFactory);
         getEntityManager().addEntity(pinball);
         getInputManager().addListener(pinball);
     }
@@ -100,7 +100,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     public void visit(BallDrainedEvent event) {
         if (scoreManager.getBallsLeft() > 0) {
             // Respawn logic
-            pinball.setPosition(LogicConstants.PINBALL_START_X, LogicConstants.PINBALL_START_Y);
+            pinball.setPosition(LogicConstants.PINBALL_START[0], LogicConstants.PINBALL_START[1]);
             pinball.setVelocity(0, 0);
             pinball.setState(assemblyFactory.createInPlayState());
         }
@@ -117,8 +117,8 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
                 LogicConstants.COLOR_SIM_BG[2]);
 
         // 1. Draw Background
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_BEACH_BACKGROUND, 0, 0, LogicConstants.SCENE_WIDTH,
-                LogicConstants.SCENE_HEIGHT);
+        getContext().getGraphics().drawTexture(LogicConstants.TEX_BEACH_BACKGROUND, 0, 0, LogicConstants.SCENE_SIZE[0],
+                LogicConstants.SCENE_SIZE[1]);
         getContext().getGraphics().end();
 
         // 2. Draw Game Entities (Walls, Flippers, Trash, Pinball)
@@ -126,21 +126,21 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         getContext().getGraphics().end();
 
         // 3. Draw UI Overlay
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_UI_PANEL_BG, 0, 0, 400, LogicConstants.SCENE_HEIGHT);
+        getContext().getGraphics().drawTexture(LogicConstants.TEX_UI_PANEL_BG, 0, 0, 400, LogicConstants.SCENE_SIZE[1]);
         getContext().getGraphics().drawText(LogicConstants.TEXT_SCORE_PREFIX + scoreManager.getScore(),
-                LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_GAME_TEXT_X, LogicConstants.UI_SCORE_Y);
+                LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_SCORE_POS[0], LogicConstants.UI_SCORE_POS[1]);
         getContext().getGraphics().drawText(LogicConstants.TEXT_BALLS_PREFIX + scoreManager.getBallsLeft(),
-                LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_GAME_TEXT_X, LogicConstants.UI_BALLS_Y);
+                LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_BALLS_POS[0], LogicConstants.UI_BALLS_POS[1]);
         getContext().getGraphics().drawText(blueprint.getText(), LogicConstants.FONT_GEIST_BOLD,
-                LogicConstants.UI_GAME_TEXT_X, LogicConstants.UI_DESC_Y, LogicConstants.UI_DESC_WIDTH);
+                LogicConstants.UI_DESC_POS[0], LogicConstants.UI_DESC_POS[1], LogicConstants.UI_DESC_WIDTH);
 
         // 4. Draw star icons for collected trash
         int collected = scoreManager.getScore();
         for (int i = 0; i < totalTrash; i++) {
             int row = i / 4;
             int col = i % 4;
-            float starX = LogicConstants.UI_STAR_START_X + col * LogicConstants.UI_STAR_SPACING;
-            float starY = LogicConstants.UI_STAR_START_Y - row * LogicConstants.UI_STAR_SPACING;
+            float starX = LogicConstants.UI_STAR_START[0] + col * LogicConstants.UI_STAR_SPACING;
+            float starY = LogicConstants.UI_STAR_START[1] - row * LogicConstants.UI_STAR_SPACING;
             if (i < collected) {
                 getContext().getGraphics().drawTexture(LogicConstants.TEX_STAR, starX, starY, 64, 60);
             } else {

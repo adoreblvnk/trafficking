@@ -22,7 +22,7 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     }
 
     public FlipperEntity(String id, float x, float y, boolean isLeft) {
-        super(id, x, y, LogicConstants.FLIPPER_WIDTH, LogicConstants.FLIPPER_HEIGHT);
+        super(id, x, y, LogicConstants.FLIPPER_SIZE[0], LogicConstants.FLIPPER_SIZE[1]);
         this.isLeft = isLeft;
         this.textureId = LogicConstants.TEX_FLIPPER;
 
@@ -43,8 +43,8 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
         // degrees,
         // it naturally mirrors the left one, setting its hinge perfectly to the right
         // side of its bounds!
-        setCollider(new OBBCollider(x, y, LogicConstants.FLIPPER_WIDTH, LogicConstants.FLIPPER_HEIGHT,
-                LogicConstants.FLIPPER_PIVOT_X, LogicConstants.FLIPPER_PIVOT_Y, currentAngle));
+        setCollider(new OBBCollider(x, y, LogicConstants.FLIPPER_SIZE[0], LogicConstants.FLIPPER_SIZE[1],
+                LogicConstants.FLIPPER_PIVOT[0], LogicConstants.FLIPPER_PIVOT[1], currentAngle));
         setCollisionEnabled(true);
         setTag(LogicConstants.TAG_FLIPPER);
     }
@@ -84,15 +84,15 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
         float rotVel = getRotationalVelocity();
         if (rotVel != 0) {
             // Boost ball upwards if flipper is moving
-            entity.getVelocity().setY(entity.getVelocity().getY() + Math.abs(rotVel) * LogicConstants.FLIPPER_BOOST_Y);
-            entity.getVelocity().setX(entity.getVelocity().getX() + rotVel * LogicConstants.FLIPPER_BOOST_X);
+            entity.getVelocity().setY(entity.getVelocity().getY() + Math.abs(rotVel) * LogicConstants.FLIPPER_BOOST[1]);
+            entity.getVelocity().setX(entity.getVelocity().getX() + rotVel * LogicConstants.FLIPPER_BOOST[0]);
         }
     }
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(textureId, getPosition().getX(), getPosition().getY(), LogicConstants.FLIPPER_WIDTH,
-                LogicConstants.FLIPPER_HEIGHT, LogicConstants.FLIPPER_PIVOT_X, LogicConstants.FLIPPER_PIVOT_Y,
+        graphics.drawTexture(textureId, getPosition().getX(), getPosition().getY(), LogicConstants.FLIPPER_SIZE[0],
+                LogicConstants.FLIPPER_SIZE[1], LogicConstants.FLIPPER_PIVOT[0], LogicConstants.FLIPPER_PIVOT[1],
                 currentAngle);
     }
 

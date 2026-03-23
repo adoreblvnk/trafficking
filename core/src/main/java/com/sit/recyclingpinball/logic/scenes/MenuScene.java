@@ -21,23 +21,23 @@ public class MenuScene extends AbstractScene implements InputListener {
 
         float titleBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
         float titleBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
-        float titleBtnX = LogicConstants.UI_CENTER_X - titleBtnW / 2;
-        float titleBtnY = LogicConstants.UI_MENU_TITLE_Y;
+        float titleBtnX = LogicConstants.UI_MENU_TITLE_POS[0] - titleBtnW / 2;
+        float titleBtnY = LogicConstants.UI_MENU_TITLE_POS[1];
         buttons.add(
                 new Button(titleBtnX, titleBtnY, titleBtnW, titleBtnH, LogicConstants.TEXT_RECYCLING_PINBALL, null));
 
         float startBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
         float startBtnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
-        float startBtnX = LogicConstants.UI_CENTER_X - startBtnW / 2;
-        float startBtnY = LogicConstants.UI_MENU_START_BTN_Y;
+        float startBtnX = LogicConstants.UI_MENU_START_BTN_POS[0] - startBtnW / 2;
+        float startBtnY = LogicConstants.UI_MENU_START_BTN_POS[1];
         buttons.add(new Button(startBtnX, startBtnY, startBtnW, startBtnH, LogicConstants.TEXT_START_GAME, () -> {
             sceneManager.setScene(assemblyFactory.createLevelSelectScene());
         }));
 
         float quitBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
         float quitBtnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
-        float quitBtnX = LogicConstants.UI_CENTER_X - quitBtnW / 2;
-        float quitBtnY = LogicConstants.UI_MENU_QUIT_BTN_Y;
+        float quitBtnX = LogicConstants.UI_MENU_QUIT_BTN_POS[0] - quitBtnW / 2;
+        float quitBtnY = LogicConstants.UI_MENU_QUIT_BTN_POS[1];
         buttons.add(new Button(quitBtnX, quitBtnY, quitBtnW, quitBtnH, LogicConstants.TEXT_QUIT, () -> {
             getContext().exit();
         }));
@@ -55,8 +55,8 @@ public class MenuScene extends AbstractScene implements InputListener {
         getContext().getGraphics().begin();
 
         // Full-screen dirty beach background
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_WIDTH,
-                LogicConstants.SCENE_HEIGHT);
+        getContext().getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_SIZE[0],
+                LogicConstants.SCENE_SIZE[1]);
 
         for (Button button : buttons) {
             button.render(getContext());

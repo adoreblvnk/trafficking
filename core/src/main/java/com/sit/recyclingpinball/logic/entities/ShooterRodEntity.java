@@ -21,8 +21,8 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     private float launchVelocity;
 
     public ShooterRodEntity(String id, float x, float y, PinballEventBus eventBus) {
-        super(id, x, y, LogicConstants.SHOOTER_WIDTH, LogicConstants.SHOOTER_HEIGHT);
-        setCollider(new BoxCollider(x, y, LogicConstants.SHOOTER_WIDTH, LogicConstants.SHOOTER_HEIGHT));
+        super(id, x, y, LogicConstants.SHOOTER_SIZE[0], LogicConstants.SHOOTER_SIZE[1]);
+        setCollider(new BoxCollider(x, y, LogicConstants.SHOOTER_SIZE[0], LogicConstants.SHOOTER_SIZE[1]));
         this.anchorY = y;
         this.eventBus = eventBus;
         this.shaftTextureId = LogicConstants.TEX_SLIDE_VERTICAL_GREY;
@@ -38,7 +38,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
             entity.getVelocity().setY(0);
             entity.getVelocity().setX(0);
 
-            float rodTop = getPosition().getY() + LogicConstants.SHOOTER_HEIGHT + LogicConstants.PINBALL_RADIUS;
+            float rodTop = getPosition().getY() + LogicConstants.SHOOTER_SIZE[1] + (LogicConstants.PINBALL_SIZE / 2f);
 
             if (entity.getPosition().getY() <= rodTop + 2f) {
                 entity.setPosition(entity.getPosition().getX(), rodTop);
@@ -52,16 +52,17 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     public void render(IGraphicsProvider graphics) {
         // Draw the shaft at the bottom, and the knob extending upwards (where the ball
         // sits)
-        graphics.drawTexture(shaftTextureId, getPosition().getX() + LogicConstants.SHOOTER_SHAFT_OFFSET_X,
-                getPosition().getY(), LogicConstants.SHOOTER_SHAFT_WIDTH, LogicConstants.SHOOTER_SHAFT_HEIGHT);
-        graphics.drawTexture(knobTextureId, getPosition().getX(),
-                getPosition().getY() + LogicConstants.SHOOTER_KNOB_OFFSET_Y, LogicConstants.SHOOTER_KNOB_SIZE,
+        graphics.drawTexture(shaftTextureId, getPosition().getX() + LogicConstants.SHOOTER_SHAFT_OFFSET[0],
+                getPosition().getY() + LogicConstants.SHOOTER_SHAFT_OFFSET[1], LogicConstants.SHOOTER_SHAFT_SIZE[0],
+                LogicConstants.SHOOTER_SHAFT_SIZE[1]);
+        graphics.drawTexture(knobTextureId, getPosition().getX() + LogicConstants.SHOOTER_KNOB_OFFSET[0],
+                getPosition().getY() + LogicConstants.SHOOTER_KNOB_OFFSET[1], LogicConstants.SHOOTER_KNOB_SIZE,
                 LogicConstants.SHOOTER_KNOB_SIZE);
     }
 
     @Override
     public boolean onTouchDown(int x, int y, int ptr, int btn) {
-        float touchY = LogicConstants.SCENE_HEIGHT - y;
+        float touchY = LogicConstants.SCENE_SIZE[1] - y;
         if (getCollider() != null && getCollider().contains(x, touchY)) {
             isDragging = true;
             return true;
@@ -72,7 +73,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     @Override
     public boolean onDrag(int x, int y, int ptr) {
         if (isDragging) {
-            float touchY = LogicConstants.SCENE_HEIGHT - y;
+            float touchY = LogicConstants.SCENE_SIZE[1] - y;
             float newY = Math.max(anchorY - LogicConstants.SHOOTER_MAX_PULL, touchY);
             // Additionally clamp it to not go above anchorY, though prompt doesn't
             // explicitly say for onDrag,

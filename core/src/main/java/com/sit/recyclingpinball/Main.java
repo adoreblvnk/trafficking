@@ -33,10 +33,7 @@ public class Main extends Game {
         assetManager.initialize(context.getAudio(), context.getGraphics());
 
         // Load Sounds
-        String[] sounds = {LogicConstants.SOUND_CLICK, LogicConstants.SOUND_COLLECT, LogicConstants.SOUND_LOSE,
-                LogicConstants.SOUND_WIN, LogicConstants.SOUND_BOUNCE, LogicConstants.SOUND_FLIP,
-                LogicConstants.SOUND_STRETCH};
-        for (String sound : sounds) {
+        for (String sound : LogicConstants.SOUND_ASSETS) {
             assetManager.loadSound(sound);
         }
 
@@ -44,12 +41,7 @@ public class Main extends Game {
         assetManager.loadFont(LogicConstants.FONT_GEIST_BOLD, LogicConstants.FONT_SIZE_SMALL);
 
         // Load Textures
-        String[] textures = {LogicConstants.TEX_DIRTY_BEACH, LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT,
-                LogicConstants.TEX_BEACH_BACKGROUND, LogicConstants.TEX_UI_PANEL_BG, LogicConstants.TEX_STAR,
-                LogicConstants.TEX_PINBALL_DEFAULT, LogicConstants.TEX_SLIDE_VERTICAL_GREY,
-                LogicConstants.TEX_BALL_BLUE_LARGE, LogicConstants.TEX_FLIPPER, LogicConstants.TEX_TRASH_PLASTIC,
-                LogicConstants.TEX_TRASH_PAPER, LogicConstants.TEX_TRASH_GLASS};
-        for (String texture : textures) {
+        for (String texture : LogicConstants.TEXTURE_ASSETS) {
             assetManager.loadTexture(texture);
         }
 

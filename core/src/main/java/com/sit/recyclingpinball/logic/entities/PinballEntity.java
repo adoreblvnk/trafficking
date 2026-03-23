@@ -22,7 +22,7 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
     public PinballEntity(String id, float x, float y, PinballEventBus eventBus,
             com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory) {
         super(id, x, y, LogicConstants.PINBALL_SIZE, LogicConstants.PINBALL_SIZE);
-        setCollider(new CircleCollider(x, y, LogicConstants.PINBALL_RADIUS));
+        setCollider(new CircleCollider(x, y, LogicConstants.PINBALL_SIZE / 2f));
         this.eventBus = eventBus;
         this.assemblyFactory = assemblyFactory;
         this.currentState = assemblyFactory.createInPlayState(); // Start in play state to allow falling onto shooter
@@ -53,8 +53,8 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(LogicConstants.TEX_PINBALL_DEFAULT, getPosition().getX() - LogicConstants.PINBALL_RADIUS,
-                getPosition().getY() - LogicConstants.PINBALL_RADIUS, LogicConstants.PINBALL_SIZE,
+        graphics.drawTexture(LogicConstants.TEX_PINBALL_DEFAULT, getPosition().getX() - (LogicConstants.PINBALL_SIZE / 2f),
+                getPosition().getY() - (LogicConstants.PINBALL_SIZE / 2f), LogicConstants.PINBALL_SIZE,
                 LogicConstants.PINBALL_SIZE);
     }
 

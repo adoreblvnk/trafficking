@@ -16,15 +16,15 @@ public class TrashEntity extends StaticEntity {
         super(id, x, y, LogicConstants.TRASH_SIZE, LogicConstants.TRASH_SIZE, 1, 1, 1);
         this.textureId = textureId;
         this.eventBus = eventBus;
-        setCollider(new CircleCollider(x, y, LogicConstants.TRASH_RADIUS));
+        setCollider(new CircleCollider(x, y, LogicConstants.TRASH_SIZE / 2f));
         setCollisionEnabled(true);
         setTag(LogicConstants.TAG_TRASH);
     }
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(textureId, getPosition().getX() - LogicConstants.TRASH_RADIUS,
-                getPosition().getY() - LogicConstants.TRASH_RADIUS, LogicConstants.TRASH_SIZE,
+        graphics.drawTexture(textureId, getPosition().getX() - (LogicConstants.TRASH_SIZE / 2f),
+                getPosition().getY() - (LogicConstants.TRASH_SIZE / 2f), LogicConstants.TRASH_SIZE,
                 LogicConstants.TRASH_SIZE);
     }
 

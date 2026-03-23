@@ -28,13 +28,13 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
 
         float titleBtnW = LogicConstants.UI_BTN_WIDTH_SMALL;
         float titleBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
-        float titleBtnX = LogicConstants.UI_CENTER_X - titleBtnW / 2;
-        float titleBtnY = LogicConstants.UI_LEVEL_SELECT_TITLE_Y;
+        float titleBtnX = LogicConstants.UI_LEVEL_SELECT_TITLE_POS[0] - titleBtnW / 2;
+        float titleBtnY = LogicConstants.UI_LEVEL_SELECT_TITLE_POS[1];
         buttons.add(new Button(titleBtnX, titleBtnY, titleBtnW, titleBtnH, LogicConstants.TEXT_LEVEL_SELECT, null));
 
         float btnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
         float btnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
-        float btnX = LogicConstants.UI_CENTER_X - btnW / 2;
+        float btnX = LogicConstants.UI_LEVEL_SELECT_BTN_START_POS[0] - btnW / 2;
 
         java.util.List<String> levelFiles = getContext().getIO().listInternalFiles(LogicConstants.DIR_LEVELS, ".json");
         levelFiles.remove(LogicConstants.PATH_BASE_LEVEL);
@@ -43,14 +43,15 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         for (int i = 0; i < levelFiles.size(); i++) {
             String path = levelFiles.get(i);
             DataDrivenLevelBlueprint bp = new DataDrivenLevelBlueprint(path, getContext());
-            float btnY = LogicConstants.UI_LEVEL_SELECT_BTN_START_Y - (i * LogicConstants.UI_LEVEL_SELECT_BTN_SPACING);
+            float btnY = LogicConstants.UI_LEVEL_SELECT_BTN_START_POS[1]
+                    - (i * LogicConstants.UI_LEVEL_SELECT_BTN_SPACING);
             buttons.add(new Button(btnX, btnY, btnW, btnH, bp.getLevelName(), () -> {
                 sceneManager.setScene(
                         this.assemblyFactory.createSimulationScene(new DataDrivenLevelBlueprint(path, getContext())));
             }));
         }
 
-        float backBtnY = LogicConstants.UI_LEVEL_SELECT_BTN_START_Y
+        float backBtnY = LogicConstants.UI_LEVEL_SELECT_BTN_START_POS[1]
                 - (levelFiles.size() * LogicConstants.UI_LEVEL_SELECT_BTN_SPACING);
         buttons.add(new Button(btnX, backBtnY, btnW, btnH, LogicConstants.TEXT_BACK, () -> {
             sceneManager.setScene(this.assemblyFactory.createMenuScene());
@@ -69,8 +70,8 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         getContext().getGraphics().begin();
 
         // Full-screen dirty beach background
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_WIDTH,
-                LogicConstants.SCENE_HEIGHT);
+        getContext().getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_SIZE[0],
+                LogicConstants.SCENE_SIZE[1]);
 
         for (Button button : buttons) {
             button.render(getContext());

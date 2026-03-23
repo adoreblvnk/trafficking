@@ -28,20 +28,20 @@ public class PauseOverlay extends AbstractScene implements InputListener {
 
         float pauseBtnW = LogicConstants.UI_BTN_WIDTH_SMALL;
         float pauseBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
-        float pauseBtnX = LogicConstants.UI_CENTER_X - pauseBtnW / 2;
-        float pauseBtnY = LogicConstants.UI_PAUSE_TITLE_Y;
+        float pauseBtnX = LogicConstants.UI_PAUSE_TITLE_POS[0] - pauseBtnW / 2;
+        float pauseBtnY = LogicConstants.UI_PAUSE_TITLE_POS[1];
         buttons.add(new Button(pauseBtnX, pauseBtnY, pauseBtnW, pauseBtnH, LogicConstants.TEXT_PAUSED, null));
 
         float btnW = LogicConstants.UI_BTN_WIDTH_SMALL;
         float btnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
-        float btnX = LogicConstants.UI_CENTER_X - btnW / 2;
+        float btnX = LogicConstants.UI_PAUSE_RESUME_BTN_POS[0] - btnW / 2;
 
-        buttons.add(
-                new Button(btnX, LogicConstants.UI_PAUSE_RESUME_BTN_Y, btnW, btnH, LogicConstants.TEXT_RESUME, () -> {
+        buttons.add(new Button(btnX, LogicConstants.UI_PAUSE_RESUME_BTN_POS[1], btnW, btnH, LogicConstants.TEXT_RESUME,
+                () -> {
                     sceneManager.popScene();
                 }));
-        buttons.add(
-                new Button(btnX, LogicConstants.UI_PAUSE_MENU_BTN_Y, btnW, btnH, LogicConstants.TEXT_MAIN_MENU, () -> {
+        buttons.add(new Button(btnX, LogicConstants.UI_PAUSE_MENU_BTN_POS[1], btnW, btnH, LogicConstants.TEXT_MAIN_MENU,
+                () -> {
                     sceneManager.setScene(assemblyFactory.createMenuScene());
                 }));
     }
@@ -61,7 +61,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
         getContext().getGraphics().begin();
         // 60% opacity — dark enough to communicate "paused", light enough to see game
         // state.
-        getContext().getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_WIDTH, LogicConstants.SCENE_HEIGHT,
+        getContext().getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_SIZE[0], LogicConstants.SCENE_SIZE[1],
                 LogicConstants.COLOR_DIM[0], LogicConstants.COLOR_DIM[1], LogicConstants.COLOR_DIM[2],
                 LogicConstants.COLOR_DIM_PAUSED_A);
 

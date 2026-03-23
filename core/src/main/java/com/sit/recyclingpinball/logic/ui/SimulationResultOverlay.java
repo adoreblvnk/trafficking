@@ -32,19 +32,19 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         String text = isWin ? LogicConstants.TEXT_YOU_WIN : LogicConstants.TEXT_GAME_OVER;
         float titleBtnW = LogicConstants.UI_BTN_WIDTH_SMALL;
         float titleBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
-        float titleBtnX = LogicConstants.UI_CENTER_X - titleBtnW / 2;
-        float titleBtnY = LogicConstants.UI_RESULT_TITLE_Y - titleBtnH / 2;
+        float titleBtnX = LogicConstants.UI_RESULT_TITLE_POS[0] - titleBtnW / 2;
+        float titleBtnY = LogicConstants.UI_RESULT_TITLE_POS[1] - titleBtnH / 2;
         buttons.add(new Button(titleBtnX, titleBtnY, titleBtnW, titleBtnH, text, null));
 
         float retBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
         float retBtnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
-        float retBtnX = LogicConstants.UI_CENTER_X - retBtnW / 2;
-        float retBtnY = LogicConstants.UI_RESULT_MENU_BTN_Y;
+        float retBtnX = LogicConstants.UI_RESULT_MENU_BTN_POS[0] - retBtnW / 2;
+        float retBtnY = LogicConstants.UI_RESULT_MENU_BTN_POS[1];
         buttons.add(new Button(retBtnX, retBtnY, retBtnW, retBtnH, LogicConstants.TEXT_MAIN_MENU, () -> {
             sceneManager.setScene(assemblyFactory.createMenuScene());
         }));
 
-        float retryBtnY = LogicConstants.UI_RESULT_RETRY_BTN_Y;
+        float retryBtnY = LogicConstants.UI_RESULT_RETRY_BTN_POS[1];
         buttons.add(new Button(retBtnX, retryBtnY, retBtnW, retBtnH, LogicConstants.TEXT_RETRY, () -> {
             sceneManager.setScene(assemblyFactory.createSimulationScene(blueprint));
         }));
@@ -68,7 +68,7 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
     public void render() {
         getContext().getGraphics().begin();
         // Semi-transparent dark backdrop
-        getContext().getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_WIDTH, LogicConstants.SCENE_HEIGHT,
+        getContext().getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_SIZE[0], LogicConstants.SCENE_SIZE[1],
                 LogicConstants.COLOR_DIM[0], LogicConstants.COLOR_DIM[1], LogicConstants.COLOR_DIM[2],
                 LogicConstants.COLOR_DIM_OVERLAY_A);
 
@@ -77,8 +77,9 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         }
 
         // Star icons showing collected trash
-        float starsStartX = LogicConstants.UI_CENTER_X - (totalTrash * LogicConstants.UI_STAR_SPACING) / 2.0f;
-        float starsY = LogicConstants.UI_RESULT_STARS_Y;
+        float starsStartX = LogicConstants.UI_RESULT_STARS_POS[0]
+                - (totalTrash * LogicConstants.UI_STAR_SPACING) / 2.0f;
+        float starsY = LogicConstants.UI_RESULT_STARS_POS[1];
         for (int i = 0; i < totalTrash; i++) {
             float starX = starsStartX + i * LogicConstants.UI_STAR_SPACING;
             if (i < score) {
@@ -96,7 +97,8 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         getContext().getGraphics().drawText(
                 LogicConstants.TEXT_TRASH_COLLECTED_PREFIX + score + LogicConstants.TEXT_TRASH_DIVIDER + totalTrash
                         + LogicConstants.TEXT_TRASH_COLLECTED_SUFFIX,
-                LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_RESULT_SCORE_X, LogicConstants.UI_RESULT_SCORE_Y);
+                LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_RESULT_SCORE_POS[0],
+                LogicConstants.UI_RESULT_SCORE_POS[1]);
 
         getContext().getGraphics().end();
     }
