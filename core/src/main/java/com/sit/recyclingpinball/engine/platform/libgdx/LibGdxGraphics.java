@@ -23,6 +23,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
     private final SpriteBatch spriteBatch;
     private boolean isShapeBatchOpen = false;
     private boolean isSpriteBatchOpen = false;
+    private boolean isDisposed = false;
     private final AssetManager assetManager;
 
     public LibGdxGraphics(AssetManager assetManager) {
@@ -280,10 +281,15 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void dispose() {
+        if (isDisposed) {
+            return;
+        }
+
         try {
             end();
             shapeRenderer.dispose();
             spriteBatch.dispose();
+            isDisposed = true;
         } catch (Exception e) {
             Gdx.app.error("LibGdxGraphics", "Failed to dispose resources", e);
         }

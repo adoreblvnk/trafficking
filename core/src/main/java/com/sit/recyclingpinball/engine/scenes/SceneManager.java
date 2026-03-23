@@ -96,7 +96,6 @@ public class SceneManager {
         while (!sceneStack.isEmpty()) {
             popScene();
         }
-        context.dispose();
     }
 
     public IEngineContext getContext() {

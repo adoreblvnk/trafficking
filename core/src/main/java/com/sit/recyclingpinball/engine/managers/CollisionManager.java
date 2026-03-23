@@ -5,7 +5,9 @@ import com.sit.recyclingpinball.engine.EngineConstants;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
 
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +39,14 @@ public class CollisionManager {
         try {
             quadTree.clear();
 
+            Map<ICollidable, Integer> entityOrder = new IdentityHashMap<>();
+            for (int i = 0; i < entities.size(); i++) {
+                ICollidable e = entities.get(i);
+                if (e != null) {
+                    entityOrder.put(e, i);
+                }
+            }
+
             for (ICollidable e : entities) {
                 if (e != null && e.getCollider() != null) {
                     quadTree.insert(e);
@@ -61,26 +71,15 @@ public class CollisionManager {
                     if (!a.isCollisionEnabled() || !b.isCollisionEnabled())
                         continue;
 
-                    int hashA = System.identityHashCode(a);
-                    int hashB = System.identityHashCode(b);
+                    Integer orderA = entityOrder.get(a);
+                    Integer orderB = entityOrder.get(b);
+                    if (orderA == null || orderB == null || orderA >= orderB)
+                        continue;
 
-                    boolean shouldProcess = false;
-                    if (hashA > hashB) {
-                        shouldProcess = true;
-                    } else if (hashA == hashB) {
-                        if (a.getCollider().getAABB().getX() > b.getCollider().getAABB().getX()
-                                || (a.getCollider().getAABB().getX() == b.getCollider().getAABB().getX()
-                                        && a.getCollider().getAABB().getY() > b.getCollider().getAABB().getY())) {
-                            shouldProcess = true;
-                        }
-                    }
-
-                    if (shouldProcess) {
-                        if (checkCollision(a, b)) {
-                            resolveCollision(a, b);
-                            a.onCollision(b);
-                            b.onCollision(a);
-                        }
+                    if (checkCollision(a, b)) {
+                        resolveCollision(a, b);
+                        a.onCollision(b);
+                        b.onCollision(a);
                     }
                 }
             }
