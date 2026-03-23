@@ -83,14 +83,6 @@ public abstract class AbstractScene {
         return inputManager;
     }
 
-    public CollisionManager getCollisionManager() {
-        return collisionManager;
-    }
-
-    public MovementManager getMovementManager() {
-        return movementManager;
-    }
-
     // Keeps rendering in screen coordinates when the window is resized.
     public void resize(int width, int height) {
         context.getGraphics().setProjectionMatrix(width, height);

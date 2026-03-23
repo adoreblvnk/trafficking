@@ -44,29 +44,6 @@ public class LibGdxIOProvider implements IIOProvider {
     }
 
     @Override
-    public Optional<String> readLocalText(String localPath) {
-        try {
-            com.badlogic.gdx.files.FileHandle file = Gdx.files.local(localPath);
-            if (!file.exists()) {
-                return Optional.empty();
-            }
-            return Optional.of(file.readString());
-        } catch (GdxRuntimeException e) {
-            return Optional.empty();
-        }
-    }
-
-    @Override
-    public boolean writeLocalText(String localPath, String data) {
-        try {
-            Gdx.files.local(localPath).writeString(data, false);
-            return true;
-        } catch (GdxRuntimeException e) {
-            return false;
-        }
-    }
-
-    @Override
     public <T> T fromJson(String jsonStr, Class<T> type) {
         return this.json.fromJson(type, jsonStr);
     }

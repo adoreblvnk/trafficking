@@ -20,26 +20,6 @@ public interface IIOProvider {
     Optional<String> readInternalText(String internalPath);
 
     /**
-     * Reads a text file from local writable storage.
-     *
-     * @param localPath
-     *            local file path
-     * @return file content if found/readable
-     */
-    Optional<String> readLocalText(String localPath);
-
-    /**
-     * Writes text to a local writable storage path.
-     *
-     * @param localPath
-     *            local file path
-     * @param data
-     *            text content to write
-     * @return true when write succeeds
-     */
-    boolean writeLocalText(String localPath, String data);
-
-    /**
      * Deserializes a JSON string into an object of the specified class.
      *
      * @param json

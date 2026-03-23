@@ -7,9 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
-import com.sit.recyclingpinball.engine.managers.IOManager;
-import com.sit.recyclingpinball.engine.managers.SoundManager;
-import com.sit.recyclingpinball.engine.managers.TimeManager;
 
 /**
  * Owns the scene stack and global services, single entry point for scene
@@ -21,21 +18,14 @@ public class SceneManager {
     private static final Logger LOGGER = Logger.getLogger(SceneManager.class.getName());
 
     private final Deque<AbstractScene> sceneStack;
-    private final SoundManager soundManager;
-    private final IOManager ioManager;
-    private final TimeManager timeManager;
     private final IEngineContext context;
 
-    public SceneManager(IEngineContext context, SoundManager soundManager, IOManager ioManager,
-            TimeManager timeManager) {
+    public SceneManager(IEngineContext context) {
         if (context == null) {
             throw new IllegalArgumentException("EngineContext cannot be null");
         }
         this.context = context;
         this.sceneStack = new ArrayDeque<>();
-        this.soundManager = soundManager;
-        this.ioManager = ioManager;
-        this.timeManager = timeManager;
     }
 
     // Layers a scene on top of the current one and routes input to it (e.g. pause
@@ -106,20 +96,7 @@ public class SceneManager {
         while (!sceneStack.isEmpty()) {
             popScene();
         }
-        soundManager.dispose();
         context.dispose();
-    }
-
-    public SoundManager getSoundManager() {
-        return soundManager;
-    }
-
-    public IOManager getIOManager() {
-        return ioManager;
-    }
-
-    public TimeManager getTimeManager() {
-        return timeManager;
     }
 
     public IEngineContext getContext() {

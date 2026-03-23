@@ -95,15 +95,15 @@ public interface IGraphicsProvider {
     void setProjectionMatrix(float width, float height);
 
     /**
-     * Loads a font from the given path and applies the requested size.
-     *
-     * @param fontPath
-     *            relative asset path to the font file
-     * @param size
-     *            target font size
-     * @return true if the font was loaded
+     * Loads a texture from the given path and returns it as a generic handle.
+     * The manager is responsible for storing and reusing this handle.
      */
-    boolean loadFont(String fontPath, int size);
+    Object loadTextureResource(String path);
+
+    /**
+     * Loads a font from the given path and returns it as a generic handle.
+     */
+    Object loadFontResource(String path, int size);
 
     /**
      * Sets the color used for subsequent text drawing calls.

@@ -8,31 +8,25 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Matrix4;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
+import com.sit.recyclingpinball.engine.managers.AssetManager;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import com.badlogic.gdx.graphics.Texture;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * libGDX implementation of IGraphicsProvider. Encapsulates ShapeRenderer and
- * GL20 operations for platform-independent rendering. The ShapeRenderer is NOT
- * exposed; all interactions happen through this interface.
+ * libGDX implementation of IGraphicsProvider.
+ * Now delegates asset management to the AssetManager singleton.
  */
 public class LibGdxGraphics implements IGraphicsProvider {
 
     private final ShapeRenderer shapeRenderer;
     private final SpriteBatch spriteBatch;
-    private final Map<String, Texture> textures;
-    private BitmapFont font;
     private boolean isShapeBatchOpen = false;
-
-    private final Map<String, BitmapFont> fonts = new HashMap<>();
+    private boolean isSpriteBatchOpen = false;
 
     public LibGdxGraphics() {
         this.shapeRenderer = new ShapeRenderer();
         this.spriteBatch = new SpriteBatch();
-        this.textures = new HashMap<>();
     }
 
     @Override
@@ -45,8 +39,6 @@ public class LibGdxGraphics implements IGraphicsProvider {
     public void setColor(float r, float g, float b, float a) {
         shapeRenderer.setColor(r, g, b, a);
     }
-
-    private boolean isSpriteBatchOpen = false;
 
     private void ensureShapeBatch() {
         if (isSpriteBatchOpen) {
@@ -94,6 +86,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
         disableBlend();
     }
 
+    @Override
     public void drawLine(float x1, float y1, float x2, float y2, float width) {
         ensureShapeBatch();
         shapeRenderer.rectLine(x1, y1, x2, y2, width);
@@ -131,27 +124,26 @@ public class LibGdxGraphics implements IGraphicsProvider {
     }
 
     @Override
-    public boolean loadFont(String fontPath, int size) {
+    public Object loadTextureResource(String path) {
+        try {
+            return new Texture(Gdx.files.internal(path));
+        } catch (Exception e) {
+            Gdx.app.error("LibGdxGraphics", "Failed to load texture: " + path, e);
+            return null;
+        }
+    }
+
+    @Override
+    public Object loadFontResource(String path, int size) {
         FreeTypeFontGenerator generator = null;
         try {
-            generator = new FreeTypeFontGenerator(Gdx.files.internal(fontPath));
+            generator = new FreeTypeFontGenerator(Gdx.files.internal(path));
             FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
             parameter.size = size;
-            BitmapFont generatedFont = generator.generateFont(parameter);
-
-            if (font != null) {
-                font.dispose();
-            }
-
-            font = generatedFont;
-
-            // Register font by its path so we can retrieve it with the full path
-            fonts.put(fontPath, generatedFont);
-
-            return true;
+            return generator.generateFont(parameter);
         } catch (Exception e) {
-            Gdx.app.error("LibGdxGraphics", "Failed to load font: " + fontPath, e);
-            return false;
+            Gdx.app.error("LibGdxGraphics", "Failed to load font: " + path, e);
+            return null;
         } finally {
             if (generator != null) {
                 generator.dispose();
@@ -175,85 +167,46 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void drawText(String text, float x, float y) {
-        if (font == null) {
-            return;
-        }
-
-        ensureSpriteBatch();
-        applyTextColor(font);
-        font.draw(spriteBatch, text, x, y);
+        // Default text drawing with fallback
+        drawText(text, null, x, y);
     }
 
     @Override
-    public void drawText(String text, String fontName, float x, float y) {
-        BitmapFont targetFont = fonts.get(fontName);
-        if (targetFont == null) {
-            if (Gdx.files.internal(fontName).exists()) {
-                loadFont(fontName, 24);
-                targetFont = fonts.get(fontName);
-            }
-            if (targetFont == null)
-                targetFont = font;
-        }
-
-        if (targetFont == null)
-            return;
-
+    public void drawText(String text, String fontId, float x, float y) {
+        BitmapFont f = (BitmapFont) AssetManager.getInstance().getFont(fontId);
+        if (f == null) return;
         ensureSpriteBatch();
-        applyTextColor(targetFont);
-        targetFont.draw(spriteBatch, text, x, y);
+        applyTextColor(f);
+        f.draw(spriteBatch, text, x, y);
     }
 
     @Override
-    public void drawText(String text, String fontName, float x, float y, float targetWidth) {
-        BitmapFont targetFont = fonts.get(fontName);
-        if (targetFont == null) {
-            if (Gdx.files.internal(fontName).exists()) {
-                loadFont(fontName, 24);
-                targetFont = fonts.get(fontName);
-            }
-            if (targetFont == null)
-                targetFont = font;
-        }
-
-        if (targetFont == null)
-            return;
-
+    public void drawText(String text, String fontId, float x, float y, float targetWidth) {
+        BitmapFont f = (BitmapFont) AssetManager.getInstance().getFont(fontId);
+        if (f == null) return;
         ensureSpriteBatch();
-        applyTextColor(targetFont);
-        targetFont.draw(spriteBatch, text, x, y, targetWidth, com.badlogic.gdx.utils.Align.center, true);
+        applyTextColor(f);
+        f.draw(spriteBatch, text, x, y, targetWidth, com.badlogic.gdx.utils.Align.center, true);
     }
 
     private final GlyphLayout glyphLayout = new GlyphLayout();
 
     @Override
-    public void drawTextCentered(String text, String fontName, float x, float y, float width, float height) {
-        BitmapFont targetFont = fonts.get(fontName);
-        if (targetFont == null) {
-            if (Gdx.files.internal(fontName).exists()) {
-                loadFont(fontName, 24);
-                targetFont = fonts.get(fontName);
-            }
-            if (targetFont == null)
-                targetFont = font;
-        }
-
-        if (targetFont == null)
-            return;
-
+    public void drawTextCentered(String text, String fontId, float x, float y, float width, float height) {
+        BitmapFont f = (BitmapFont) AssetManager.getInstance().getFont(fontId);
+        if (f == null) return;
         ensureSpriteBatch();
-        applyTextColor(targetFont);
+        applyTextColor(f);
 
-        glyphLayout.setText(targetFont, text);
+        glyphLayout.setText(f, text);
         float textX = x + (width - glyphLayout.width) / 2f;
         float textY = y + (height + glyphLayout.height) / 2f;
 
-        targetFont.draw(spriteBatch, text, textX, textY);
+        f.draw(spriteBatch, text, textX, textY);
     }
 
     @Override
     public void fillRectangle(float x, float y, float w, float h, float r, float g, float b, float alpha) {
-        // Must end any open batches first
         if (isShapeBatchOpen) {
             shapeRenderer.end();
             isShapeBatchOpen = false;
@@ -262,8 +215,6 @@ public class LibGdxGraphics implements IGraphicsProvider {
             spriteBatch.end();
             isSpriteBatchOpen = false;
         }
-        // Enable blending BEFORE begin, draw, then end() flushes vertices while
-        // blending is still active
         enableBlend();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(r, g, b, alpha);
@@ -274,11 +225,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void drawTexture(String textureId, float x, float y, float w, float h) {
-        Texture texture = textures.get(textureId);
-        if (texture == null) {
-            texture = new Texture(Gdx.files.internal(textureId));
-            textures.put(textureId, texture);
-        }
+        Texture texture = (Texture) AssetManager.getInstance().getTexture(textureId);
+        if (texture == null) return;
         ensureSpriteBatch();
         spriteBatch.draw(texture, x, y, w, h);
     }
@@ -286,11 +234,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
     @Override
     public void drawTexture(String textureId, float x, float y, float width, float height, float originX, float originY,
             float rotationDegrees) {
-        Texture texture = textures.get(textureId);
-        if (texture == null) {
-            texture = new Texture(Gdx.files.internal(textureId));
-            textures.put(textureId, texture);
-        }
+        Texture texture = (Texture) AssetManager.getInstance().getTexture(textureId);
+        if (texture == null) return;
         ensureSpriteBatch();
         spriteBatch.draw(texture, x, y, originX, originY, width, height, 1.0f, 1.0f, rotationDegrees, 0, 0,
                 texture.getWidth(), texture.getHeight(), false, false);
@@ -298,7 +243,6 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void begin() {
-        // Now mostly a no-op marker to start frame
     }
 
     @Override
@@ -316,25 +260,11 @@ public class LibGdxGraphics implements IGraphicsProvider {
     @Override
     public void dispose() {
         try {
-            endShapes();
+            end();
             shapeRenderer.dispose();
-        } catch (Exception e) {
-            Gdx.app.error("LibGdxGraphics", "Failed to dispose ShapeRenderer", e);
-        }
-
-        try {
-            if (font != null) {
-                font.dispose();
-            }
-        } catch (Exception e) {
-            Gdx.app.error("LibGdxGraphics", "Failed to dispose BitmapFont", e);
-        }
-
-        try {
             spriteBatch.dispose();
         } catch (Exception e) {
-            Gdx.app.error("LibGdxGraphics", "Failed to dispose SpriteBatch", e);
+            Gdx.app.error("LibGdxGraphics", "Failed to dispose resources", e);
         }
     }
-
 }

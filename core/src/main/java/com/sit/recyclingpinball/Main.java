@@ -5,10 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.sit.recyclingpinball.engine.platform.libgdx.LibGdxContext;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.logic.scenes.MenuScene;
-import com.sit.recyclingpinball.engine.managers.SoundManager;
-import com.sit.recyclingpinball.engine.managers.IOManager;
-import com.sit.recyclingpinball.engine.managers.TimeManager;
-
 import com.sit.recyclingpinball.engine.managers.AssetManager;
 
 import com.sit.recyclingpinball.logic.LogicConstants;
@@ -19,16 +15,24 @@ public class Main extends Game {
 
     @Override
     public void create() {
-        // Architecture Justification: "Pure DI" (manual wiring in a Composition Root)
-        // is an accepted architectural best practice. It prevents the need for
-        // reflection-heavy magic frameworks (like Spring) in a lightweight game engine.
-        // Localizing concrete object creation to the main entry point is exactly how
-        // decoupled modules are achieved.
+        // ARCHITECTURE JUSTIFICATION: Composition Root Pattern
+        // Main.java serves as the "Composition Root" for the entire application.
+        // It is the only location where concrete implementations (LibGdxContext)
+        // are instantiated and wired to their respective managers. This keeps
+        // the core game engine and logic layers completely decoupled from
+        // platform-specific bootstrapping.
         context = new LibGdxContext();
 
+        // PERFORMANCE OPTIMIZATION: Asset Preloading & Flyweight Pattern
+        // We initialize the AssetManager and explicitly load all resources upfront.
+        // This ensures the Flyweight pattern is strictly enforced—multiple game
+        // objects (e.g., trash, walls) share single memory references for their
+        // textures and sounds. Preloading also eliminates disk I/O "hitching"
+        // during the gameplay loop, ensuring a consistent 60FPS render cycle.
         AssetManager assetManager = AssetManager.getInstance();
-        assetManager.initialize(context.getAudio());
+        assetManager.initialize(context.getAudio(), context.getGraphics());
 
+        // Load Sounds
         assetManager.loadSound(LogicConstants.SOUNDS_DIR + LogicConstants.SOUND_CLICK + LogicConstants.SOUND_EXTENSION,
                 LogicConstants.SOUND_CLICK);
         assetManager.loadSound(
@@ -46,11 +50,28 @@ public class Main extends Game {
                 LogicConstants.SOUNDS_DIR + LogicConstants.SOUND_STRETCH + LogicConstants.SOUND_EXTENSION,
                 LogicConstants.SOUND_STRETCH);
 
-        SoundManager soundManager = new SoundManager(context.getAudio());
-        IOManager ioManager = new IOManager(context.getIO());
-        TimeManager timeManager = new TimeManager(context.getTime());
+        // Load Fonts
+        assetManager.loadFont(LogicConstants.FONT_GEIST_BOLD, 24, LogicConstants.FONT_GEIST_BOLD);
+        assetManager.loadFont(LogicConstants.FONT_GEIST_BOLD, 32, "font_32");
+        assetManager.loadFont(LogicConstants.FONT_GEIST_BOLD, 48, "font_48");
+        assetManager.loadFont(LogicConstants.FONT_GEIST_BOLD, 72, "font_72");
 
-        sceneManager = new SceneManager(context, soundManager, ioManager, timeManager);
+        // Load Textures
+        assetManager.loadTexture(LogicConstants.TEX_DIRTY_BEACH, LogicConstants.TEX_DIRTY_BEACH);
+        assetManager.loadTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT);
+        assetManager.loadTexture(LogicConstants.TEX_BEACH_BACKGROUND, LogicConstants.TEX_BEACH_BACKGROUND);
+        assetManager.loadTexture(LogicConstants.TEX_UI_PANEL_BG, LogicConstants.TEX_UI_PANEL_BG);
+        assetManager.loadTexture(LogicConstants.TEX_STAR, LogicConstants.TEX_STAR);
+        assetManager.loadTexture(LogicConstants.TEX_PINBALL_DEFAULT, LogicConstants.TEX_PINBALL_DEFAULT);
+        assetManager.loadTexture(LogicConstants.TEX_SLIDE_VERTICAL_GREY, LogicConstants.TEX_SLIDE_VERTICAL_GREY);
+        assetManager.loadTexture(LogicConstants.TEX_BALL_BLUE_LARGE, LogicConstants.TEX_BALL_BLUE_LARGE);
+        assetManager.loadTexture(LogicConstants.TEX_FLIPPER, LogicConstants.TEX_FLIPPER);
+        assetManager.loadTexture(LogicConstants.ID_TRASH_PLASTIC, LogicConstants.ID_TRASH_PLASTIC);
+        assetManager.loadTexture(LogicConstants.ID_TRASH_PAPER, LogicConstants.ID_TRASH_PAPER);
+        assetManager.loadTexture(LogicConstants.ID_TRASH_GLASS, LogicConstants.ID_TRASH_GLASS);
+        assetManager.loadTexture("textures/wall.png", "textures/wall.png");
+
+        sceneManager = new SceneManager(context);
         sceneManager.setScene(new MenuScene(context, sceneManager));
     }
 

@@ -79,22 +79,10 @@ public class EntityManager {
         return false;
     }
 
-    public AbstractEntity getEntity(String id) {
-        return entityMap.get(id);
-    }
-
     public void update(float dt) {
         for (AbstractEntity e : entityList) {
             e.update(dt);
         }
-    }
-
-    /**
-     * Marks the entity manager's z-index order as dirty, forcing a re-sort before
-     * the next render.
-     */
-    public void markZIndexDirty() {
-        this.isZIndexDirty = true;
     }
 
     /**
