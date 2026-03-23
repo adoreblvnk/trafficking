@@ -2,7 +2,10 @@ package com.sit.recyclingpinball.engine;
 
 //constants are strictly for the Abstract Engine alone
 //defines both physics defaults and unit scales
-public class EngineConstants {
+public final class EngineConstants {
+
+    private EngineConstants() {
+    }
 
     // physics Defaults
     public static final float DEFAULT_BOUNCE = 0.8f;

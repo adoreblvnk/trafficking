@@ -4,9 +4,12 @@ import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.factories.TrashType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DataDrivenLevelBlueprint implements ILevelBlueprint {
     private String text = "";
-    private LevelConfig mergedConfig;
+    private final LevelConfig mergedConfig;
     private String name = "Unknown Level";
 
     public DataDrivenLevelBlueprint(String filepath, IEngineContext context) {
@@ -17,57 +20,76 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
         String specificContent = context.getIO().readInternalText(filepath).orElse("{}");
         LevelConfig specificConfig = context.getIO().fromJson(specificContent, LevelConfig.class);
 
-        mergedConfig = baseConfig != null ? baseConfig : new LevelConfig();
+        mergedConfig = merge(baseConfig, specificConfig);
         if (specificConfig != null) {
-            if (specificConfig.name != null)
-                this.name = specificConfig.name;
+            if (specificConfig.getName() != null) {
+                this.name = specificConfig.getName();
+            }
 
-            if (specificConfig.text != null)
-                this.text = specificConfig.text.replace("\\n", "\n");
-
-            if (specificConfig.wall != null)
-                mergedConfig.wall.addAll(specificConfig.wall);
-            if (specificConfig.slantedWall != null)
-                mergedConfig.slantedWall.addAll(specificConfig.slantedWall);
-            if (specificConfig.flipperLeft != null)
-                mergedConfig.flipperLeft = specificConfig.flipperLeft;
-            if (specificConfig.flipperRight != null)
-                mergedConfig.flipperRight = specificConfig.flipperRight;
-            if (specificConfig.shooter != null)
-                mergedConfig.shooter = specificConfig.shooter;
-            if (specificConfig.trash != null)
-                mergedConfig.trash.addAll(specificConfig.trash);
+            if (specificConfig.getText() != null) {
+                this.text = specificConfig.getText().replace("\\n", "\n");
+            }
         }
+    }
+
+    private static LevelConfig merge(LevelConfig baseConfig, LevelConfig specificConfig) {
+        LevelConfig base = baseConfig != null ? baseConfig : new LevelConfig();
+
+        if (specificConfig == null) {
+            return base;
+        }
+
+        LevelConfig merged = new LevelConfig();
+        merged.setName(specificConfig.getName() != null ? specificConfig.getName() : base.getName());
+        merged.setText(specificConfig.getText() != null ? specificConfig.getText() : base.getText());
+        merged.setWall(concat(base.getWall(), specificConfig.getWall()));
+        merged.setSlantedWall(concat(base.getSlantedWall(), specificConfig.getSlantedWall()));
+        merged.setFlipperLeft(
+                specificConfig.getFlipperLeft() != null ? specificConfig.getFlipperLeft() : base.getFlipperLeft());
+        merged.setFlipperRight(
+                specificConfig.getFlipperRight() != null ? specificConfig.getFlipperRight() : base.getFlipperRight());
+        merged.setShooter(specificConfig.getShooter() != null ? specificConfig.getShooter() : base.getShooter());
+        merged.setTrash(concat(base.getTrash(), specificConfig.getTrash()));
+        return merged;
+    }
+
+    private static <T> List<T> concat(List<T> first, List<T> second) {
+        List<T> merged = new ArrayList<>();
+        if (first != null) {
+            merged.addAll(first);
+        }
+        if (second != null) {
+            merged.addAll(second);
+        }
+        return merged;
     }
 
     @Override
     public BoardLayout construct(BoardBuilder builder, PinballEventBus eventBus) {
-        if (mergedConfig != null) {
-            if (mergedConfig.wall != null) {
-                for (LevelConfig.WallConfig wall : mergedConfig.wall) {
-                    builder.addWall((int) wall.x, (int) wall.y, (int) wall.width, (int) wall.height);
-                }
+        if (mergedConfig.getWall() != null) {
+            for (LevelConfig.WallConfig wall : mergedConfig.getWall()) {
+                builder.addWall((int) wall.getX(), (int) wall.getY(), (int) wall.getWidth(), (int) wall.getHeight());
             }
-            if (mergedConfig.slantedWall != null) {
-                for (LevelConfig.SlantedWallConfig swall : mergedConfig.slantedWall) {
-                    builder.addSlantedWall((int) swall.x, (int) swall.y, (int) swall.width, (int) swall.height,
-                            swall.rotation);
-                }
+        }
+        if (mergedConfig.getSlantedWall() != null) {
+            for (LevelConfig.SlantedWallConfig swall : mergedConfig.getSlantedWall()) {
+                builder.addSlantedWall((int) swall.getX(), (int) swall.getY(), (int) swall.getWidth(),
+                        (int) swall.getHeight(), swall.getRotation());
             }
-            if (mergedConfig.flipperLeft != null) {
-                builder.addLeftFlipper((int) mergedConfig.flipperLeft.x, (int) mergedConfig.flipperLeft.y);
-            }
-            if (mergedConfig.flipperRight != null) {
-                builder.addRightFlipper((int) mergedConfig.flipperRight.x, (int) mergedConfig.flipperRight.y);
-            }
-            if (mergedConfig.shooter != null) {
-                builder.setShooterRod((int) mergedConfig.shooter.x, (int) mergedConfig.shooter.y, eventBus);
-            }
-            if (mergedConfig.trash != null) {
-                for (LevelConfig.TrashConfig trashItem : mergedConfig.trash) {
-                    TrashType type = TrashType.valueOf(trashItem.type);
-                    builder.addTrash(type, (int) trashItem.x, (int) trashItem.y, eventBus);
-                }
+        }
+        if (mergedConfig.getFlipperLeft() != null) {
+            builder.addLeftFlipper((int) mergedConfig.getFlipperLeft().getX(), (int) mergedConfig.getFlipperLeft().getY());
+        }
+        if (mergedConfig.getFlipperRight() != null) {
+            builder.addRightFlipper((int) mergedConfig.getFlipperRight().getX(), (int) mergedConfig.getFlipperRight().getY());
+        }
+        if (mergedConfig.getShooter() != null) {
+            builder.setShooterRod((int) mergedConfig.getShooter().getX(), (int) mergedConfig.getShooter().getY(), eventBus);
+        }
+        if (mergedConfig.getTrash() != null) {
+            for (LevelConfig.TrashConfig trashItem : mergedConfig.getTrash()) {
+                TrashType type = TrashType.valueOf(trashItem.getType());
+                builder.addTrash(type, (int) trashItem.getX(), (int) trashItem.getY(), eventBus);
             }
         }
         return builder.build();
