@@ -51,7 +51,7 @@ public abstract class AbstractScene {
         }
 
         try {
-            movementManager.processMovement(entityManager.getEntities(), dt);
+            movementManager.processMovement(entityManager.getEntitiesByType(com.sit.recyclingpinball.engine.interfaces.Movable.class), dt);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Movement processing failed", e);
         }

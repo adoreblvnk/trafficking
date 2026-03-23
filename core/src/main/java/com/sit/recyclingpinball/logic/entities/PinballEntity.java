@@ -1,5 +1,6 @@
 package com.sit.recyclingpinball.logic.entities;
 
+import com.sit.recyclingpinball.engine.components.SpriteComponent;
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
@@ -18,6 +19,7 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
     private IPinballState currentState;
     private final PinballEventBus eventBus;
     private final com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory;
+    private final SpriteComponent sprite;
 
     public PinballEntity(String id, float x, float y, PinballEventBus eventBus,
             com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory) {
@@ -25,6 +27,8 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
         setCollider(new CircleCollider(x, y, LogicConstants.PINBALL_SIZE / 2f));
         this.eventBus = eventBus;
         this.assemblyFactory = assemblyFactory;
+        this.sprite = new SpriteComponent(LogicConstants.TEX_PINBALL_DEFAULT, LogicConstants.PINBALL_SIZE,
+            LogicConstants.PINBALL_SIZE);
         this.currentState = assemblyFactory.createInPlayState(); // Start in play state to allow falling onto shooter
                                                                     // rod
         this.eventBus.register(this);
@@ -53,9 +57,8 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(LogicConstants.TEX_PINBALL_DEFAULT, getPosition().getX() - (LogicConstants.PINBALL_SIZE / 2f),
-                getPosition().getY() - (LogicConstants.PINBALL_SIZE / 2f), LogicConstants.PINBALL_SIZE,
-                LogicConstants.PINBALL_SIZE);
+        graphics.drawTexture(sprite.textureId(), getPosition().getX() - (sprite.width() / 2f),
+            getPosition().getY() - (sprite.height() / 2f), sprite.width(), sprite.height());
     }
 
     @Override

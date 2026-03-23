@@ -1,5 +1,6 @@
 package com.sit.recyclingpinball.logic.entities;
 
+import com.sit.recyclingpinball.engine.components.SpriteComponent;
 import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
 
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;
@@ -14,8 +15,8 @@ import com.sit.recyclingpinball.logic.LogicConstants;
 public class ShooterRodEntity extends DynamicEntity implements InputListener {
     private final float anchorY;
     private final PinballEventBus eventBus;
-    private final String shaftTextureId;
-    private final String knobTextureId;
+    private final SpriteComponent shaftSprite;
+    private final SpriteComponent knobSprite;
     private boolean isDragging;
     private boolean isKeyPulling;
     private float launchVelocity;
@@ -25,8 +26,10 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         setCollider(new BoxCollider(x, y, LogicConstants.SHOOTER_SIZE[0], LogicConstants.SHOOTER_SIZE[1]));
         this.anchorY = y;
         this.eventBus = eventBus;
-        this.shaftTextureId = LogicConstants.TEX_SLIDE_VERTICAL_GREY;
-        this.knobTextureId = LogicConstants.TEX_BALL_BLUE_LARGE;
+        this.shaftSprite = new SpriteComponent(LogicConstants.TEX_SLIDE_VERTICAL_GREY,
+            LogicConstants.SHOOTER_SHAFT_SIZE[0], LogicConstants.SHOOTER_SHAFT_SIZE[1]);
+        this.knobSprite = new SpriteComponent(LogicConstants.TEX_BALL_BLUE_LARGE, LogicConstants.SHOOTER_KNOB_SIZE,
+            LogicConstants.SHOOTER_KNOB_SIZE);
         this.isDragging = false;
         this.isKeyPulling = false;
         setTag(LogicConstants.TAG_SHOOTER);
@@ -52,12 +55,12 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     public void render(IGraphicsProvider graphics) {
         // Draw the shaft at the bottom, and the knob extending upwards (where the ball
         // sits)
-        graphics.drawTexture(shaftTextureId, getPosition().getX() + LogicConstants.SHOOTER_SHAFT_OFFSET[0],
-                getPosition().getY() + LogicConstants.SHOOTER_SHAFT_OFFSET[1], LogicConstants.SHOOTER_SHAFT_SIZE[0],
-                LogicConstants.SHOOTER_SHAFT_SIZE[1]);
-        graphics.drawTexture(knobTextureId, getPosition().getX() + LogicConstants.SHOOTER_KNOB_OFFSET[0],
-                getPosition().getY() + LogicConstants.SHOOTER_KNOB_OFFSET[1], LogicConstants.SHOOTER_KNOB_SIZE,
-                LogicConstants.SHOOTER_KNOB_SIZE);
+        graphics.drawTexture(shaftSprite.textureId(), getPosition().getX() + LogicConstants.SHOOTER_SHAFT_OFFSET[0],
+            getPosition().getY() + LogicConstants.SHOOTER_SHAFT_OFFSET[1], shaftSprite.width(),
+            shaftSprite.height());
+        graphics.drawTexture(knobSprite.textureId(), getPosition().getX() + LogicConstants.SHOOTER_KNOB_OFFSET[0],
+            getPosition().getY() + LogicConstants.SHOOTER_KNOB_OFFSET[1], knobSprite.width(),
+            knobSprite.height());
     }
 
     @Override

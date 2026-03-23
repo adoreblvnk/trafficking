@@ -1,5 +1,6 @@
 package com.sit.recyclingpinball.logic.entities;
 
+import com.sit.recyclingpinball.engine.components.SpriteComponent;
 import com.sit.recyclingpinball.engine.entities.StaticEntity;
 import com.sit.recyclingpinball.engine.physics.CircleCollider;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
@@ -9,12 +10,12 @@ import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 
 public class TrashEntity extends StaticEntity {
-    private final String textureId;
+    private final SpriteComponent sprite;
     private final PinballEventBus eventBus;
 
     public TrashEntity(String id, float x, float y, String textureId, PinballEventBus eventBus) {
         super(id, x, y, LogicConstants.TRASH_SIZE, LogicConstants.TRASH_SIZE, 1, 1, 1);
-        this.textureId = textureId;
+        this.sprite = new SpriteComponent(textureId, LogicConstants.TRASH_SIZE, LogicConstants.TRASH_SIZE);
         this.eventBus = eventBus;
         setCollider(new CircleCollider(x, y, LogicConstants.TRASH_SIZE / 2f));
         setCollisionEnabled(true);
@@ -23,9 +24,8 @@ public class TrashEntity extends StaticEntity {
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        graphics.drawTexture(textureId, getPosition().getX() - (LogicConstants.TRASH_SIZE / 2f),
-                getPosition().getY() - (LogicConstants.TRASH_SIZE / 2f), LogicConstants.TRASH_SIZE,
-                LogicConstants.TRASH_SIZE);
+        graphics.drawTexture(sprite.textureId(), getPosition().getX() - (sprite.width() / 2f),
+            getPosition().getY() - (sprite.height() / 2f), sprite.width(), sprite.height());
     }
 
     @Override
