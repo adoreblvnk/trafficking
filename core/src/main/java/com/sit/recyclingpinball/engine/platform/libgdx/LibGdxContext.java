@@ -65,22 +65,6 @@ public class LibGdxContext implements IEngineContext {
     }
 
     /**
-     * Casts the time provider to LibGdxTime to access time scaling. This is safe
-     * because LibGdxContext always creates LibGdxTime internally.
-     */
-    public LibGdxTime getTimeManager() {
-        return (LibGdxTime) timeProvider;
-    }
-
-    /**
-     * Casts the graphics provider to LibGdxGraphics to access advanced operations.
-     * This is safe because LibGdxContext always creates LibGdxGraphics internally.
-     */
-    public LibGdxGraphics getGraphicsManager() {
-        return (LibGdxGraphics) graphicsProvider;
-    }
-
-    /**
      * Disposes all native resources held by providers.
      */
     @Override

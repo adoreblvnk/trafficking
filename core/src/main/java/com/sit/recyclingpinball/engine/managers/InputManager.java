@@ -28,10 +28,6 @@ public class InputManager {
         }
     }
 
-    public void removeListener(InputListener l) {
-        listeners.remove(l);
-    }
-
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         for (InputListener l : listeners) {
             try {

@@ -5,22 +5,16 @@ import com.sit.recyclingpinball.engine.physics.CircleCollider;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
 import com.sit.recyclingpinball.logic.LogicConstants;
-import com.sit.recyclingpinball.logic.factories.TrashType;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 
 public class TrashEntity extends StaticEntity {
-    private final TrashType type;
     private final String textureId;
-    private final int points;
     private final PinballEventBus eventBus;
 
-    public TrashEntity(String id, float x, float y, TrashType type, String textureId, int points,
-            PinballEventBus eventBus) {
+    public TrashEntity(String id, float x, float y, String textureId, PinballEventBus eventBus) {
         super(id, x, y, 64, 64, 1, 1, 1);
-        this.type = type;
         this.textureId = textureId;
-        this.points = points;
         this.eventBus = eventBus;
         setCollider(new CircleCollider(x, y, 32));
         setCollisionEnabled(true);
@@ -37,16 +31,9 @@ public class TrashEntity extends StaticEntity {
         super.onCollision(other);
         if (LogicConstants.TAG_PINBALL.equals(other.getTag())) {
             if (isCollisionEnabled()) {
-                eventBus.post(new TrashCollectedEvent(type, getId()));
+                eventBus.post(new TrashCollectedEvent(getId()));
                 setCollisionEnabled(false);
             }
         }
-    }
-
-    public int getPoints() {
-        return points;
-    }
-    public TrashType getType() {
-        return type;
     }
 }

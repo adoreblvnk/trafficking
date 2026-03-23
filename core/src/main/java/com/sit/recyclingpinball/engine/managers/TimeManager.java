@@ -25,24 +25,4 @@ public class TimeManager {
     public float getDeltaTime() {
         return timeProvider.getDeltaTime() * timeScale;
     }
-
-    /**
-     * Sets the time scale multiplier for slow-motion or fast-forward effects.
-     *
-     * @param scale
-     *            the scale factor (0.0 pauses, 1.0 is normal, >1.0 is fast)
-     */
-    public void setTimeScale(float scale) {
-        if (scale < 0) {
-            this.timeScale = 0;
-        } else if (Float.isNaN(scale) || Float.isInfinite(scale)) {
-            this.timeScale = 1f;
-        } else {
-            this.timeScale = scale;
-        }
-    }
-
-    public float getTimeScale() {
-        return timeScale;
-    }
 }

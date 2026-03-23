@@ -8,9 +8,9 @@ public class LevelConfig {
     public String text;
     public List<WallConfig> wall = new ArrayList<>();
     public List<SlantedWallConfig> slantedWall = new ArrayList<>();
-    public List<FlipperConfig> flipperLeft = new ArrayList<>();
-    public List<FlipperConfig> flipperRight = new ArrayList<>();
-    public List<ShooterConfig> shooter = new ArrayList<>();
+    public FlipperConfig flipperLeft;
+    public FlipperConfig flipperRight;
+    public ShooterConfig shooter;
     public List<TrashConfig> trash = new ArrayList<>();
 
     public static class WallConfig {

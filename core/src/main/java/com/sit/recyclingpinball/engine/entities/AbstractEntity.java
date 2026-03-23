@@ -1,7 +1,6 @@
 package com.sit.recyclingpinball.engine.entities;
 
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
-import com.sit.recyclingpinball.engine.interfaces.CollisionListener;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.sit.recyclingpinball.engine.physics.ICollider;
@@ -23,7 +22,6 @@ public abstract class AbstractEntity implements ICollidable {
     private float b = 1.0f;
     private float a = 1.0f;
     private int zIndex = 0;
-    private CollisionListener collisionListener;
     private String tag = "";
 
     private ICollider collider;
@@ -76,11 +74,6 @@ public abstract class AbstractEntity implements ICollidable {
     @Override
     public ICollider getCollider() {
         return collider;
-    }
-
-    // Retained for backward compatibility with logic package for now
-    public com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle getBounds() {
-        return collider.getAABB();
     }
 
     @Override
@@ -188,25 +181,9 @@ public abstract class AbstractEntity implements ICollidable {
         return zIndex;
     }
 
-    // updates the entity's render layer
-    public void setZIndex(int zIndex) {
-        this.zIndex = zIndex;
-    }
-
-    public void setCollisionListener(CollisionListener collisionListener) {
-        this.collisionListener = collisionListener;
-    }
-
-    public CollisionListener getCollisionListener() {
-        return collisionListener;
-    }
-
     // activates when an overlap with each other occurs
     @Override
     public void onCollision(ICollidable other) {
-        if (collisionListener != null) {
-            collisionListener.onCollide(this, other);
-        }
     }
 
     @Override

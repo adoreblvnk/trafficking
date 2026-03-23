@@ -11,6 +11,7 @@ import com.sit.recyclingpinball.logic.level.DataDrivenLevelBlueprint;
 import com.sit.recyclingpinball.logic.ui.Button;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LevelSelectScene extends AbstractScene implements InputListener {
@@ -34,27 +35,22 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         float btnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
         float btnX = LogicConstants.UI_CENTER_X - btnW / 2;
 
-        buttons.add(new Button(btnX, 570, btnW, btnH, LogicConstants.TEXT_LEVEL_1, () -> {
-            sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                    new DataDrivenLevelBlueprint("levels/level1.json", getContext())));
-        }));
-        buttons.add(new Button(btnX, 480, btnW, btnH, LogicConstants.TEXT_LEVEL_2, () -> {
-            sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                    new DataDrivenLevelBlueprint("levels/level2.json", getContext())));
-        }));
-        buttons.add(new Button(btnX, 390, btnW, btnH, LogicConstants.TEXT_LEVEL_3, () -> {
-            sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                    new DataDrivenLevelBlueprint("levels/level3.json", getContext())));
-        }));
-        buttons.add(new Button(btnX, 300, btnW, btnH, LogicConstants.TEXT_LEVEL_4, () -> {
-            sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                    new DataDrivenLevelBlueprint("levels/level4.json", getContext())));
-        }));
-        buttons.add(new Button(btnX, 210, btnW, btnH, LogicConstants.TEXT_LEVEL_5, () -> {
-            sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                    new DataDrivenLevelBlueprint("levels/level5.json", getContext())));
-        }));
-        buttons.add(new Button(btnX, 120, btnW, btnH, LogicConstants.TEXT_BACK, () -> {
+        java.util.List<String> levelFiles = getContext().getIO().listInternalFiles(LogicConstants.DIR_LEVELS, ".json");
+        levelFiles.remove(LogicConstants.PATH_BASE_LEVEL);
+        Collections.sort(levelFiles);
+
+        for (int i = 0; i < levelFiles.size(); i++) {
+            String path = levelFiles.get(i);
+            DataDrivenLevelBlueprint bp = new DataDrivenLevelBlueprint(path, getContext());
+            float btnY = 570 - (i * 90);
+            buttons.add(new Button(btnX, btnY, btnW, btnH, bp.getLevelName(), () -> {
+                sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
+                        new DataDrivenLevelBlueprint(path, getContext())));
+            }));
+        }
+
+        float backBtnY = 570 - (levelFiles.size() * 90);
+        buttons.add(new Button(btnX, backBtnY, btnW, btnH, LogicConstants.TEXT_BACK, () -> {
             sceneManager.setScene(new MenuScene(getContext(), sceneManager));
         }));
     }
@@ -84,32 +80,7 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
 
     @Override
     public boolean onKeyDown(EngineKey keycode) {
-        if (keycode == EngineKey.NUM_1) {
-            getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
-            sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                    new DataDrivenLevelBlueprint("levels/level1.json", getContext())));
-            return true;
-        } else if (keycode == EngineKey.NUM_2) {
-            getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
-            sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                    new DataDrivenLevelBlueprint("levels/level2.json", getContext())));
-            return true;
-        } else if (keycode == EngineKey.NUM_3) {
-            getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
-            sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                    new DataDrivenLevelBlueprint("levels/level3.json", getContext())));
-            return true;
-        } else if (keycode == EngineKey.NUM_4) {
-            getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
-            sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                    new DataDrivenLevelBlueprint("levels/level4.json", getContext())));
-            return true;
-        } else if (keycode == EngineKey.NUM_5) {
-            getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
-            sceneManager.setScene(new SimulationScene(getContext(), sceneManager,
-                    new DataDrivenLevelBlueprint("levels/level5.json", getContext())));
-            return true;
-        } else if (keycode == EngineKey.ESCAPE) {
+        if (keycode == EngineKey.ESCAPE) {
             getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
             sceneManager.setScene(new MenuScene(getContext(), sceneManager));
             return true;

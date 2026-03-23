@@ -1,18 +1,10 @@
 package com.sit.recyclingpinball.logic.events;
 
-import com.sit.recyclingpinball.logic.factories.TrashType;
-
 public class TrashCollectedEvent implements IPinballEvent {
-    private final TrashType type;
     private final String entityId;
 
-    public TrashCollectedEvent(TrashType type, String entityId) {
-        this.type = type;
+    public TrashCollectedEvent(String entityId) {
         this.entityId = entityId;
-    }
-
-    public TrashType getType() {
-        return type;
     }
 
     public String getEntityId() {

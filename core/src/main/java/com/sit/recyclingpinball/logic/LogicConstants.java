@@ -2,16 +2,28 @@ package com.sit.recyclingpinball.logic;
 
 public class LogicConstants {
 
+    public static final String DIR_LEVELS = "levels";
+    public static final String PATH_BASE_LEVEL = "levels/base.json";
+
+    // Asset Directories and Extensions
+    public static final String DEFAULT_FONT_PATH = "fonts/Geist-Bold.ttf";
+    public static final String FONTS_DIR = "fonts/";
+    public static final String TEXTURES_DIR = "textures/";
+    public static final String FONT_EXTENSION = ".ttf";
+    public static final String TEXTURE_EXTENSION = ".png";
+    public static final String SOUNDS_DIR = "sounds/";
+    public static final String SOUND_EXTENSION = ".mp3";
+
     // Textures
-    public static final String TEX_DIRTY_BEACH = "dirty_beach";
-    public static final String TEX_BUTTON_RECT_DEPTH_FLAT = "button_rectangle_depth_flat";
-    public static final String TEX_BEACH_BACKGROUND = "beach_background";
-    public static final String TEX_UI_PANEL_BG = "ui_panel_bg";
-    public static final String TEX_STAR = "star";
-    public static final String TEX_PINBALL_DEFAULT = "pinball_default";
-    public static final String TEX_SLIDE_VERTICAL_GREY = "slide_vertical_grey";
-    public static final String TEX_BALL_BLUE_LARGE = "ball_blue_large";
-    public static final String TEX_FLIPPER = "flipper";
+    public static final String TEX_DIRTY_BEACH = "textures/dirty_beach.png";
+    public static final String TEX_BUTTON_RECT_DEPTH_FLAT = "textures/button_rectangle_depth_flat.png";
+    public static final String TEX_BEACH_BACKGROUND = "textures/beach_background.png";
+    public static final String TEX_UI_PANEL_BG = "textures/ui_panel_bg.png";
+    public static final String TEX_STAR = "textures/star.png";
+    public static final String TEX_PINBALL_DEFAULT = "textures/pinball_default.png";
+    public static final String TEX_SLIDE_VERTICAL_GREY = "textures/slide_vertical_grey.png";
+    public static final String TEX_BALL_BLUE_LARGE = "textures/ball_blue_large.png";
+    public static final String TEX_FLIPPER = "textures/flipper.png";
 
     // Sounds
     public static final String SOUND_CLICK = "click";
@@ -20,9 +32,10 @@ public class LogicConstants {
     public static final String SOUND_STRETCH = "stretch";
     public static final String SOUND_COLLECT = "collect";
     public static final String SOUND_FLIP = "flip";
+    public static final String SOUND_BOUNCE = "bounce";
 
     // Fonts
-    public static final String FONT_GEIST_BOLD = "Geist-Bold";
+    public static final String FONT_GEIST_BOLD = "fonts/Geist-Bold.ttf";
 
     // Tags
     public static final String TAG_PINBALL = "pinball";
@@ -103,9 +116,9 @@ public class LogicConstants {
     public static final String ID_FLIPPER_R_PREFIX = "flipper_r_";
     public static final String ID_SHOOTER_ROD_PREFIX = "shooter_rod_";
     public static final String ID_TRASH_PREFIX = "trash_";
-    public static final String ID_TRASH_PLASTIC = "trash_plastic";
-    public static final String ID_TRASH_PAPER = "trash_paper";
-    public static final String ID_TRASH_GLASS = "trash_glass";
+    public static final String ID_TRASH_PLASTIC = "textures/trash_plastic.png";
+    public static final String ID_TRASH_PAPER = "textures/trash_paper.png";
+    public static final String ID_TRASH_GLASS = "textures/trash_glass.png";
 
     public static final float PINBALL_START_X = 1810f;
     public static final float PINBALL_START_Y = 400f;
@@ -122,11 +135,7 @@ public class LogicConstants {
     public static final String TEXT_RETRY = "Retry";
     public static final String TEXT_BACK = "Back";
 
-    public static final String TEXT_LEVEL_1 = "Level 1";
-    public static final String TEXT_LEVEL_2 = "Level 2";
-    public static final String TEXT_LEVEL_3 = "Level 3";
-    public static final String TEXT_LEVEL_4 = "Level 4";
-    public static final String TEXT_LEVEL_5 = "Level 5";
+    public static final String TEXT_LEVEL_1 = "Level 1"; // unused
 
     public static final String TEXT_SCORE_PREFIX = "Score: ";
     public static final String TEXT_BALLS_PREFIX = "Balls: ";

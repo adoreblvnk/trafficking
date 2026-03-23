@@ -35,14 +35,6 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         setTag(LogicConstants.TAG_SHOOTER);
     }
 
-    private float getX() {
-        return getPosition().getX();
-    }
-
-    private float getY() {
-        return getPosition().getY();
-    }
-
     @Override
     public void resolveCollision(com.sit.recyclingpinball.engine.entities.DynamicEntity entity) {
         if (getVelocity().getY() <= 0) {
@@ -63,8 +55,8 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     public void render(IGraphicsProvider graphics) {
         // Draw the shaft at the bottom, and the knob extending upwards (where the ball
         // sits)
-        graphics.drawTexture(shaftTextureId, getX() + 24, getY(), 16, 96);
-        graphics.drawTexture(knobTextureId, getX(), getY() + 96, 64, 64);
+        graphics.drawTexture(shaftTextureId, getPosition().getX() + 24, getPosition().getY(), 16, 96);
+        graphics.drawTexture(knobTextureId, getPosition().getX(), getPosition().getY() + 96, 64, 64);
     }
 
     @Override
@@ -100,7 +92,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     public boolean onTouchUp(int x, int y, int ptr, int btn) {
         if (isDragging) {
             isDragging = false;
-            float pullDistance = anchorY - getY();
+            float pullDistance = anchorY - getPosition().getY();
             launchVelocity = pullDistance * 20f;
             setVelocity(0, launchVelocity);
             return true;
@@ -113,14 +105,14 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         super.update(dt);
 
         if (isKeyPulling) {
-            float newY = getY() - keyPullSpeed * dt;
+            float newY = getPosition().getY() - keyPullSpeed * dt;
             newY = Math.max(anchorY - maxPullDistance, newY);
             setPosition(getPosition().getX(), newY);
             setVelocity(0, 0);
             eventBus.post(new ShooterRodMovedEvent(newY));
         }
 
-        if (getVelocity().getY() > 0 && getY() >= anchorY) {
+        if (getVelocity().getY() > 0 && getPosition().getY() >= anchorY) {
             setPosition(getPosition().getX(), anchorY);
             setVelocity(0, 0);
             eventBus.post(new BallLaunchedEvent(launchVelocity));
@@ -141,7 +133,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         if (keycode == EngineKey.DOWN || keycode == EngineKey.S) {
             if (isKeyPulling) {
                 isKeyPulling = false;
-                float pullDistance = anchorY - getY();
+                float pullDistance = anchorY - getPosition().getY();
                 launchVelocity = pullDistance * 20f;
                 setVelocity(0, launchVelocity);
                 return true;

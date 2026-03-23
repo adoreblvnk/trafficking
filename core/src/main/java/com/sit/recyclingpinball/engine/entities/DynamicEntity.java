@@ -16,23 +16,9 @@ public class DynamicEntity extends AbstractEntity implements Movable {
     private float friction = EngineConstants.DEFAULT_FRICTION;
     private float mass = 1.0f;
 
-    public float getMass() {
-        return mass;
-    }
-
-    public void setMass(float mass) {
-        if (mass > 0) {
-            this.mass = mass;
-        }
-    }
-
     @Override
     public float getInverseMass() {
         return mass > 0 ? 1f / mass : 0f;
-    }
-
-    public float getFriction() {
-        return friction;
     }
 
     public void setFriction(float friction) {

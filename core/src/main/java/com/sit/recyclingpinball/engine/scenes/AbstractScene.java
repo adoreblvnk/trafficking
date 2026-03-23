@@ -3,7 +3,6 @@ package com.sit.recyclingpinball.engine.scenes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sit.recyclingpinball.engine.EngineConstants;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
 import com.sit.recyclingpinball.engine.managers.CollisionManager;
 import com.sit.recyclingpinball.engine.managers.EntityManager;
@@ -41,11 +40,6 @@ public abstract class AbstractScene {
     }
 
     public abstract void create();
-
-    // Centralizes font loading so scenes avoid duplicating TTF setup and paths.
-    protected void loadFont(int size) {
-        context.getGraphics().loadFont(EngineConstants.DEFAULT_FONT_PATH, size);
-    }
 
     // Runs entity updates, then movement, then collision so physics and callbacks
     // stay consistent.

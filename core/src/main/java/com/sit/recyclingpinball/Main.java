@@ -11,6 +11,8 @@ import com.sit.recyclingpinball.engine.managers.TimeManager;
 
 import com.sit.recyclingpinball.engine.managers.AssetManager;
 
+import com.sit.recyclingpinball.logic.LogicConstants;
+
 public class Main extends Game {
     private SceneManager sceneManager;
     private LibGdxContext context;
@@ -26,7 +28,23 @@ public class Main extends Game {
 
         AssetManager assetManager = AssetManager.getInstance();
         assetManager.initialize(context.getAudio());
-        assetManager.loadAll();
+
+        assetManager.loadSound(LogicConstants.SOUNDS_DIR + LogicConstants.SOUND_CLICK + LogicConstants.SOUND_EXTENSION,
+                LogicConstants.SOUND_CLICK);
+        assetManager.loadSound(
+                LogicConstants.SOUNDS_DIR + LogicConstants.SOUND_COLLECT + LogicConstants.SOUND_EXTENSION,
+                LogicConstants.SOUND_COLLECT);
+        assetManager.loadSound(LogicConstants.SOUNDS_DIR + LogicConstants.SOUND_LOSE + LogicConstants.SOUND_EXTENSION,
+                LogicConstants.SOUND_LOSE);
+        assetManager.loadSound(LogicConstants.SOUNDS_DIR + LogicConstants.SOUND_WIN + LogicConstants.SOUND_EXTENSION,
+                LogicConstants.SOUND_WIN);
+        assetManager.loadSound(LogicConstants.SOUNDS_DIR + LogicConstants.SOUND_BOUNCE + LogicConstants.SOUND_EXTENSION,
+                LogicConstants.SOUND_BOUNCE);
+        assetManager.loadSound(LogicConstants.SOUNDS_DIR + LogicConstants.SOUND_FLIP + LogicConstants.SOUND_EXTENSION,
+                LogicConstants.SOUND_FLIP);
+        assetManager.loadSound(
+                LogicConstants.SOUNDS_DIR + LogicConstants.SOUND_STRETCH + LogicConstants.SOUND_EXTENSION,
+                LogicConstants.SOUND_STRETCH);
 
         SoundManager soundManager = new SoundManager(context.getAudio());
         IOManager ioManager = new IOManager(context.getIO());

@@ -19,10 +19,6 @@ public final class SATMathUtils {
         return new PlatformVector2(v.getX() / len, v.getY() / len);
     }
 
-    public static PlatformVector2 perpendicular(PlatformVector2 v) {
-        return new PlatformVector2(-v.getY(), v.getX());
-    }
-
     public static float[] projectPolygon(PlatformVector2 axis, PlatformVector2[] vertices) {
         float min = dotProduct(axis, vertices[0]);
         float max = min;

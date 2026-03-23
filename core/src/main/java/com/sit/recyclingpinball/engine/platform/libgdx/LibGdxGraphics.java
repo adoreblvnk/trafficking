@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Matrix4;
-import com.sit.recyclingpinball.engine.EngineConstants;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -146,15 +145,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
             font = generatedFont;
 
-            // Register font by its simple name (e.g. "Geist-Bold")
-            String simpleName = fontPath;
-            int lastSlash = fontPath.lastIndexOf('/');
-            if (lastSlash >= 0)
-                simpleName = simpleName.substring(lastSlash + 1);
-            int lastDot = simpleName.lastIndexOf('.');
-            if (lastDot >= 0)
-                simpleName = simpleName.substring(0, lastDot);
-            fonts.put(simpleName, generatedFont);
+            // Register font by its path so we can retrieve it with the full path
+            fonts.put(fontPath, generatedFont);
 
             return true;
         } catch (Exception e) {
@@ -196,9 +188,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
     public void drawText(String text, String fontName, float x, float y) {
         BitmapFont targetFont = fonts.get(fontName);
         if (targetFont == null) {
-            String path = EngineConstants.FONTS_DIR + fontName + EngineConstants.FONT_EXTENSION;
-            if (Gdx.files.internal(path).exists()) {
-                loadFont(path, 24);
+            if (Gdx.files.internal(fontName).exists()) {
+                loadFont(fontName, 24);
                 targetFont = fonts.get(fontName);
             }
             if (targetFont == null)
@@ -217,9 +208,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
     public void drawText(String text, String fontName, float x, float y, float targetWidth) {
         BitmapFont targetFont = fonts.get(fontName);
         if (targetFont == null) {
-            String path = EngineConstants.FONTS_DIR + fontName + EngineConstants.FONT_EXTENSION;
-            if (Gdx.files.internal(path).exists()) {
-                loadFont(path, 24);
+            if (Gdx.files.internal(fontName).exists()) {
+                loadFont(fontName, 24);
                 targetFont = fonts.get(fontName);
             }
             if (targetFont == null)
@@ -240,9 +230,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
     public void drawTextCentered(String text, String fontName, float x, float y, float width, float height) {
         BitmapFont targetFont = fonts.get(fontName);
         if (targetFont == null) {
-            String path = EngineConstants.FONTS_DIR + fontName + EngineConstants.FONT_EXTENSION;
-            if (Gdx.files.internal(path).exists()) {
-                loadFont(path, 24);
+            if (Gdx.files.internal(fontName).exists()) {
+                loadFont(fontName, 24);
                 targetFont = fonts.get(fontName);
             }
             if (targetFont == null)
@@ -287,8 +276,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
     public void drawTexture(String textureId, float x, float y, float w, float h) {
         Texture texture = textures.get(textureId);
         if (texture == null) {
-            texture = new Texture(
-                    Gdx.files.internal(EngineConstants.TEXTURES_DIR + textureId + EngineConstants.TEXTURE_EXTENSION));
+            texture = new Texture(Gdx.files.internal(textureId));
             textures.put(textureId, texture);
         }
         ensureSpriteBatch();
@@ -300,8 +288,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
             float rotationDegrees) {
         Texture texture = textures.get(textureId);
         if (texture == null) {
-            texture = new Texture(
-                    Gdx.files.internal(EngineConstants.TEXTURES_DIR + textureId + EngineConstants.TEXTURE_EXTENSION));
+            texture = new Texture(Gdx.files.internal(textureId));
             textures.put(textureId, texture);
         }
         ensureSpriteBatch();

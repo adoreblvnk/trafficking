@@ -1,7 +1,6 @@
 package com.sit.recyclingpinball.engine.managers;
 
 import com.sit.recyclingpinball.engine.interfaces.providers.IAudioProvider;
-import com.sit.recyclingpinball.engine.EngineConstants;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,44 +43,9 @@ public class AssetManager {
         this.audioProvider = provider;
     }
 
-    /**
-     * Loads all required game assets.
-     */
-    public void loadAll() {
-        if (audioProvider == null) {
-            throw new IllegalStateException(
-                    "AssetManager must be initialized with an IAudioProvider before loading assets");
-        }
-
-        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_CLICK + EngineConstants.SOUND_EXTENSION,
-                EngineConstants.SOUND_CLICK);
-        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_COLLECT + EngineConstants.SOUND_EXTENSION,
-                EngineConstants.SOUND_COLLECT);
-        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_LOSE + EngineConstants.SOUND_EXTENSION,
-                EngineConstants.SOUND_LOSE);
-        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_WIN + EngineConstants.SOUND_EXTENSION,
-                EngineConstants.SOUND_WIN);
-        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_BOUNCE + EngineConstants.SOUND_EXTENSION,
-                EngineConstants.SOUND_BOUNCE);
-        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_FLIP + EngineConstants.SOUND_EXTENSION,
-                EngineConstants.SOUND_FLIP);
-        loadSound(EngineConstants.SOUNDS_DIR + EngineConstants.SOUND_STRETCH + EngineConstants.SOUND_EXTENSION,
-                EngineConstants.SOUND_STRETCH);
-    }
-
-    private void loadSound(String path, String id) {
+    public void loadSound(String path, String id) {
         audioProvider.loadSound(path, id);
         loadedSounds.put(id, path);
     }
 
-    /**
-     * Retrieves the path of a loaded sound by its ID.
-     *
-     * @param id
-     *            the sound identifier
-     * @return the file path of the sound, or null if not loaded
-     */
-    public String getSound(String id) {
-        return loadedSounds.get(id);
-    }
 }

@@ -25,22 +25,6 @@ public class CollisionManager {
         this.quadTree = new QuadTree(0, bounds);
     }
 
-    public List<ICollidable> getEntitiesInArea(List<? extends ICollidable> entities, PlatformRectangle area) {
-        List<ICollidable> result = new ArrayList<>();
-
-        if (entities == null || area == null) {
-            LOGGER.severe("Cannot query area with null parameters");
-            return result;
-        }
-
-        for (ICollidable e : entities) {
-            if (e != null && e.getCollider() != null && e.getCollider().getAABB().overlaps(area)) {
-                result.add(e);
-            }
-        }
-        return result;
-    }
-
     public void processCollisions(List<? extends ICollidable> entities) {
         if (entities == null) {
             LOGGER.severe("Cannot process collisions on null entity list");

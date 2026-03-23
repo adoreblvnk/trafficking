@@ -8,6 +8,8 @@ import java.util.Optional;
  */
 public interface IIOProvider {
 
+    java.util.List<String> listInternalFiles(String directory, String extension);
+
     /**
      * Reads a text file from internal assets/resources.
      *
@@ -36,8 +38,6 @@ public interface IIOProvider {
      * @return true when write succeeds
      */
     boolean writeLocalText(String localPath, String data);
-
-    java.util.List<String> listInternalFiles(String directory, String extension);
 
     /**
      * Deserializes a JSON string into an object of the specified class.

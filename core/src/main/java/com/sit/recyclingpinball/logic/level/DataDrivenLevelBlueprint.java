@@ -5,12 +5,13 @@ import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.factories.TrashType;
 
 public class DataDrivenLevelBlueprint implements ILevelBlueprint {
-    private String name = "";
     private String text = "";
     private LevelConfig mergedConfig;
+    private String name = "Unknown Level";
 
     public DataDrivenLevelBlueprint(String filepath, IEngineContext context) {
-        String baseContent = context.getIO().readInternalText("levels/base.json").orElse("{}");
+        String baseContent = context.getIO()
+                .readInternalText(com.sit.recyclingpinball.logic.LogicConstants.PATH_BASE_LEVEL).orElse("{}");
         LevelConfig baseConfig = context.getIO().fromJson(baseContent, LevelConfig.class);
 
         String specificContent = context.getIO().readInternalText(filepath).orElse("{}");
@@ -20,6 +21,7 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
         if (specificConfig != null) {
             if (specificConfig.name != null)
                 this.name = specificConfig.name;
+
             if (specificConfig.text != null)
                 this.text = specificConfig.text.replace("\\n", "\n");
 
@@ -28,11 +30,11 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
             if (specificConfig.slantedWall != null)
                 mergedConfig.slantedWall.addAll(specificConfig.slantedWall);
             if (specificConfig.flipperLeft != null)
-                mergedConfig.flipperLeft.addAll(specificConfig.flipperLeft);
+                mergedConfig.flipperLeft = specificConfig.flipperLeft;
             if (specificConfig.flipperRight != null)
-                mergedConfig.flipperRight.addAll(specificConfig.flipperRight);
+                mergedConfig.flipperRight = specificConfig.flipperRight;
             if (specificConfig.shooter != null)
-                mergedConfig.shooter.addAll(specificConfig.shooter);
+                mergedConfig.shooter = specificConfig.shooter;
             if (specificConfig.trash != null)
                 mergedConfig.trash.addAll(specificConfig.trash);
         }
@@ -53,19 +55,13 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
                 }
             }
             if (mergedConfig.flipperLeft != null) {
-                for (LevelConfig.FlipperConfig flip : mergedConfig.flipperLeft) {
-                    builder.addLeftFlipper((int) flip.x, (int) flip.y);
-                }
+                builder.addLeftFlipper((int) mergedConfig.flipperLeft.x, (int) mergedConfig.flipperLeft.y);
             }
             if (mergedConfig.flipperRight != null) {
-                for (LevelConfig.FlipperConfig flip : mergedConfig.flipperRight) {
-                    builder.addRightFlipper((int) flip.x, (int) flip.y);
-                }
+                builder.addRightFlipper((int) mergedConfig.flipperRight.x, (int) mergedConfig.flipperRight.y);
             }
             if (mergedConfig.shooter != null) {
-                for (LevelConfig.ShooterConfig shooter : mergedConfig.shooter) {
-                    builder.setShooterRod((int) shooter.x, (int) shooter.y, eventBus);
-                }
+                builder.setShooterRod((int) mergedConfig.shooter.x, (int) mergedConfig.shooter.y, eventBus);
             }
             if (mergedConfig.trash != null) {
                 for (LevelConfig.TrashConfig trashItem : mergedConfig.trash) {
@@ -78,12 +74,12 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
     }
 
     @Override
-    public String getLevelName() {
-        return name;
+    public String getText() {
+        return text;
     }
 
     @Override
-    public String getText() {
-        return text;
+    public String getLevelName() {
+        return name;
     }
 }

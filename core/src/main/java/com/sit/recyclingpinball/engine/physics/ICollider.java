@@ -9,9 +9,6 @@ public interface ICollider {
     void setPosition(float x, float y);
     default void setRotation(float angle) {
     }
-    default float getRotation() {
-        return 0f;
-    }
 
     CollisionResult checkCollision(ICollider other);
     CollisionResult checkCollision(CircleCollider other);
