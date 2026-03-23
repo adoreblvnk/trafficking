@@ -95,8 +95,8 @@ public interface IGraphicsProvider {
     void setProjectionMatrix(float width, float height);
 
     /**
-     * Loads a texture from the given path and returns it as a generic handle.
-     * The manager is responsible for storing and reusing this handle.
+     * Loads a texture from the given path and returns it as a generic handle. The
+     * manager is responsible for storing and reusing this handle.
      */
     Object loadTextureResource(String path);
 

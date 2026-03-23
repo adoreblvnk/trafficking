@@ -26,7 +26,7 @@ public class Main extends Game {
         // PERFORMANCE OPTIMIZATION: Asset Preloading & Flyweight Pattern
         // We initialize the AssetManager and explicitly load all resources upfront.
         // This ensures the Flyweight pattern is strictly enforced—multiple game
-        // objects (e.g., trash, walls) share single memory references for their
+        // objects (e.g., trash, pinball) share single memory references for their
         // textures and sounds. Preloading also eliminates disk I/O "hitching"
         // during the gameplay loop, ensuring a consistent 60FPS render cycle.
         AssetManager assetManager = AssetManager.getInstance();
@@ -69,7 +69,6 @@ public class Main extends Game {
         assetManager.loadTexture(LogicConstants.ID_TRASH_PLASTIC, LogicConstants.ID_TRASH_PLASTIC);
         assetManager.loadTexture(LogicConstants.ID_TRASH_PAPER, LogicConstants.ID_TRASH_PAPER);
         assetManager.loadTexture(LogicConstants.ID_TRASH_GLASS, LogicConstants.ID_TRASH_GLASS);
-        assetManager.loadTexture("textures/wall.png", "textures/wall.png");
 
         sceneManager = new SceneManager(context);
         sceneManager.setScene(new MenuScene(context, sceneManager));

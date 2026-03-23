@@ -14,8 +14,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Texture;
 
 /**
- * libGDX implementation of IGraphicsProvider.
- * Now delegates asset management to the AssetManager singleton.
+ * libGDX implementation of IGraphicsProvider. Now delegates asset management to
+ * the AssetManager singleton.
  */
 public class LibGdxGraphics implements IGraphicsProvider {
 
@@ -174,7 +174,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
     @Override
     public void drawText(String text, String fontId, float x, float y) {
         BitmapFont f = (BitmapFont) AssetManager.getInstance().getFont(fontId);
-        if (f == null) return;
+        if (f == null)
+            return;
         ensureSpriteBatch();
         applyTextColor(f);
         f.draw(spriteBatch, text, x, y);
@@ -183,7 +184,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
     @Override
     public void drawText(String text, String fontId, float x, float y, float targetWidth) {
         BitmapFont f = (BitmapFont) AssetManager.getInstance().getFont(fontId);
-        if (f == null) return;
+        if (f == null)
+            return;
         ensureSpriteBatch();
         applyTextColor(f);
         f.draw(spriteBatch, text, x, y, targetWidth, com.badlogic.gdx.utils.Align.center, true);
@@ -194,7 +196,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
     @Override
     public void drawTextCentered(String text, String fontId, float x, float y, float width, float height) {
         BitmapFont f = (BitmapFont) AssetManager.getInstance().getFont(fontId);
-        if (f == null) return;
+        if (f == null)
+            return;
         ensureSpriteBatch();
         applyTextColor(f);
 
@@ -226,7 +229,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
     @Override
     public void drawTexture(String textureId, float x, float y, float w, float h) {
         Texture texture = (Texture) AssetManager.getInstance().getTexture(textureId);
-        if (texture == null) return;
+        if (texture == null)
+            return;
         ensureSpriteBatch();
         spriteBatch.draw(texture, x, y, w, h);
     }
@@ -235,7 +239,8 @@ public class LibGdxGraphics implements IGraphicsProvider {
     public void drawTexture(String textureId, float x, float y, float width, float height, float originX, float originY,
             float rotationDegrees) {
         Texture texture = (Texture) AssetManager.getInstance().getTexture(textureId);
-        if (texture == null) return;
+        if (texture == null)
+            return;
         ensureSpriteBatch();
         spriteBatch.draw(texture, x, y, originX, originY, width, height, 1.0f, 1.0f, rotationDegrees, 0, 0,
                 texture.getWidth(), texture.getHeight(), false, false);

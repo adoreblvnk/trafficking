@@ -6,15 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Centralized manager for loading and tracking game assets (Sounds, Textures, Fonts).
- * Ensures assets are loaded once and shared across the engine (Flyweight Pattern).
+ * Centralized manager for loading and tracking game assets (Sounds, Textures,
+ * Fonts). Ensures assets are loaded once and shared across the engine
+ * (Flyweight Pattern).
  */
 public class AssetManager {
 
     private static AssetManager instance;
     private IAudioProvider audioProvider;
     private IGraphicsProvider graphicsProvider;
-    
+
     private final Map<String, Object> loadedSounds = new HashMap<>();
     private final Map<String, Object> loadedTextures = new HashMap<>();
     private final Map<String, Object> loadedFonts = new HashMap<>();
