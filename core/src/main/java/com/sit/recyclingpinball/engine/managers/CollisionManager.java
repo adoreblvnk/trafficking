@@ -15,16 +15,13 @@ import java.util.logging.Logger;
  * Detects and resolves intersections between bounded entities. Supports
  * static/dynamic entity separation with configurable bounce and push factors.
  */
-public class CollisionManager {
+public class CollisionManager implements com.sit.recyclingpinball.engine.interfaces.ICollisionManager {
     private static final Logger LOGGER = Logger.getLogger(CollisionManager.class.getName());
 
     private final QuadTree quadTree;
 
-    public CollisionManager(PlatformRectangle bounds) {
-        if (bounds == null) {
-            bounds = new PlatformRectangle(0, 0, 1920, 1080); // Default fallback
-        }
-        this.quadTree = new QuadTree(0, bounds);
+    public CollisionManager(float worldWidth, float worldHeight) {
+        this.quadTree = new QuadTree(0, new PlatformRectangle(0, 0, worldWidth, worldHeight));
     }
 
     public void processCollisions(List<? extends ICollidable> entities) {

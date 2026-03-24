@@ -29,7 +29,7 @@ import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
  * @see com.sit.recyclingpinball.engine.entities.AbstractEntity
  * @see com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider
  */
-public class EntityManager {
+public class EntityManager implements com.sit.recyclingpinball.engine.interfaces.IEntityManager {
 
     private final Map<String, AbstractEntity> entityMap;
     private final List<AbstractEntity> entityList;
@@ -113,11 +113,13 @@ public class EntityManager {
     }
 
     /**
-     * Retrieves all entities that implement or extend a specific type.
-     * Uses Generics to avoid downcasting in the caller.
+     * Retrieves all entities that implement or extend a specific type. Uses
+     * Generics to avoid downcasting in the caller.
      *
-     * @param type the Class object of the type to filter by
-     * @param <T>  the generic type parameter
+     * @param type
+     *            the Class object of the type to filter by
+     * @param <T>
+     *            the generic type parameter
      * @return a list of entities cast to the specified type
      */
     public <T> List<T> getEntitiesByType(Class<T> type) {

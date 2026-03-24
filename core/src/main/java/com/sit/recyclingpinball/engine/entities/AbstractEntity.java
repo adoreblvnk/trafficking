@@ -65,7 +65,8 @@ public abstract class AbstractEntity implements ICollidable {
      * Renders the entity using the provided graphics provider
      * (platform-independent).
      *
-     * @param graphics the graphics provider
+     * @param graphics
+     *            the graphics provider
      */
     public abstract void render(IGraphicsProvider graphics);
 
@@ -103,7 +104,6 @@ public abstract class AbstractEntity implements ICollidable {
     public PlatformVector2 getPosition() {
         return position;
     }
-
 
     // updates both position and bounding box to prevent desync whenever moving the
     // entity

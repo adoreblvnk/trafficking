@@ -18,7 +18,7 @@ public class IdleState implements IPinballState {
 
     @Override
     public void visit(BallLaunchedEvent launchEvent) {
-        ctx.setState(ctx.getFactory().createInPlayState());
+        ctx.setState(ctx.getStateFactory().createInPlayState());
         ctx.getVelocity().setY(launchEvent.getLaunchVelocity());
     }
 

@@ -3,31 +3,30 @@ package com.sit.recyclingpinball.engine.scenes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
+import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
+import com.sit.recyclingpinball.engine.interfaces.IInputManager;
+import com.sit.recyclingpinball.engine.interfaces.IMovementManager;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
-import com.sit.recyclingpinball.engine.managers.CollisionManager;
-import com.sit.recyclingpinball.engine.managers.EntityManager;
-import com.sit.recyclingpinball.engine.managers.InputManager;
-import com.sit.recyclingpinball.engine.managers.MovementManager;
 
 /**
  * Base for all game screens; provides shared managers and a consistent
- * lifecycle. Now depends on IEngineContext for platform-independent access to
- * display, graphics, and audio.
+ * lifecycle. Depends on manager interfaces for DIP compliance.
  */
 public abstract class AbstractScene {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractScene.class.getName());
 
-    private EntityManager entityManager;
-    private CollisionManager collisionManager;
-    private InputManager inputManager;
-    private MovementManager movementManager;
+    private IEntityManager entityManager;
+    private ICollisionManager collisionManager;
+    private IInputManager inputManager;
+    private IMovementManager movementManager;
     private final IEngineContext context;
 
     // Gives every scene its own manager instances for isolation and predictable
     // teardown.
-    public AbstractScene(IEngineContext context, EntityManager entityManager, CollisionManager collisionManager,
-            InputManager inputManager, MovementManager movementManager) {
+    public AbstractScene(IEngineContext context, IEntityManager entityManager, ICollisionManager collisionManager,
+            IInputManager inputManager, IMovementManager movementManager) {
         this.context = context;
         this.entityManager = entityManager;
         this.collisionManager = collisionManager;
@@ -51,7 +50,8 @@ public abstract class AbstractScene {
         }
 
         try {
-            movementManager.processMovement(entityManager.getEntitiesByType(com.sit.recyclingpinball.engine.interfaces.Movable.class), dt);
+            movementManager.processMovement(
+                    entityManager.getEntitiesByType(com.sit.recyclingpinball.engine.interfaces.Movable.class), dt);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Movement processing failed", e);
         }
@@ -75,11 +75,11 @@ public abstract class AbstractScene {
     public void dispose() {
     }
 
-    public EntityManager getEntityManager() {
+    public IEntityManager getEntityManager() {
         return entityManager;
     }
 
-    public InputManager getInputManager() {
+    public IInputManager getInputManager() {
         return inputManager;
     }
 

@@ -78,13 +78,16 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
             }
         }
         if (mergedConfig.getFlipperLeft() != null) {
-            builder.addLeftFlipper((int) mergedConfig.getFlipperLeft().getX(), (int) mergedConfig.getFlipperLeft().getY());
+            builder.addLeftFlipper((int) mergedConfig.getFlipperLeft().getX(),
+                    (int) mergedConfig.getFlipperLeft().getY());
         }
         if (mergedConfig.getFlipperRight() != null) {
-            builder.addRightFlipper((int) mergedConfig.getFlipperRight().getX(), (int) mergedConfig.getFlipperRight().getY());
+            builder.addRightFlipper((int) mergedConfig.getFlipperRight().getX(),
+                    (int) mergedConfig.getFlipperRight().getY());
         }
         if (mergedConfig.getShooter() != null) {
-            builder.setShooterRod((int) mergedConfig.getShooter().getX(), (int) mergedConfig.getShooter().getY(), eventBus);
+            builder.setShooterRod((int) mergedConfig.getShooter().getX(), (int) mergedConfig.getShooter().getY(),
+                    eventBus);
         }
         if (mergedConfig.getTrash() != null) {
             for (LevelConfig.TrashConfig trashItem : mergedConfig.getTrash()) {

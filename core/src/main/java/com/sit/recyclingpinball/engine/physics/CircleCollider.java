@@ -2,6 +2,7 @@ package com.sit.recyclingpinball.engine.physics;
 
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle;
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformCircle;
+import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 
 public class CircleCollider implements ICollider {
     private PlatformCircle circle;
@@ -33,11 +34,13 @@ public class CircleCollider implements ICollider {
 
     @Override
     public CollisionResult checkCollision(ICollider other) {
-        return other.checkCollision(this).invert();
+        return CollisionDispatcher.dispatch(this, other);
     }
 
-    @Override
-    public CollisionResult checkCollision(CircleCollider other) {
+    /**
+     * Circle-vs-circle collision logic, called by CollisionDispatcher.
+     */
+    CollisionResult collideCircle(CircleCollider other) {
         boolean overlaps = this.circle.overlaps(other.getCircle());
         if (!overlaps)
             return new CollisionResult(false, null, 0);
@@ -47,23 +50,13 @@ public class CircleCollider implements ICollider {
         float dist = (float) Math.sqrt(dx * dx + dy * dy);
         float overlap = (this.circle.getRadius() + other.getCircle().getRadius()) - dist;
 
-        com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2 normal;
+        PlatformVector2 normal;
         if (dist > 0) {
-            normal = new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2(dx / dist, dy / dist);
+            normal = new PlatformVector2(dx / dist, dy / dist);
         } else {
-            normal = new com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2(1, 0);
+            normal = new PlatformVector2(1, 0);
         }
         return new CollisionResult(true, normal, overlap);
-    }
-
-    @Override
-    public CollisionResult checkCollision(BoxCollider other) {
-        return SATMathUtils.getAABBvsAABB(this.aabb, other.getAABB());
-    }
-
-    @Override
-    public CollisionResult checkCollision(OBBCollider other) {
-        return SATMathUtils.getMTV(other, this).invert();
     }
 
     @Override

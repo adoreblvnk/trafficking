@@ -3,13 +3,14 @@ package com.sit.recyclingpinball.logic.ui;
 import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
-import com.sit.recyclingpinball.engine.managers.CollisionManager;
-import com.sit.recyclingpinball.engine.managers.EntityManager;
-import com.sit.recyclingpinball.engine.managers.InputManager;
-import com.sit.recyclingpinball.engine.managers.MovementManager;
+import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
+import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
+import com.sit.recyclingpinball.engine.interfaces.IInputManager;
+import com.sit.recyclingpinball.engine.interfaces.IMovementManager;
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.logic.LogicConstants;
+import com.sit.recyclingpinball.logic.factories.SceneFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,14 @@ import java.util.List;
 public class PauseOverlay extends AbstractScene implements InputListener {
     private final SceneManager sceneManager;
     private final List<Button> buttons = new ArrayList<>();
-    private final com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory;
+    private final SceneFactory sceneFactory;
 
-    public PauseOverlay(IEngineContext context, SceneManager sceneManager,
-            com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory, EntityManager entityManager,
-            CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+    public PauseOverlay(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+            IEntityManager entityManager, ICollisionManager collisionManager, IInputManager inputManager,
+            IMovementManager movementManager) {
         super(context, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
-        this.assemblyFactory = assemblyFactory;
+        this.sceneFactory = sceneFactory;
 
         float pauseBtnW = LogicConstants.UI_BTN_WIDTH_SMALL;
         float pauseBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
@@ -42,7 +43,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
                 }));
         buttons.add(new Button(btnX, LogicConstants.UI_PAUSE_MENU_BTN_POS[1], btnW, btnH, LogicConstants.TEXT_MAIN_MENU,
                 () -> {
-                    sceneManager.setScene(assemblyFactory.createMenuScene());
+                    sceneManager.setScene(sceneFactory.createMenuScene());
                 }));
     }
 
@@ -80,7 +81,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
             return true;
         } else if (keycode == EngineKey.M) {
             getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
-            sceneManager.setScene(assemblyFactory.createMenuScene());
+            sceneManager.setScene(sceneFactory.createMenuScene());
             return true;
         }
         return false;

@@ -3,7 +3,7 @@ package com.sit.recyclingpinball.logic.entities;
 import com.sit.recyclingpinball.engine.components.SpriteComponent;
 import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
 
-import com.sit.recyclingpinball.engine.entities.DynamicEntity;
+import com.sit.recyclingpinball.engine.entities.AbstractEntity;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.sit.recyclingpinball.engine.physics.BoxCollider;
@@ -12,7 +12,12 @@ import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.ShooterRodMovedEvent;
 import com.sit.recyclingpinball.logic.LogicConstants;
 
-public class ShooterRodEntity extends DynamicEntity implements InputListener {
+/**
+ * An anchored shooter rod that responds to drag/keyboard input and launches the
+ * ball. Extends AbstractEntity directly because it is not a physics-driven body
+ * — it manages its own position via input and spring-back animation.
+ */
+public class ShooterRodEntity extends AbstractEntity implements InputListener {
     private final float anchorY;
     private final PinballEventBus eventBus;
     private final SpriteComponent shaftSprite;
@@ -20,6 +25,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     private boolean isDragging;
     private boolean isKeyPulling;
     private float launchVelocity;
+    private float velocityY;
 
     public ShooterRodEntity(String id, float x, float y, PinballEventBus eventBus) {
         super(id, x, y, LogicConstants.SHOOTER_SIZE[0], LogicConstants.SHOOTER_SIZE[1]);
@@ -27,17 +33,18 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         this.anchorY = y;
         this.eventBus = eventBus;
         this.shaftSprite = new SpriteComponent(LogicConstants.TEX_SLIDE_VERTICAL_GREY,
-            LogicConstants.SHOOTER_SHAFT_SIZE[0], LogicConstants.SHOOTER_SHAFT_SIZE[1]);
+                LogicConstants.SHOOTER_SHAFT_SIZE[0], LogicConstants.SHOOTER_SHAFT_SIZE[1]);
         this.knobSprite = new SpriteComponent(LogicConstants.TEX_BALL_BLUE_LARGE, LogicConstants.SHOOTER_KNOB_SIZE,
-            LogicConstants.SHOOTER_KNOB_SIZE);
+                LogicConstants.SHOOTER_KNOB_SIZE);
         this.isDragging = false;
         this.isKeyPulling = false;
+        this.velocityY = 0;
         setTag(LogicConstants.TAG_SHOOTER);
     }
 
     @Override
     public void resolveCollision(com.sit.recyclingpinball.engine.entities.DynamicEntity entity) {
-        if (getVelocity().getY() <= 0) {
+        if (velocityY <= 0) {
             entity.getVelocity().setY(0);
             entity.getVelocity().setX(0);
 
@@ -53,14 +60,11 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
 
     @Override
     public void render(IGraphicsProvider graphics) {
-        // Draw the shaft at the bottom, and the knob extending upwards (where the ball
-        // sits)
         graphics.drawTexture(shaftSprite.textureId(), getPosition().getX() + LogicConstants.SHOOTER_SHAFT_OFFSET[0],
-            getPosition().getY() + LogicConstants.SHOOTER_SHAFT_OFFSET[1], shaftSprite.width(),
-            shaftSprite.height());
+                getPosition().getY() + LogicConstants.SHOOTER_SHAFT_OFFSET[1], shaftSprite.width(),
+                shaftSprite.height());
         graphics.drawTexture(knobSprite.textureId(), getPosition().getX() + LogicConstants.SHOOTER_KNOB_OFFSET[0],
-            getPosition().getY() + LogicConstants.SHOOTER_KNOB_OFFSET[1], knobSprite.width(),
-            knobSprite.height());
+                getPosition().getY() + LogicConstants.SHOOTER_KNOB_OFFSET[1], knobSprite.width(), knobSprite.height());
     }
 
     @Override
@@ -78,13 +82,10 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
         if (isDragging) {
             float touchY = LogicConstants.SCENE_SIZE[1] - y;
             float newY = Math.max(anchorY - LogicConstants.SHOOTER_MAX_PULL, touchY);
-            // Additionally clamp it to not go above anchorY, though prompt doesn't
-            // explicitly say for onDrag,
-            // but it says "use Math.max(anchorY - maxPullDistance, touchY) to clamp it."
             newY = Math.min(anchorY, newY);
 
             setPosition(getPosition().getX(), newY);
-            setVelocity(0, 0);
+            velocityY = 0;
 
             eventBus.post(new ShooterRodMovedEvent(newY));
             return true;
@@ -98,7 +99,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
             isDragging = false;
             float pullDistance = anchorY - getPosition().getY();
             launchVelocity = pullDistance * LogicConstants.SHOOTER_LAUNCH_MULTIPLIER;
-            setVelocity(0, launchVelocity);
+            velocityY = launchVelocity;
             return true;
         }
         return false;
@@ -112,14 +113,20 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
             float newY = getPosition().getY() - LogicConstants.SHOOTER_KEY_PULL_SPEED * dt;
             newY = Math.max(anchorY - LogicConstants.SHOOTER_MAX_PULL, newY);
             setPosition(getPosition().getX(), newY);
-            setVelocity(0, 0);
+            velocityY = 0;
             eventBus.post(new ShooterRodMovedEvent(newY));
         }
 
-        if (getVelocity().getY() > 0 && getPosition().getY() >= anchorY) {
-            setPosition(getPosition().getX(), anchorY);
-            setVelocity(0, 0);
-            eventBus.post(new BallLaunchedEvent(launchVelocity));
+        // Spring-back: move rod upward toward anchor
+        if (velocityY > 0) {
+            float newY = getPosition().getY() + velocityY * dt;
+            if (newY >= anchorY) {
+                setPosition(getPosition().getX(), anchorY);
+                velocityY = 0;
+                eventBus.post(new BallLaunchedEvent(launchVelocity));
+            } else {
+                setPosition(getPosition().getX(), newY);
+            }
         }
     }
 
@@ -139,7 +146,7 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
                 isKeyPulling = false;
                 float pullDistance = anchorY - getPosition().getY();
                 launchVelocity = pullDistance * LogicConstants.SHOOTER_LAUNCH_MULTIPLIER;
-                setVelocity(0, launchVelocity);
+                velocityY = launchVelocity;
                 return true;
             }
         }
@@ -149,5 +156,15 @@ public class ShooterRodEntity extends DynamicEntity implements InputListener {
     @Override
     public boolean isStatic() {
         return true;
+    }
+
+    @Override
+    public boolean isTrigger() {
+        return false;
+    }
+
+    @Override
+    public float getInverseMass() {
+        return 0f;
     }
 }

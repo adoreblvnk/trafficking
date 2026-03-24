@@ -26,7 +26,7 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
         super(id, x, y, LogicConstants.FLIPPER_SIZE[0], LogicConstants.FLIPPER_SIZE[1]);
         this.isLeft = isLeft;
         this.sprite = new SpriteComponent(LogicConstants.TEX_FLIPPER, LogicConstants.FLIPPER_SIZE[0],
-            LogicConstants.FLIPPER_SIZE[1]);
+                LogicConstants.FLIPPER_SIZE[1]);
 
         if (isLeft) {
             this.startAngle = LogicConstants.FLIPPER_LEFT_START_ANGLE;
@@ -94,8 +94,7 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     @Override
     public void render(IGraphicsProvider graphics) {
         graphics.drawTexture(sprite.textureId(), getPosition().getX(), getPosition().getY(), sprite.width(),
-            sprite.height(), LogicConstants.FLIPPER_PIVOT[0], LogicConstants.FLIPPER_PIVOT[1],
-                currentAngle);
+                sprite.height(), LogicConstants.FLIPPER_PIVOT[0], LogicConstants.FLIPPER_PIVOT[1], currentAngle);
     }
 
     @Override

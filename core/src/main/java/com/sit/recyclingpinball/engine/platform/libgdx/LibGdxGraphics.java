@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Matrix4;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
-import com.sit.recyclingpinball.engine.managers.AssetManager;
+import com.sit.recyclingpinball.engine.interfaces.providers.IAssetProvider;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -24,12 +24,12 @@ public class LibGdxGraphics implements IGraphicsProvider {
     private boolean isShapeBatchOpen = false;
     private boolean isSpriteBatchOpen = false;
     private boolean isDisposed = false;
-    private final AssetManager assetManager;
+    private final IAssetProvider assetProvider;
 
-    public LibGdxGraphics(AssetManager assetManager) {
+    public LibGdxGraphics(IAssetProvider assetProvider) {
         this.shapeRenderer = new ShapeRenderer();
         this.spriteBatch = new SpriteBatch();
-        this.assetManager = assetManager;
+        this.assetProvider = assetProvider;
     }
 
     @Override
@@ -176,7 +176,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void drawText(String text, String fontId, float x, float y) {
-        BitmapFont f = (BitmapFont) assetManager.getFont(fontId);
+        BitmapFont f = (BitmapFont) assetProvider.getFont(fontId);
         if (f == null)
             return;
         ensureSpriteBatch();
@@ -186,7 +186,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void drawText(String text, String fontId, float x, float y, float targetWidth) {
-        BitmapFont f = (BitmapFont) assetManager.getFont(fontId);
+        BitmapFont f = (BitmapFont) assetProvider.getFont(fontId);
         if (f == null)
             return;
         ensureSpriteBatch();
@@ -198,7 +198,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void drawTextCentered(String text, String fontId, float x, float y, float width, float height) {
-        BitmapFont f = (BitmapFont) assetManager.getFont(fontId);
+        BitmapFont f = (BitmapFont) assetProvider.getFont(fontId);
         if (f == null)
             return;
         ensureSpriteBatch();
@@ -231,7 +231,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void drawTexture(String textureId, float x, float y, float w, float h) {
-        Texture texture = (Texture) assetManager.getTexture(textureId);
+        Texture texture = (Texture) assetProvider.getTexture(textureId);
         if (texture == null)
             return;
         ensureSpriteBatch();
@@ -241,7 +241,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
     @Override
     public void drawTexture(String textureId, float x, float y, float width, float height, float originX, float originY,
             float rotationDegrees) {
-        Texture texture = (Texture) assetManager.getTexture(textureId);
+        Texture texture = (Texture) assetProvider.getTexture(textureId);
         if (texture == null)
             return;
         ensureSpriteBatch();
