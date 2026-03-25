@@ -72,12 +72,8 @@ public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.
      */
     public void dispose() {
         if (graphicsProvider != null) {
-            for (Object texture : loadedTextures.values()) {
-                graphicsProvider.disposeTextureResource(texture);
-            }
-            for (Object font : loadedFonts.values()) {
-                graphicsProvider.disposeFontResource(font);
-            }
+            loadedTextures.values().forEach(graphicsProvider::disposeTextureResource);
+            loadedFonts.values().forEach(graphicsProvider::disposeFontResource);
         }
         loadedTextures.clear();
         loadedFonts.clear();

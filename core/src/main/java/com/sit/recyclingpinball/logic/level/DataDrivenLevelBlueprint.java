@@ -4,7 +4,8 @@ import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.factories.TrashType;
 
-import java.util.ArrayList;
+import java.util.Objects;
+import java.util.stream.Stream;
 import java.util.List;
 
 public class DataDrivenLevelBlueprint implements ILevelBlueprint {
@@ -33,35 +34,29 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
     }
 
     private static LevelConfig merge(LevelConfig baseConfig, LevelConfig specificConfig) {
-        LevelConfig base = baseConfig != null ? baseConfig : new LevelConfig();
+        LevelConfig base = Objects.requireNonNullElse(baseConfig, new LevelConfig());
 
         if (specificConfig == null) {
             return base;
         }
 
         LevelConfig merged = new LevelConfig();
-        merged.setName(specificConfig.getName() != null ? specificConfig.getName() : base.getName());
-        merged.setText(specificConfig.getText() != null ? specificConfig.getText() : base.getText());
+        merged.setName(Objects.requireNonNullElse(specificConfig.getName(), base.getName()));
+        merged.setText(Objects.requireNonNullElse(specificConfig.getText(), base.getText()));
         merged.setWall(concat(base.getWall(), specificConfig.getWall()));
         merged.setSlantedWall(concat(base.getSlantedWall(), specificConfig.getSlantedWall()));
-        merged.setFlipperLeft(
-                specificConfig.getFlipperLeft() != null ? specificConfig.getFlipperLeft() : base.getFlipperLeft());
-        merged.setFlipperRight(
-                specificConfig.getFlipperRight() != null ? specificConfig.getFlipperRight() : base.getFlipperRight());
-        merged.setShooter(specificConfig.getShooter() != null ? specificConfig.getShooter() : base.getShooter());
+        merged.setFlipperLeft(Objects.requireNonNullElse(specificConfig.getFlipperLeft(), base.getFlipperLeft()));
+        merged.setFlipperRight(Objects.requireNonNullElse(specificConfig.getFlipperRight(), base.getFlipperRight()));
+        merged.setShooter(Objects.requireNonNullElse(specificConfig.getShooter(), base.getShooter()));
         merged.setTrash(concat(base.getTrash(), specificConfig.getTrash()));
         return merged;
     }
 
     private static <T> List<T> concat(List<T> first, List<T> second) {
-        List<T> merged = new ArrayList<>();
-        if (first != null) {
-            merged.addAll(first);
-        }
-        if (second != null) {
-            merged.addAll(second);
-        }
-        return merged;
+        return Stream.concat(
+                (first == null ? Stream.<T>empty() : first.stream()),
+                (second == null ? Stream.<T>empty() : second.stream())
+        ).toList();
     }
 
     @Override

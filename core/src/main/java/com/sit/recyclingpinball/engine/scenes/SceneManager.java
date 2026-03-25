@@ -2,7 +2,6 @@ package com.sit.recyclingpinball.engine.scenes;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,14 +80,13 @@ public class SceneManager {
             LOGGER.log(Level.SEVERE, "Active scene update failed", e);
         }
 
-        Iterator<AbstractScene> it = sceneStack.descendingIterator();
-        while (it.hasNext()) {
+        sceneStack.descendingIterator().forEachRemaining(scene -> {
             try {
-                it.next().render();
+                scene.render();
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Scene render failed", e);
             }
-        }
+        });
     }
 
     // Cleans up all scenes and shared services on app exit.

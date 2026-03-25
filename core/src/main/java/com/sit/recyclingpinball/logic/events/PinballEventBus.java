@@ -1,19 +1,17 @@
 package com.sit.recyclingpinball.logic.events;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class PinballEventBus {
-    private final List<PinballEventVisitor> listeners;
+    private final Set<PinballEventVisitor> listeners;
 
     public PinballEventBus() {
-        this.listeners = new ArrayList<>();
+        this.listeners = new CopyOnWriteArraySet<>();
     }
 
     public void register(PinballEventVisitor listener) {
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
+        listeners.add(listener);
     }
 
     public void unregister(PinballEventVisitor listener) {
@@ -21,8 +19,6 @@ public class PinballEventBus {
     }
 
     public void post(IPinballEvent event) {
-        for (PinballEventVisitor l : listeners) {
-            event.accept(l);
-        }
+        listeners.forEach(event::accept);
     }
 }

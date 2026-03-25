@@ -15,7 +15,6 @@ import com.sit.recyclingpinball.logic.factories.SceneFactory;
 import com.sit.recyclingpinball.logic.ui.Button;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class LevelSelectScene extends AbstractScene implements InputListener {
@@ -42,7 +41,7 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
 
         java.util.List<String> levelFiles = getContext().getIO().listInternalFiles(LogicConstants.DIR_LEVELS, ".json");
         levelFiles.remove(LogicConstants.PATH_BASE_LEVEL);
-        Collections.sort(levelFiles);
+        levelFiles.sort(java.util.Comparator.naturalOrder());
 
         for (int i = 0; i < levelFiles.size(); i++) {
             String path = levelFiles.get(i);

@@ -71,9 +71,7 @@ public class LibGdxAudio implements IAudioProvider {
 
     @Override
     public void dispose() {
-        for (Sound sound : soundBank.values()) {
-            sound.dispose();
-        }
+        soundBank.values().forEach(Sound::dispose);
         soundBank.clear();
     }
 }

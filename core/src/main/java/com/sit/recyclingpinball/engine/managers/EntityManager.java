@@ -80,9 +80,7 @@ public class EntityManager implements com.sit.recyclingpinball.engine.interfaces
     }
 
     public void update(float dt) {
-        for (AbstractEntity e : entityList) {
-            e.update(dt);
-        }
+        entityList.forEach(e -> e.update(dt));
     }
 
     /**
@@ -95,10 +93,7 @@ public class EntityManager implements com.sit.recyclingpinball.engine.interfaces
         if (isZIndexDirty) {
             sortIfDirty();
         }
-
-        for (AbstractEntity e : renderList) {
-            e.render(graphics);
-        }
+        renderList.forEach(e -> e.render(graphics));
     }
 
     private synchronized void sortIfDirty() {
@@ -123,12 +118,9 @@ public class EntityManager implements com.sit.recyclingpinball.engine.interfaces
      * @return a list of entities cast to the specified type
      */
     public <T> List<T> getEntitiesByType(Class<T> type) {
-        List<T> result = new java.util.ArrayList<>();
-        for (AbstractEntity e : entityList) {
-            if (type.isInstance(e)) {
-                result.add(type.cast(e));
-            }
-        }
-        return result;
+        return entityList.stream()
+                .filter(type::isInstance)
+                .map(type::cast)
+                .toList();
     }
 }

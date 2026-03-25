@@ -11,11 +11,8 @@ import com.sit.recyclingpinball.engine.interfaces.IMovementManager;
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.logic.LogicConstants;
-import com.sit.recyclingpinball.logic.entities.FlipperEntity;
 import com.sit.recyclingpinball.logic.entities.PinballEntity;
 import com.sit.recyclingpinball.logic.entities.ShooterRodEntity;
-import com.sit.recyclingpinball.logic.entities.TrashEntity;
-import com.sit.recyclingpinball.logic.entities.WallEntity;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 import com.sit.recyclingpinball.logic.events.PinballEventVisitor;
@@ -63,16 +60,13 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         scoreManager = new GameScoreManager(eventBus, totalTrash);
         new GameAudioManager(getContext().getAudio(), eventBus);
 
-        for (WallEntity w : layout.getWalls()) {
-            getEntityManager().addEntity(w);
-        }
-        for (FlipperEntity f : layout.getFlippers()) {
+        layout.getWalls().forEach(getEntityManager()::addEntity);
+        layout.getTrashes().forEach(getEntityManager()::addEntity);
+        
+        layout.getFlippers().forEach(f -> {
             getEntityManager().addEntity(f);
             getInputManager().addListener(f);
-        }
-        for (TrashEntity t : layout.getTrashes()) {
-            getEntityManager().addEntity(t);
-        }
+        });
 
         ShooterRodEntity shooterRod = layout.getShooterRod();
         if (shooterRod != null) {
