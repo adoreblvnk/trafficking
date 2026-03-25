@@ -14,6 +14,7 @@ import com.sit.recyclingpinball.logic.events.ShooterRodMovedEvent;
 import com.sit.recyclingpinball.logic.LogicConstants;
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
+import com.sit.recyclingpinball.logic.events.BallRestedOnRodEvent;
 import com.sit.recyclingpinball.logic.factories.StateFactory;
 
 public class PinballEntity extends DynamicEntity implements InputListener, PinballEventVisitor, IPinballEntityContext {
@@ -96,7 +97,7 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
     }
 
     @Override
-    public void visit(com.sit.recyclingpinball.logic.events.BallRestedOnRodEvent event) {
+    public void visit(BallRestedOnRodEvent event) {
         setState(stateFactory.createIdleState(this));
     }
 
