@@ -34,11 +34,26 @@ public class CircleCollider implements ICollider {
 
     @Override
     public CollisionResult checkCollision(ICollider other) {
-        return CollisionDispatcher.dispatch(this, other);
+        return other.checkCollisionWith(this);
+    }
+
+    @Override
+    public CollisionResult checkCollisionWith(CircleCollider other) {
+        return other.collideCircle(this);
+    }
+
+    @Override
+    public CollisionResult checkCollisionWith(BoxCollider other) {
+        return SATMathUtils.getAABBvsAABB(other.getAABB(), this.getAABB());
+    }
+
+    @Override
+    public CollisionResult checkCollisionWith(OBBCollider other) {
+        return SATMathUtils.getMTV(other, this);
     }
 
     /**
-     * Circle-vs-circle collision logic, called by CollisionDispatcher.
+     * Circle-vs-circle collision logic.
      */
     CollisionResult collideCircle(CircleCollider other) {
         if (!this.circle.overlaps(other.getCircle())) {

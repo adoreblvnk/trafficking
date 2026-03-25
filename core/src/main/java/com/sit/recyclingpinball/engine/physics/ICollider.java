@@ -11,4 +11,8 @@ public interface ICollider {
     }
 
     CollisionResult checkCollision(ICollider other);
+
+    CollisionResult checkCollisionWith(CircleCollider other);
+    CollisionResult checkCollisionWith(BoxCollider other);
+    CollisionResult checkCollisionWith(OBBCollider other);
 }

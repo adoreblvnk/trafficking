@@ -118,30 +118,23 @@ public abstract class AbstractEntity implements ICollidable {
         return height;
     }
 
-    /**
-     * Sets the color as RGBA components.
-     *
-     * @param r
-     *            red (0.0 to 1.0)
-     * @param g
-     *            green (0.0 to 1.0)
-     * @param b
-     *            blue (0.0 to 1.0)
-     * @param a
-     *            alpha (0.0 to 1.0)
-     */
-    /**
-     * Gets the red component of the entity's color.
-     */
-    /**
-     * Gets the green component of the entity's color.
-     */
-    /**
-     * Gets the blue component of the entity's color.
-     */
-    /**
-     * Gets the alpha component of the entity's color.
-     */
+    private float r = 1.0f;
+    private float g = 1.0f;
+    private float b = 1.0f;
+    private float a = 1.0f;
+
+    public void setColor(float r, float g, float b, float a) {
+        this.r = Math.max(0, Math.min(1, r));
+        this.g = Math.max(0, Math.min(1, g));
+        this.b = Math.max(0, Math.min(1, b));
+        this.a = Math.max(0, Math.min(1, a));
+    }
+
+    public float getRed() { return r; }
+    public float getGreen() { return g; }
+    public float getBlue() { return b; }
+    public float getAlpha() { return a; }
+
     public int getZIndex() {
         return zIndex;
     }
