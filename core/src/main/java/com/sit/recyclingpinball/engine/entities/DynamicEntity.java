@@ -11,6 +11,23 @@ import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
  * color.
  */
 public class DynamicEntity extends AbstractEntity implements Movable {
+    private float r = 1.0f;
+    private float g = 1.0f;
+    private float b = 1.0f;
+    private float a = 1.0f;
+
+    public void setColor(float r, float g, float b, float a) {
+        this.r = Math.max(0, Math.min(1, r));
+        this.g = Math.max(0, Math.min(1, g));
+        this.b = Math.max(0, Math.min(1, b));
+        this.a = Math.max(0, Math.min(1, a));
+    }
+
+    public float getRed() { return r; }
+    public float getGreen() { return g; }
+    public float getBlue() { return b; }
+    public float getAlpha() { return a; }
+
 
     private PlatformVector2 velocity;
     private float friction = EngineConstants.DEFAULT_FRICTION;
