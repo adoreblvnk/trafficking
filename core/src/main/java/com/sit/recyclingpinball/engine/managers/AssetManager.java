@@ -15,7 +15,6 @@ public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.
     private IAudioProvider audioProvider;
     private IGraphicsProvider graphicsProvider;
 
-    private final Map<String, Object> loadedSounds = new HashMap<>();
     private final Map<String, Object> loadedTextures = new HashMap<>();
     private final Map<String, Object> loadedFonts = new HashMap<>();
 
@@ -34,7 +33,7 @@ public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.
     }
 
     /**
-     * Loads a sound and stores it using its path as the ID.
+     * Loads a sound and stores it in the internal bank.
      */
     public void loadSound(String path) {
         audioProvider.loadSound(path, path);
@@ -82,6 +81,5 @@ public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.
         }
         loadedTextures.clear();
         loadedFonts.clear();
-        loadedSounds.clear();
     }
 }

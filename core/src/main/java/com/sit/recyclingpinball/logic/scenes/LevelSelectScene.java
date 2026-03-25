@@ -71,7 +71,6 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     public void render() {
         getContext().getGraphics().clearScreen(LogicConstants.COLOR_BG[0], LogicConstants.COLOR_BG[1],
                 LogicConstants.COLOR_BG[2]);
-        getContext().getGraphics().begin();
 
         // Full-screen dirty beach background
         getContext().getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_SIZE[0],
@@ -81,7 +80,6 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
             button.render(getContext());
         }
 
-        getContext().getGraphics().end();
         super.render();
     }
 

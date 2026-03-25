@@ -4,17 +4,21 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
+import com.sit.recyclingpinball.engine.interfaces.providers.IDisplay;
 
 /**
  * libGDX input bridge that forwards framework callbacks to the pure Java
- * IInputManager.
+ * IInputManager. Performs Y-flip to align screen coordinates with bottom-up
+ * world coordinates.
  */
 public class LibGdxInputAdapter extends InputAdapter {
 
     private final IInputManager inputManager;
+    private final IDisplay display;
 
-    public LibGdxInputAdapter(IInputManager inputManager) {
+    public LibGdxInputAdapter(IInputManager inputManager, IDisplay display) {
         this.inputManager = inputManager;
+        this.display = display;
     }
 
     private EngineKey mapKey(int keycode) {
@@ -114,17 +118,20 @@ public class LibGdxInputAdapter extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return inputManager != null && inputManager.touchDown(screenX, screenY, pointer, button);
+        int worldY = display.getHeight() - screenY;
+        return inputManager != null && inputManager.touchDown(screenX, worldY, pointer, button);
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return inputManager != null && inputManager.touchDragged(screenX, screenY, pointer);
+        int worldY = display.getHeight() - screenY;
+        return inputManager != null && inputManager.touchDragged(screenX, worldY, pointer);
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return inputManager != null && inputManager.touchUp(screenX, screenY, pointer, button);
+        int worldY = display.getHeight() - screenY;
+        return inputManager != null && inputManager.touchUp(screenX, worldY, pointer, button);
     }
 
     @Override

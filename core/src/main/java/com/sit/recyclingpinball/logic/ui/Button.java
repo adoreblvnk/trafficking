@@ -35,8 +35,7 @@ public class Button {
         if (action == null) {
             return false;
         }
-        float mappedY = context.getDisplay().getHeight() - screenY;
-        if (screenX >= x && screenX <= x + width && mappedY >= y && mappedY <= y + height) {
+        if (screenX >= x && screenX <= x + width && screenY >= y && screenY <= y + height) {
             context.getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
             action.run();
             return true;

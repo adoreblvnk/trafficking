@@ -69,8 +69,7 @@ public class ShooterRodEntity extends AbstractEntity implements InputListener {
 
     @Override
     public boolean onTouchDown(int x, int y, int ptr, int btn) {
-        float touchY = LogicConstants.SCENE_SIZE[1] - y;
-        if (getCollider() != null && getCollider().contains(x, touchY)) {
+        if (getCollider() != null && getCollider().contains(x, y)) {
             isDragging = true;
             return true;
         }
@@ -80,8 +79,7 @@ public class ShooterRodEntity extends AbstractEntity implements InputListener {
     @Override
     public boolean onDrag(int x, int y, int ptr) {
         if (isDragging) {
-            float touchY = LogicConstants.SCENE_SIZE[1] - y;
-            float newY = Math.max(anchorY - LogicConstants.SHOOTER_MAX_PULL, touchY);
+            float newY = Math.max(anchorY - LogicConstants.SHOOTER_MAX_PULL, (float) y);
             newY = Math.min(anchorY, newY);
 
             setPosition(getPosition().getX(), newY);

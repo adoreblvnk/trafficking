@@ -41,18 +41,19 @@ public class CircleCollider implements ICollider {
      * Circle-vs-circle collision logic, called by CollisionDispatcher.
      */
     CollisionResult collideCircle(CircleCollider other) {
-        boolean overlaps = this.circle.overlaps(other.getCircle());
-        if (!overlaps)
+        if (!this.circle.overlaps(other.getCircle())) {
             return new CollisionResult(false, null, 0);
+        }
 
-        float dx = this.circle.getX() - other.getCircle().getX();
-        float dy = this.circle.getY() - other.getCircle().getY();
-        float dist = (float) Math.sqrt(dx * dx + dy * dy);
+        PlatformVector2 posA = new PlatformVector2(this.circle.getX(), this.circle.getY());
+        PlatformVector2 posB = new PlatformVector2(other.getCircle().getX(), other.getCircle().getY());
+        PlatformVector2 diff = posA.cpy().sub(posB);
+        float dist = diff.len();
         float overlap = (this.circle.getRadius() + other.getCircle().getRadius()) - dist;
 
         PlatformVector2 normal;
         if (dist > 0) {
-            normal = new PlatformVector2(dx / dist, dy / dist);
+            normal = diff.nor();
         } else {
             normal = new PlatformVector2(1, 0);
         }

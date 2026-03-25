@@ -30,6 +30,7 @@ public class LibGdxGraphics implements IGraphicsProvider {
         this.shapeRenderer = new ShapeRenderer();
         this.spriteBatch = new SpriteBatch();
         this.assetProvider = assetProvider;
+        enableBlend();
     }
 
     @Override
@@ -43,15 +44,24 @@ public class LibGdxGraphics implements IGraphicsProvider {
         shapeRenderer.setColor(r, g, b, a);
     }
 
-    private void ensureShapeBatch() {
+    private void ensureShapeBatch(ShapeRenderer.ShapeType type) {
         if (isSpriteBatchOpen) {
             spriteBatch.end();
             isSpriteBatchOpen = false;
         }
+        if (isShapeBatchOpen && shapeRenderer.getCurrentType() != type) {
+            shapeRenderer.end();
+            isShapeBatchOpen = false;
+        }
         if (!isShapeBatchOpen) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            enableBlend(); // LibGDX SpriteBatch disables blending on end(), so we must restore it
+            shapeRenderer.begin(type);
             isShapeBatchOpen = true;
         }
+    }
+
+    private void ensureShapeBatch() {
+        ensureShapeBatch(ShapeRenderer.ShapeType.Filled);
     }
 
     private void ensureSpriteBatch() {
@@ -73,20 +83,9 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b, float a) {
-        if (isSpriteBatchOpen) {
-            spriteBatch.end();
-            isSpriteBatchOpen = false;
-        }
-        if (isShapeBatchOpen) {
-            shapeRenderer.end();
-            isShapeBatchOpen = false;
-        }
-        enableBlend();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        ensureShapeBatch(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(r, g, b, a);
         shapeRenderer.line(x1, y1, x2, y2);
-        shapeRenderer.end();
-        disableBlend();
     }
 
     @Override
@@ -213,20 +212,9 @@ public class LibGdxGraphics implements IGraphicsProvider {
 
     @Override
     public void fillRectangle(float x, float y, float w, float h, float r, float g, float b, float alpha) {
-        if (isShapeBatchOpen) {
-            shapeRenderer.end();
-            isShapeBatchOpen = false;
-        }
-        if (isSpriteBatchOpen) {
-            spriteBatch.end();
-            isSpriteBatchOpen = false;
-        }
-        enableBlend();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        ensureShapeBatch();
         shapeRenderer.setColor(r, g, b, alpha);
         shapeRenderer.rect(x, y, w, h);
-        shapeRenderer.end();
-        disableBlend();
     }
 
     @Override

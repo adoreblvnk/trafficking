@@ -66,7 +66,6 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
 
     @Override
     public void render() {
-        getContext().getGraphics().begin();
         // Semi-transparent dark backdrop
         getContext().getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_SIZE[0], LogicConstants.SCENE_SIZE[1],
                 LogicConstants.COLOR_DIM[0], LogicConstants.COLOR_DIM[1], LogicConstants.COLOR_DIM[2],
@@ -96,8 +95,6 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
                 LogicConstants.TEXT_TRASH_COLLECTED_PREFIX + score + LogicConstants.TEXT_TRASH_DIVIDER + totalTrash,
                 LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_RESULT_SCORE_POS[0],
                 LogicConstants.UI_RESULT_SCORE_POS[1]);
-
-        getContext().getGraphics().end();
     }
 
     @Override

@@ -121,11 +121,9 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         // 1. Draw Background
         getContext().getGraphics().drawTexture(LogicConstants.TEX_BEACH_BACKGROUND, 0, 0, LogicConstants.SCENE_SIZE[0],
                 LogicConstants.SCENE_SIZE[1]);
-        getContext().getGraphics().end();
 
         // 2. Draw Game Entities (Walls, Flippers, Trash, Pinball)
         super.render();
-        getContext().getGraphics().end();
 
         // 3. Draw UI Overlay
         getContext().getGraphics().drawTexture(LogicConstants.TEX_UI_PANEL_BG, 0, 0, 400, LogicConstants.SCENE_SIZE[1]);
@@ -150,8 +148,6 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
                 getContext().getGraphics().fillRectangle(starX + 16, starY + 14, 32, 32, 0.3f, 0.3f, 0.3f, 0.4f);
             }
         }
-
-        getContext().getGraphics().end();
     }
 
     @Override

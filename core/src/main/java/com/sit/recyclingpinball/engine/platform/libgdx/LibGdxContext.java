@@ -30,7 +30,7 @@ public class LibGdxContext implements IEngineContext {
         this.timeProvider = new LibGdxTime();
         this.audioProvider = new LibGdxAudio();
         this.graphicsProvider = new LibGdxGraphics(assetProvider);
-        this.inputProvider = new LibGdxInputProvider();
+        this.inputProvider = new LibGdxInputProvider(displayProvider);
         this.ioProvider = new LibGdxIOProvider();
     }
 

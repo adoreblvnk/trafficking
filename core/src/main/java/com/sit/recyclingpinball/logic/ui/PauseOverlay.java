@@ -59,7 +59,6 @@ public class PauseOverlay extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        getContext().getGraphics().begin();
         // 60% opacity — dark enough to communicate "paused", light enough to see game
         // state.
         getContext().getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_SIZE[0], LogicConstants.SCENE_SIZE[1],
@@ -69,8 +68,6 @@ public class PauseOverlay extends AbstractScene implements InputListener {
         for (Button button : buttons) {
             button.render(getContext());
         }
-
-        getContext().getGraphics().end();
     }
 
     @Override

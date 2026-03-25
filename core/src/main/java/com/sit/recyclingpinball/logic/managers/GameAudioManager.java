@@ -31,6 +31,5 @@ public class GameAudioManager implements PinballEventVisitor {
     public void visit(BallLaunchedEvent event) {
         audio.playSound(com.sit.recyclingpinball.logic.LogicConstants.SOUND_STRETCH,
                 com.sit.recyclingpinball.logic.LogicConstants.VOLUME_DEFAULT);
-        // TODO: Load and play "sounds/launch.mp3" here in the future.
     }
 }

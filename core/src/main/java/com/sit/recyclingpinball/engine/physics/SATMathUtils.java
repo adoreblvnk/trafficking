@@ -9,21 +9,18 @@ public final class SATMathUtils {
     }
 
     public static float dotProduct(PlatformVector2 a, PlatformVector2 b) {
-        return a.getX() * b.getX() + a.getY() * b.getY();
+        return a.dot(b);
     }
 
     public static PlatformVector2 normalize(PlatformVector2 v) {
-        float len = v.len();
-        if (len == 0)
-            return new PlatformVector2(0, 0);
-        return new PlatformVector2(v.getX() / len, v.getY() / len);
+        return v.cpy().nor();
     }
 
     public static float[] projectPolygon(PlatformVector2 axis, PlatformVector2[] vertices) {
-        float min = dotProduct(axis, vertices[0]);
+        float min = axis.dot(vertices[0]);
         float max = min;
         for (int i = 1; i < vertices.length; i++) {
-            float projection = dotProduct(axis, vertices[i]);
+            float projection = axis.dot(vertices[i]);
             if (projection < min) {
                 min = projection;
             } else if (projection > max) {
@@ -34,7 +31,7 @@ public final class SATMathUtils {
     }
 
     public static float[] projectCircle(PlatformVector2 axis, PlatformVector2 center, float radius) {
-        float projection = dotProduct(axis, center);
+        float projection = axis.dot(center);
         return new float[]{projection - radius, projection + radius};
     }
 
@@ -51,9 +48,7 @@ public final class SATMathUtils {
 
     public static CollisionResult getAABBvsAABB(PlatformRectangle rA, PlatformRectangle rB) {
         PlatformRectangle intersection = new PlatformRectangle();
-        PlatformRectangle.intersectRectangles(rA, rB, intersection);
-
-        if (intersection.getWidth() == 0 && intersection.getHeight() == 0) {
+        if (!PlatformRectangle.intersectRectangles(rA, rB, intersection)) {
             return new CollisionResult(false, null, 0);
         }
 
@@ -100,8 +95,7 @@ public final class SATMathUtils {
             }
         }
 
-        PlatformVector2 circleAxis = SATMathUtils.normalize(
-                new PlatformVector2(center.getX() - closestVertex.getX(), center.getY() - closestVertex.getY()));
+        PlatformVector2 circleAxis = center.cpy().sub(closestVertex).nor();
 
         PlatformVector2[] allAxes = new PlatformVector2[axes.length + 1];
         System.arraycopy(axes, 0, allAxes, 0, axes.length);
@@ -111,10 +105,10 @@ public final class SATMathUtils {
         PlatformVector2 mtvAxis = null;
 
         for (PlatformVector2 axis : allAxes) {
-            if (axis.getX() == 0 && axis.getY() == 0)
+            if (axis.isZero())
                 continue;
-            float[] proj1 = SATMathUtils.projectPolygon(axis, vertices);
-            float[] proj2 = SATMathUtils.projectCircle(axis, center, radius);
+            float[] proj1 = projectPolygon(axis, vertices);
+            float[] proj2 = projectCircle(axis, center, radius);
 
             if (!overlap(proj1, proj2)) {
                 return new CollisionResult(false, null, 0);
@@ -132,9 +126,9 @@ public final class SATMathUtils {
 
         PlatformVector2 centerA = getPolygonCenter(vertices);
         PlatformVector2 centerB = center;
-        PlatformVector2 dir = new PlatformVector2(centerA.getX() - centerB.getX(), centerA.getY() - centerB.getY());
-        if (dotProduct(mtvAxis, dir) < 0) {
-            mtvAxis = new PlatformVector2(-mtvAxis.getX(), -mtvAxis.getY());
+        PlatformVector2 dir = centerA.cpy().sub(centerB);
+        if (mtvAxis.dot(dir) < 0) {
+            mtvAxis = mtvAxis.cpy().scl(-1);
         }
 
         float epsilon = 0.5f;
@@ -142,7 +136,7 @@ public final class SATMathUtils {
     }
 
     public static CollisionResult getMTV(OBBCollider obb, BoxCollider box) {
-        com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformRectangle r = box.getAABB();
+        PlatformRectangle r = box.getAABB();
         PlatformVector2[] boxVertices = new PlatformVector2[]{new PlatformVector2(r.getX(), r.getY()),
                 new PlatformVector2(r.getX() + r.getWidth(), r.getY()),
                 new PlatformVector2(r.getX() + r.getWidth(), r.getY() + r.getHeight()),
@@ -166,7 +160,7 @@ public final class SATMathUtils {
         PlatformVector2 mtvAxis = null;
 
         for (PlatformVector2 axis : allAxes) {
-            if (axis.getX() == 0 && axis.getY() == 0)
+            if (axis.isZero())
                 continue;
             float[] proj1 = projectPolygon(axis, verticesA);
             float[] proj2 = projectPolygon(axis, verticesB);
@@ -187,9 +181,9 @@ public final class SATMathUtils {
 
         PlatformVector2 centerA = getPolygonCenter(verticesA);
         PlatformVector2 centerB = getPolygonCenter(verticesB);
-        PlatformVector2 dir = new PlatformVector2(centerA.getX() - centerB.getX(), centerA.getY() - centerB.getY());
-        if (dotProduct(mtvAxis, dir) < 0) {
-            mtvAxis = new PlatformVector2(-mtvAxis.getX(), -mtvAxis.getY());
+        PlatformVector2 dir = centerA.cpy().sub(centerB);
+        if (mtvAxis.dot(dir) < 0) {
+            mtvAxis = mtvAxis.cpy().scl(-1);
         }
 
         float epsilon = 0.5f;
