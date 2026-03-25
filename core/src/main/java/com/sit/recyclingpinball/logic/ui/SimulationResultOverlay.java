@@ -2,13 +2,14 @@ package com.sit.recyclingpinball.logic.ui;
 
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
-import com.sit.recyclingpinball.engine.managers.CollisionManager;
-import com.sit.recyclingpinball.engine.managers.EntityManager;
-import com.sit.recyclingpinball.engine.managers.InputManager;
-import com.sit.recyclingpinball.engine.managers.MovementManager;
+import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
+import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
+import com.sit.recyclingpinball.engine.interfaces.IInputManager;
+import com.sit.recyclingpinball.engine.interfaces.IMovementManager;
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.logic.LogicConstants;
+import com.sit.recyclingpinball.logic.factories.SceneFactory;
 import com.sit.recyclingpinball.logic.level.ILevelBlueprint;
 
 import java.util.ArrayList;
@@ -20,10 +21,9 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
     private final int totalTrash;
     private final List<Button> buttons = new ArrayList<>();
 
-    public SimulationResultOverlay(IEngineContext context, SceneManager sceneManager,
-            com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory, boolean isWin, int score,
-            int totalTrash, ILevelBlueprint blueprint, EntityManager entityManager, CollisionManager collisionManager,
-            InputManager inputManager, MovementManager movementManager) {
+    public SimulationResultOverlay(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+            boolean isWin, int score, int totalTrash, ILevelBlueprint blueprint, IEntityManager entityManager,
+            ICollisionManager collisionManager, IInputManager inputManager, IMovementManager movementManager) {
         super(context, entityManager, collisionManager, inputManager, movementManager);
         this.isWin = isWin;
         this.score = score;
@@ -41,12 +41,12 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         float retBtnX = LogicConstants.UI_RESULT_MENU_BTN_POS[0] - retBtnW / 2;
         float retBtnY = LogicConstants.UI_RESULT_MENU_BTN_POS[1];
         buttons.add(new Button(retBtnX, retBtnY, retBtnW, retBtnH, LogicConstants.TEXT_MAIN_MENU, () -> {
-            sceneManager.setScene(assemblyFactory.createMenuScene());
+            sceneManager.setScene(sceneFactory.createMenuScene());
         }));
 
         float retryBtnY = LogicConstants.UI_RESULT_RETRY_BTN_POS[1];
         buttons.add(new Button(retBtnX, retryBtnY, retBtnW, retBtnH, LogicConstants.TEXT_RETRY, () -> {
-            sceneManager.setScene(assemblyFactory.createSimulationScene(blueprint));
+            sceneManager.setScene(sceneFactory.createSimulationScene(blueprint));
         }));
     }
 
@@ -92,8 +92,6 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
         // Score text (white on dark overlay — no button behind this)
         getContext().getGraphics().setTextColor(LogicConstants.COLOR_TEXT_LIGHT[0], LogicConstants.COLOR_TEXT_LIGHT[1],
                 LogicConstants.COLOR_TEXT_LIGHT[2], LogicConstants.COLOR_TEXT_LIGHT[3]);
-        // We'll leave the score text non-centered or we could center it if we calculate
-        // width.
         getContext().getGraphics().drawText(
                 LogicConstants.TEXT_TRASH_COLLECTED_PREFIX + score + LogicConstants.TEXT_TRASH_DIVIDER + totalTrash,
                 LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_RESULT_SCORE_POS[0],

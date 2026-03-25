@@ -7,6 +7,8 @@ import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.engine.managers.AssetManager;
 
 import com.sit.recyclingpinball.logic.LogicConstants;
+import com.sit.recyclingpinball.logic.factories.SceneFactory;
+import com.sit.recyclingpinball.logic.factories.StateFactory;
 
 public class Main extends Game {
     private SceneManager sceneManager;
@@ -46,9 +48,9 @@ public class Main extends Game {
         }
 
         sceneManager = new SceneManager(context);
-        com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory = new com.sit.recyclingpinball.logic.factories.AssemblyFactory(
-                context, sceneManager);
-        sceneManager.setScene(assemblyFactory.createMenuScene());
+        StateFactory stateFactory = new StateFactory();
+        SceneFactory sceneFactory = new SceneFactory(context, sceneManager, stateFactory);
+        sceneManager.setScene(sceneFactory.createMenuScene());
     }
 
     @Override

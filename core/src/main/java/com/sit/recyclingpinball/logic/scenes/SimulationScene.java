@@ -4,10 +4,10 @@ import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
 
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
-import com.sit.recyclingpinball.engine.managers.CollisionManager;
-import com.sit.recyclingpinball.engine.managers.EntityManager;
-import com.sit.recyclingpinball.engine.managers.InputManager;
-import com.sit.recyclingpinball.engine.managers.MovementManager;
+import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
+import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
+import com.sit.recyclingpinball.engine.interfaces.IInputManager;
+import com.sit.recyclingpinball.engine.interfaces.IMovementManager;
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.logic.LogicConstants;
@@ -19,6 +19,8 @@ import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 import com.sit.recyclingpinball.logic.events.PinballEventVisitor;
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
+import com.sit.recyclingpinball.logic.factories.SceneFactory;
+import com.sit.recyclingpinball.logic.factories.StateFactory;
 import com.sit.recyclingpinball.logic.level.BoardBuilder;
 import com.sit.recyclingpinball.logic.level.BoardLayout;
 import com.sit.recyclingpinball.logic.level.ILevelBlueprint;
@@ -33,15 +35,16 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     private PinballEntity pinball;
     private int totalTrash;
 
-    private final com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory;
+    private final SceneFactory sceneFactory;
+    private final StateFactory stateFactory;
 
-    public SimulationScene(IEngineContext context, SceneManager sceneManager,
-            com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory, ILevelBlueprint blueprint,
-            EntityManager entityManager, CollisionManager collisionManager, InputManager inputManager,
-            MovementManager movementManager) {
+    public SimulationScene(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+            StateFactory stateFactory, ILevelBlueprint blueprint, IEntityManager entityManager,
+            ICollisionManager collisionManager, IInputManager inputManager, IMovementManager movementManager) {
         super(context, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
-        this.assemblyFactory = assemblyFactory;
+        this.sceneFactory = sceneFactory;
+        this.stateFactory = stateFactory;
         this.blueprint = blueprint;
     }
 
@@ -74,12 +77,10 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         if (shooterRod != null) {
             getEntityManager().addEntity(shooterRod);
             getInputManager().addListener(shooterRod);
-            // It automatically registers with MovementManager and CollisionManager via
-            // EntityManager
         }
 
         pinball = new PinballEntity(LogicConstants.TAG_PINBALL, LogicConstants.PINBALL_START[0],
-                LogicConstants.PINBALL_START[1], eventBus, assemblyFactory);
+                LogicConstants.PINBALL_START[1], eventBus, stateFactory);
         getEntityManager().addEntity(pinball);
         getInputManager().addListener(pinball);
     }
@@ -88,11 +89,11 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     public void update(float dt) {
         super.update(dt);
         if (scoreManager.isWon()) {
-            sceneManager.pushOverlay(assemblyFactory.createSimulationResultOverlay(true, scoreManager.getScore(),
-                    totalTrash, blueprint));
+            sceneManager.pushOverlay(
+                    sceneFactory.createSimulationResultOverlay(true, scoreManager.getScore(), totalTrash, blueprint));
         } else if (scoreManager.isLost()) {
-            sceneManager.pushOverlay(assemblyFactory.createSimulationResultOverlay(false, scoreManager.getScore(),
-                    totalTrash, blueprint));
+            sceneManager.pushOverlay(
+                    sceneFactory.createSimulationResultOverlay(false, scoreManager.getScore(), totalTrash, blueprint));
         }
     }
 
@@ -102,7 +103,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
             // Respawn logic
             pinball.setPosition(LogicConstants.PINBALL_START[0], LogicConstants.PINBALL_START[1]);
             pinball.setVelocity(0, 0);
-            pinball.setState(assemblyFactory.createInPlayState());
+            pinball.setState(stateFactory.createInPlayState());
         }
     }
 
@@ -155,7 +156,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     @Override
     public boolean onKeyDown(EngineKey keycode) {
         if (keycode == EngineKey.ESCAPE) {
-            sceneManager.pushOverlay(assemblyFactory.createPauseOverlay());
+            sceneManager.pushOverlay(sceneFactory.createPauseOverlay());
             return true;
         }
         return false;

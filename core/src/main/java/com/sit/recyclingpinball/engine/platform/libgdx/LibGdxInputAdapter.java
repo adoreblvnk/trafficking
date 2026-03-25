@@ -3,17 +3,17 @@ package com.sit.recyclingpinball.engine.platform.libgdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
-import com.sit.recyclingpinball.engine.managers.InputManager;
+import com.sit.recyclingpinball.engine.interfaces.IInputManager;
 
 /**
  * libGDX input bridge that forwards framework callbacks to the pure Java
- * InputManager.
+ * IInputManager.
  */
 public class LibGdxInputAdapter extends InputAdapter {
 
-    private final InputManager inputManager;
+    private final IInputManager inputManager;
 
-    public LibGdxInputAdapter(InputManager inputManager) {
+    public LibGdxInputAdapter(IInputManager inputManager) {
         this.inputManager = inputManager;
     }
 

@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.engine.interfaces.providers;
 
-import com.sit.recyclingpinball.engine.managers.InputManager;
+import com.sit.recyclingpinball.engine.interfaces.IInputManager;
 
 /**
  * Platform-independent input provider interface. Owns binding and unbinding the
@@ -14,7 +14,7 @@ public interface IInputProvider {
      * @param inputManager
      *            input manager to activate
      */
-    void setActiveProcessor(InputManager inputManager);
+    void setActiveProcessor(IInputManager inputManager);
 
     /**
      * Clears any active input processor.

@@ -25,7 +25,7 @@ public class TrashEntity extends StaticEntity {
     @Override
     public void render(IGraphicsProvider graphics) {
         graphics.drawTexture(sprite.textureId(), getPosition().getX() - (sprite.width() / 2f),
-            getPosition().getY() - (sprite.height() / 2f), sprite.width(), sprite.height());
+                getPosition().getY() - (sprite.height() / 2f), sprite.width(), sprite.height());
     }
 
     @Override

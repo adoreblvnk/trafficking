@@ -3,9 +3,13 @@ package com.sit.recyclingpinball.logic.scenes;
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
-import com.sit.recyclingpinball.engine.managers.*;
+import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
+import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
+import com.sit.recyclingpinball.engine.interfaces.IInputManager;
+import com.sit.recyclingpinball.engine.interfaces.IMovementManager;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.logic.LogicConstants;
+import com.sit.recyclingpinball.logic.factories.SceneFactory;
 import com.sit.recyclingpinball.logic.ui.Button;
 
 import java.util.ArrayList;
@@ -14,9 +18,9 @@ import java.util.List;
 public class MenuScene extends AbstractScene implements InputListener {
     private final List<Button> buttons = new ArrayList<>();
 
-    public MenuScene(IEngineContext context, SceneManager sceneManager,
-            com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory, EntityManager entityManager,
-            CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+    public MenuScene(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+            IEntityManager entityManager, ICollisionManager collisionManager, IInputManager inputManager,
+            IMovementManager movementManager) {
         super(context, entityManager, collisionManager, inputManager, movementManager);
 
         float titleBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
@@ -31,7 +35,7 @@ public class MenuScene extends AbstractScene implements InputListener {
         float startBtnX = LogicConstants.UI_MENU_START_BTN_POS[0] - startBtnW / 2;
         float startBtnY = LogicConstants.UI_MENU_START_BTN_POS[1];
         buttons.add(new Button(startBtnX, startBtnY, startBtnW, startBtnH, LogicConstants.TEXT_START_GAME, () -> {
-            sceneManager.setScene(assemblyFactory.createLevelSelectScene());
+            sceneManager.setScene(sceneFactory.createLevelSelectScene());
         }));
 
         float quitBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;

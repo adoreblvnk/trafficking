@@ -17,10 +17,6 @@ public abstract class AbstractEntity implements ICollidable {
     private PlatformVector2 position;
     private float width;
     private float height;
-    private float r = 1.0f;
-    private float g = 1.0f;
-    private float b = 1.0f;
-    private float a = 1.0f;
     private int zIndex = 0;
     private String tag = "";
 
@@ -43,10 +39,6 @@ public abstract class AbstractEntity implements ICollidable {
         this.position = new PlatformVector2(x, y);
         this.width = w;
         this.height = h;
-        this.r = 1.0f;
-        this.g = 1.0f;
-        this.b = 1.0f;
-        this.a = 1.0f;
         this.collider = new BoxCollider(x, y, w, h);
     }
 
@@ -65,7 +57,8 @@ public abstract class AbstractEntity implements ICollidable {
      * Renders the entity using the provided graphics provider
      * (platform-independent).
      *
-     * @param graphics the graphics provider
+     * @param graphics
+     *            the graphics provider
      */
     public abstract void render(IGraphicsProvider graphics);
 
@@ -104,7 +97,6 @@ public abstract class AbstractEntity implements ICollidable {
         return position;
     }
 
-
     // updates both position and bounding box to prevent desync whenever moving the
     // entity
     @Override
@@ -138,41 +130,18 @@ public abstract class AbstractEntity implements ICollidable {
      * @param a
      *            alpha (0.0 to 1.0)
      */
-    public void setColor(float r, float g, float b, float a) {
-        this.r = Math.max(0, Math.min(1, r));
-        this.g = Math.max(0, Math.min(1, g));
-        this.b = Math.max(0, Math.min(1, b));
-        this.a = Math.max(0, Math.min(1, a));
-    }
-
     /**
      * Gets the red component of the entity's color.
      */
-    public float getRed() {
-        return r;
-    }
-
     /**
      * Gets the green component of the entity's color.
      */
-    public float getGreen() {
-        return g;
-    }
-
     /**
      * Gets the blue component of the entity's color.
      */
-    public float getBlue() {
-        return b;
-    }
-
     /**
      * Gets the alpha component of the entity's color.
      */
-    public float getAlpha() {
-        return a;
-    }
-
     public int getZIndex() {
         return zIndex;
     }

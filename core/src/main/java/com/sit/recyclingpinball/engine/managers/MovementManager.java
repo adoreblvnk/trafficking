@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  * Applies position updates to movable entities based on their velocity and
  * delta time.
  */
-public class MovementManager {
+public class MovementManager implements com.sit.recyclingpinball.engine.interfaces.IMovementManager {
     private static final Logger LOGGER = Logger.getLogger(MovementManager.class.getName());
 
     public MovementManager() {

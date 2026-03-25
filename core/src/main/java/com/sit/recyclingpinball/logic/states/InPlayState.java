@@ -14,7 +14,7 @@ public class InPlayState implements IPinballState {
         ctx.getVelocity().setY(ctx.getVelocity().getY() - 900f * dt);
 
         if (ctx.getPosition().getY() < -50) {
-            ctx.setState(ctx.getFactory().createDrainedState());
+            ctx.setState(ctx.getStateFactory().createDrainedState());
             ctx.getEventBus().post(new BallDrainedEvent());
         }
     }

@@ -5,20 +5,8 @@ import com.badlogic.gdx.math.Circle;
 public class PlatformCircle {
     private final Circle delegate;
 
-    public PlatformCircle() {
-        this.delegate = new Circle();
-    }
-
     public PlatformCircle(float x, float y, float radius) {
         this.delegate = new Circle(x, y, radius);
-    }
-
-    public PlatformCircle(PlatformVector2 position, float radius) {
-        this.delegate = new Circle(position.getX(), position.getY(), radius);
-    }
-
-    public PlatformCircle(PlatformCircle circle) {
-        this.delegate = new Circle(circle.delegate);
     }
 
     public float getX() {
@@ -52,10 +40,6 @@ public class PlatformCircle {
 
     public boolean contains(PlatformVector2 point) {
         return delegate.contains(point.getX(), point.getY());
-    }
-
-    public boolean contains(PlatformCircle c) {
-        return delegate.contains(c.delegate);
     }
 
     public boolean overlaps(PlatformCircle c) {

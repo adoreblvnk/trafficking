@@ -12,7 +12,7 @@ import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
  * Distributes input events to registered listeners in subscription order.
  * Swallows exceptions to prevent input pipeline crashes.
  */
-public class InputManager {
+public class InputManager implements com.sit.recyclingpinball.engine.interfaces.IInputManager {
 
     private static final Logger LOGGER = Logger.getLogger(InputManager.class.getName());
 

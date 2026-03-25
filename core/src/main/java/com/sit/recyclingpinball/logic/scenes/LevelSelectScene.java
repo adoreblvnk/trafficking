@@ -4,10 +4,14 @@ import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
-import com.sit.recyclingpinball.engine.managers.*;
+import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
+import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
+import com.sit.recyclingpinball.engine.interfaces.IInputManager;
+import com.sit.recyclingpinball.engine.interfaces.IMovementManager;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.logic.LogicConstants;
 import com.sit.recyclingpinball.logic.level.DataDrivenLevelBlueprint;
+import com.sit.recyclingpinball.logic.factories.SceneFactory;
 import com.sit.recyclingpinball.logic.ui.Button;
 
 import java.util.ArrayList;
@@ -17,14 +21,14 @@ import java.util.List;
 public class LevelSelectScene extends AbstractScene implements InputListener {
     private final SceneManager sceneManager;
     private final List<Button> buttons = new ArrayList<>();
-    private final com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory;
+    private final SceneFactory sceneFactory;
 
-    public LevelSelectScene(IEngineContext context, SceneManager sceneManager,
-            com.sit.recyclingpinball.logic.factories.AssemblyFactory assemblyFactory, EntityManager entityManager,
-            CollisionManager collisionManager, InputManager inputManager, MovementManager movementManager) {
+    public LevelSelectScene(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+            IEntityManager entityManager, ICollisionManager collisionManager, IInputManager inputManager,
+            IMovementManager movementManager) {
         super(context, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
-        this.assemblyFactory = assemblyFactory;
+        this.sceneFactory = sceneFactory;
 
         float titleBtnW = LogicConstants.UI_BTN_WIDTH_SMALL;
         float titleBtnH = LogicConstants.UI_BTN_HEIGHT_LARGE;
@@ -47,14 +51,14 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
                     - (i * LogicConstants.UI_LEVEL_SELECT_BTN_SPACING);
             buttons.add(new Button(btnX, btnY, btnW, btnH, bp.getLevelName(), () -> {
                 sceneManager.setScene(
-                        this.assemblyFactory.createSimulationScene(new DataDrivenLevelBlueprint(path, getContext())));
+                        this.sceneFactory.createSimulationScene(new DataDrivenLevelBlueprint(path, getContext())));
             }));
         }
 
         float backBtnY = LogicConstants.UI_LEVEL_SELECT_BTN_START_POS[1]
                 - (levelFiles.size() * LogicConstants.UI_LEVEL_SELECT_BTN_SPACING);
         buttons.add(new Button(btnX, backBtnY, btnW, btnH, LogicConstants.TEXT_BACK, () -> {
-            sceneManager.setScene(this.assemblyFactory.createMenuScene());
+            sceneManager.setScene(this.sceneFactory.createMenuScene());
         }));
     }
 
@@ -85,7 +89,7 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     public boolean onKeyDown(EngineKey keycode) {
         if (keycode == EngineKey.ESCAPE) {
             getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
-            sceneManager.setScene(this.assemblyFactory.createMenuScene());
+            sceneManager.setScene(this.sceneFactory.createMenuScene());
             return true;
         }
         return false;

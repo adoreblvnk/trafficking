@@ -10,7 +10,7 @@ import java.util.Map;
  * Fonts). Ensures assets are loaded once and shared across the engine
  * (Flyweight Pattern).
  */
-public class AssetManager {
+public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.providers.IAssetProvider {
 
     private IAudioProvider audioProvider;
     private IGraphicsProvider graphicsProvider;
