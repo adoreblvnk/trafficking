@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.logic.factories;
 
-import com.sit.recyclingpinball.logic.entities.PinballEntity;
+import com.sit.recyclingpinball.logic.entities.IPinballEntityContext;
 import com.sit.recyclingpinball.logic.states.DrainedState;
 import com.sit.recyclingpinball.logic.states.IPinballState;
 import com.sit.recyclingpinball.logic.states.IdleState;
@@ -12,7 +12,7 @@ public class StateFactory {
         return new InPlayState();
     }
 
-    public IPinballState createIdleState(PinballEntity entity) {
+    public IPinballState createIdleState(IPinballEntityContext entity) {
         return new IdleState(entity);
     }
 

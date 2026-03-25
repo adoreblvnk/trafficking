@@ -1,18 +1,18 @@
 package com.sit.recyclingpinball.logic.states;
 
-import com.sit.recyclingpinball.logic.entities.PinballEntity;
+import com.sit.recyclingpinball.logic.entities.IPinballEntityContext;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
 import com.sit.recyclingpinball.logic.events.ShooterRodMovedEvent;
 
 public class IdleState implements IPinballState {
-    private final PinballEntity ctx;
+    private final IPinballEntityContext ctx;
 
-    public IdleState(PinballEntity ctx) {
+    public IdleState(IPinballEntityContext ctx) {
         this.ctx = ctx;
     }
 
     @Override
-    public void update(float dt, PinballEntity ctx) {
+    public void update(float dt, IPinballEntityContext ctx) {
         ctx.setVelocity(0, 0);
     }
 

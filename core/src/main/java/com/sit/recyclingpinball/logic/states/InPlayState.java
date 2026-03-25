@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.logic.states;
 
-import com.sit.recyclingpinball.logic.entities.PinballEntity;
+import com.sit.recyclingpinball.logic.entities.IPinballEntityContext;
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 
 public class InPlayState implements IPinballState {
@@ -9,7 +9,7 @@ public class InPlayState implements IPinballState {
     }
 
     @Override
-    public void update(float dt, PinballEntity ctx) {
+    public void update(float dt, IPinballEntityContext ctx) {
         // Apply gravity
         ctx.getVelocity().setY(ctx.getVelocity().getY() - 900f * dt);
 

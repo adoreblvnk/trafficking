@@ -16,7 +16,7 @@ import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 import com.sit.recyclingpinball.logic.factories.StateFactory;
 
-public class PinballEntity extends DynamicEntity implements InputListener, PinballEventVisitor {
+public class PinballEntity extends DynamicEntity implements InputListener, PinballEventVisitor, IPinballEntityContext {
     private IPinballState currentState;
     private final PinballEventBus eventBus;
     private final StateFactory stateFactory;
