@@ -13,6 +13,7 @@ import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.logic.LogicConstants;
 import com.sit.recyclingpinball.logic.entities.FlipperEntity;
 import com.sit.recyclingpinball.logic.entities.PinballEntity;
+import com.sit.recyclingpinball.logic.entities.ShooterRodEntity;
 import com.sit.recyclingpinball.logic.entities.TrashEntity;
 import com.sit.recyclingpinball.logic.entities.WallEntity;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
@@ -73,7 +74,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
             getEntityManager().addEntity(t);
         }
 
-        com.sit.recyclingpinball.logic.entities.ShooterRodEntity shooterRod = layout.getShooterRod();
+        ShooterRodEntity shooterRod = layout.getShooterRod();
         if (shooterRod != null) {
             getEntityManager().addEntity(shooterRod);
             getInputManager().addListener(shooterRod);
