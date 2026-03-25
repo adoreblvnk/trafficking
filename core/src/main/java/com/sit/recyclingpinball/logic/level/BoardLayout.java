@@ -6,7 +6,7 @@ import com.sit.recyclingpinball.logic.entities.WallEntity;
 import com.sit.recyclingpinball.logic.entities.ShooterRodEntity;
 import java.util.ArrayList;
 import java.util.List;
-
+ 
 public class BoardLayout {
     private final List<WallEntity> walls;
     private final List<FlipperEntity> flippers;
