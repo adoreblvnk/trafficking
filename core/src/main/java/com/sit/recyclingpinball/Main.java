@@ -1,7 +1,6 @@
 package com.sit.recyclingpinball;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.sit.recyclingpinball.engine.platform.libgdx.LibGdxContext;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.engine.managers.AssetManager;
@@ -57,7 +56,7 @@ public class Main extends Game {
     public void render() {
         super.render();
         if (sceneManager != null) {
-            sceneManager.render(Gdx.graphics.getDeltaTime());
+            sceneManager.render(context.getTime().getDeltaTime());
             // Ensure any open batches from the final scene are flushed!
             context.getGraphics().end();
         }
