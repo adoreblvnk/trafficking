@@ -2,12 +2,13 @@ package com.sit.recyclingpinball.logic.entities;
 
 import com.sit.recyclingpinball.engine.components.SpriteComponent;
 import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
-
 import com.sit.recyclingpinball.engine.entities.AbstractEntity;
+import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
 import com.sit.recyclingpinball.engine.physics.BoxCollider;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
+import com.sit.recyclingpinball.logic.events.BallRestedOnRodEvent;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.ShooterRodMovedEvent;
 import com.sit.recyclingpinball.logic.LogicConstants;
@@ -43,7 +44,7 @@ public class ShooterRodEntity extends AbstractEntity implements InputListener {
     }
 
     @Override
-    public void resolveCollision(com.sit.recyclingpinball.engine.entities.DynamicEntity entity) {
+    public void resolveCollision(DynamicEntity entity) {
         if (velocityY <= 0) {
             entity.getVelocity().setY(0);
             entity.getVelocity().setX(0);
@@ -54,7 +55,7 @@ public class ShooterRodEntity extends AbstractEntity implements InputListener {
                 entity.setPosition(entity.getPosition().getX(), rodTop);
                 entity.getVelocity().setY(0);
             }
-            eventBus.post(new com.sit.recyclingpinball.logic.events.BallRestedOnRodEvent());
+            eventBus.post(new BallRestedOnRodEvent());
         }
     }
 
