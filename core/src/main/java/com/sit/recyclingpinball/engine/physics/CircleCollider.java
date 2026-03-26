@@ -34,20 +34,18 @@ public class CircleCollider implements ICollider {
 
     @Override
     public CollisionResult checkCollision(ICollider other) {
-        return CollisionDispatcher.dispatch(this, other);
+        return other.collideWith(this);
     }
 
-    /**
-     * Circle-vs-circle collision logic.
-     */
-    CollisionResult collideCircle(CircleCollider other) {
+    @Override
+    public CollisionResult collideWith(CircleCollider other) {
         if (!this.circle.overlaps(other.getCircle())) {
             return new CollisionResult(false, null, 0);
         }
 
         PlatformVector2 posA = new PlatformVector2(this.circle.getX(), this.circle.getY());
         PlatformVector2 posB = new PlatformVector2(other.getCircle().getX(), other.getCircle().getY());
-        PlatformVector2 diff = posA.cpy().sub(posB);
+        PlatformVector2 diff = posB.cpy().sub(posA);
         float dist = diff.len();
         float overlap = (this.circle.getRadius() + other.getCircle().getRadius()) - dist;
 
@@ -58,6 +56,16 @@ public class CircleCollider implements ICollider {
             normal = new PlatformVector2(1, 0);
         }
         return new CollisionResult(true, normal, overlap);
+    }
+
+    @Override
+    public CollisionResult collideWith(BoxCollider box) {
+        return SATMathUtils.getAABBvsAABB(this.getAABB(), box.getAABB()).invert();
+    }
+
+    @Override
+    public CollisionResult collideWith(OBBCollider obb) {
+        return SATMathUtils.getMTV(obb, this);
     }
 
     @Override

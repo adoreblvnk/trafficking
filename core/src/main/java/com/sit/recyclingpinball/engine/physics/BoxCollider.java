@@ -25,7 +25,22 @@ public class BoxCollider implements ICollider {
 
     @Override
     public CollisionResult checkCollision(ICollider other) {
-        return CollisionDispatcher.dispatch(this, other);
+        return other.collideWith(this);
+    }
+
+    @Override
+    public CollisionResult collideWith(CircleCollider circle) {
+        return SATMathUtils.getAABBvsAABB(circle.getAABB(), this.getAABB());
+    }
+
+    @Override
+    public CollisionResult collideWith(BoxCollider box) {
+        return SATMathUtils.getAABBvsAABB(this.getAABB(), box.getAABB()).invert();
+    }
+
+    @Override
+    public CollisionResult collideWith(OBBCollider obb) {
+        return SATMathUtils.getMTV(obb, this);
     }
 
     @Override

@@ -8,7 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * QuadTree for spatial partitioning to optimize collision detection.
+ * QuadTree for broad-phase spatial partitioning to optimize collision detection.
+ *
+ * Design note: this class intentionally does not require a getBounds() method on
+ * {@code ICollidable}. Instead, broad-phase bounds are obtained through the
+ * polymorphic collider contract: {@code collidable.getCollider().getAABB()}.
+ * This keeps {@code ICollidable} focused while still giving QuadTree the AABB it
+ * needs, and avoids fragile {@code instanceof} or downcasting to concrete entity
+ * classes.
  */
 public class QuadTree {
 
@@ -77,6 +84,8 @@ public class QuadTree {
     }
 
     public void insert(ICollidable pRect) {
+        // Broad-phase indexing uses collider-provided AABB. No entity downcast is
+        // needed, so any ICollidable with a valid collider can be partitioned.
         if (nodes[0] != null) {
             int index = getIndex(pRect.getCollider().getAABB());
             if (index != -1) {
@@ -94,6 +103,8 @@ public class QuadTree {
 
             int i = 0;
             while (i < objects.size()) {
+                // Re-index using each object's collider AABB to keep partition logic
+                // independent of concrete entity types.
                 int index = getIndex(objects.get(i).getCollider().getAABB());
                 if (index != -1) {
                     nodes[index].insert(objects.remove(i));

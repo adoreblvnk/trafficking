@@ -81,7 +81,22 @@ public class OBBCollider implements ICollider {
 
     @Override
     public CollisionResult checkCollision(ICollider other) {
-        return CollisionDispatcher.dispatch(this, other);
+        return other.collideWith(this);
+    }
+
+    @Override
+    public CollisionResult collideWith(CircleCollider circle) {
+        return SATMathUtils.getMTV(this, circle).invert();
+    }
+
+    @Override
+    public CollisionResult collideWith(BoxCollider box) {
+        return SATMathUtils.getMTV(this, box).invert();
+    }
+
+    @Override
+    public CollisionResult collideWith(OBBCollider obb) {
+        return SATMathUtils.getMTV(this, obb).invert();
     }
 
     @Override

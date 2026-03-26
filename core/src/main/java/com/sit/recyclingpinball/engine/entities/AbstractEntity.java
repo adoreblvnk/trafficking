@@ -10,11 +10,19 @@ import com.sit.recyclingpinball.engine.physics.BoxCollider;
  * Abstract base class for all game entities. Defines common properties like
  * position, size, rendering, and collision behavior. Rendering is now
  * platform-independent via IGraphicsProvider.
+ *
+ * Design trade-off: this class intentionally keeps basic render-facing state
+ * (dimensions and RGBA tint) together with core entity state. A fully
+ * componentized ECS split would be cleaner under strict SRP, but for this
+ * project scope we prioritize a stable, simple baseline with less boilerplate
+ * and faster feature delivery.
  */
 public abstract class AbstractEntity implements ICollidable {
 
     private String id;
     private PlatformVector2 position;
+    // Kept in the base entity as a pragmatic default: most gameplay objects are
+    // directly renderable and need dimensions for both drawing and colliders.
     private float width;
     private float height;
     private int zIndex = 0;
@@ -118,6 +126,8 @@ public abstract class AbstractEntity implements ICollidable {
         return height;
     }
 
+    // Intentional compromise: color tint is stored here instead of a separate
+    // render component to keep the architecture lightweight for the project.
     private float r = 1.0f;
     private float g = 1.0f;
     private float b = 1.0f;
