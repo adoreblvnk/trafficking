@@ -3,6 +3,7 @@ package com.sit.recyclingpinball.logic.states;
 import com.sit.recyclingpinball.logic.entities.IPinballEntityContext;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
 import com.sit.recyclingpinball.logic.events.ShooterRodMovedEvent;
+import com.sit.recyclingpinball.logic.LogicConstants;
 
 public class IdleState implements IPinballState {
     private final IPinballEntityContext ctx;
@@ -24,7 +25,7 @@ public class IdleState implements IPinballState {
 
     @Override
     public void visit(ShooterRodMovedEvent rodEvent) {
-        float rodTop = rodEvent.getRodY() + 160 + 24; // 160 rod height + 24 pinball radius
+        float rodTop = rodEvent.getRodY() + LogicConstants.SHOOTER_SIZE[1] + (LogicConstants.PINBALL_SIZE / 2f);
         ctx.setPosition(ctx.getPosition().getX(), rodTop);
     }
 }
