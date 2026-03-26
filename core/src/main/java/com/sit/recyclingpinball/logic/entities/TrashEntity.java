@@ -3,7 +3,7 @@ package com.sit.recyclingpinball.logic.entities;
 import com.sit.recyclingpinball.engine.components.SpriteComponent;
 import com.sit.recyclingpinball.engine.entities.StaticEntity;
 import com.sit.recyclingpinball.engine.physics.CircleCollider;
-import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
 import com.sit.recyclingpinball.logic.LogicConstants;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
@@ -23,7 +23,7 @@ public class TrashEntity extends StaticEntity {
     }
 
     @Override
-    public void render(IGraphicsProvider graphics) {
+    public void render(PlatformGraphics graphics) {
         graphics.drawTexture(sprite.textureId(), getPosition().getX() - (sprite.width() / 2f),
                 getPosition().getY() - (sprite.height() / 2f), sprite.width(), sprite.height());
     }

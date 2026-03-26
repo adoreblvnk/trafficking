@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.logic.managers;
 
-import com.sit.recyclingpinball.engine.interfaces.providers.IAudioProvider;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformAudio;
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
@@ -8,9 +8,9 @@ import com.sit.recyclingpinball.logic.events.PinballEventVisitor;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 
 public class GameAudioManager implements PinballEventVisitor {
-    private final IAudioProvider audio;
+    private final PlatformAudio audio;
 
-    public GameAudioManager(IAudioProvider audio, PinballEventBus bus) {
+    public GameAudioManager(PlatformAudio audio, PinballEventBus bus) {
         this.audio = audio;
         bus.register(this);
     }

@@ -1,11 +1,17 @@
 package com.sit.recyclingpinball.logic.entities;
 
 import com.sit.recyclingpinball.engine.components.SpriteComponent;
-import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
+/* ARCHITECTURE JUSTIFICATION: Primitive Data Transfer Object (DTO).
+ * The Logic layer imports PlatformKey from the platform package. This is a
+ * safe traversal because PlatformKey is a pure Java enum DTO that fully
+ * insulates Logic from com.badlogic.gdx.Input.Keys while preserving framework
+ * independence.
+ */
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
 
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.physics.OBBCollider;
-import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.logic.LogicConstants;
 
@@ -92,20 +98,20 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     }
 
     @Override
-    public void render(IGraphicsProvider graphics) {
+    public void render(PlatformGraphics graphics) {
         graphics.drawTexture(sprite.textureId(), getPosition().getX(), getPosition().getY(), sprite.width(),
                 sprite.height(), LogicConstants.FLIPPER_PIVOT[0], LogicConstants.FLIPPER_PIVOT[1], currentAngle);
     }
 
     @Override
-    public boolean onKeyDown(EngineKey keycode) {
+    public boolean onKeyDown(PlatformKey keycode) {
         // Check LEFT flipper keys
-        if (isLeft && (keycode == EngineKey.A || keycode == EngineKey.LEFT)) {
+        if (isLeft && (keycode == PlatformKey.A || keycode == PlatformKey.LEFT)) {
             rotationalVelocity = LogicConstants.FLIPPER_ROT_VELOCITY; // Sweeps CCW (up)
             return true;
         }
         // Check RIGHT flipper keys
-        if (!isLeft && (keycode == EngineKey.D || keycode == EngineKey.RIGHT)) {
+        if (!isLeft && (keycode == PlatformKey.D || keycode == PlatformKey.RIGHT)) {
             rotationalVelocity = -LogicConstants.FLIPPER_ROT_VELOCITY; // Sweeps CW (up for right flipper)
             return true;
         }
@@ -113,11 +119,11 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     }
 
     @Override
-    public boolean onKeyUp(EngineKey keycode) {
-        if (isLeft && (keycode == EngineKey.A || keycode == EngineKey.LEFT)) {
+    public boolean onKeyUp(PlatformKey keycode) {
+        if (isLeft && (keycode == PlatformKey.A || keycode == PlatformKey.LEFT)) {
             rotationalVelocity = -LogicConstants.FLIPPER_ROT_VELOCITY; // Sweeps CW (down)
             return true;
-        } else if (!isLeft && (keycode == EngineKey.D || keycode == EngineKey.RIGHT)) {
+        } else if (!isLeft && (keycode == PlatformKey.D || keycode == PlatformKey.RIGHT)) {
             rotationalVelocity = LogicConstants.FLIPPER_ROT_VELOCITY; // Sweeps CCW (down for right flipper)
             return true;
         }

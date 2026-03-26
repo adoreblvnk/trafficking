@@ -1,10 +1,6 @@
-package com.sit.recyclingpinball.engine.interfaces;
+package com.sit.recyclingpinball.engine.platform.libgdx;
 
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
-
-public interface IInputManager {
-    void addListener(InputListener l);
-
+public interface PlatformInputProcessor {
     boolean touchDown(int screenX, int screenY, int pointer, int button);
 
     boolean touchDragged(int screenX, int screenY, int pointer);

@@ -7,7 +7,7 @@ import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
 import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
 import com.sit.recyclingpinball.engine.interfaces.IMovementManager;
-import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 
 /**
  * Base for all game screens; provides shared managers and a consistent
@@ -21,11 +21,11 @@ public abstract class AbstractScene {
     private final ICollisionManager collisionManager;
     private final IInputManager inputManager;
     private final IMovementManager movementManager;
-    private final IEngineContext context;
+    private final PlatformContext context;
 
     // Gives every scene its own manager instances for isolation and predictable
     // teardown.
-    public AbstractScene(IEngineContext context, IEntityManager entityManager, ICollisionManager collisionManager,
+    public AbstractScene(PlatformContext context, IEntityManager entityManager, ICollisionManager collisionManager,
             IInputManager inputManager, IMovementManager movementManager) {
         this.context = context;
         this.entityManager = entityManager;
@@ -36,7 +36,7 @@ public abstract class AbstractScene {
 
     // Protected access keeps scene internals available to subclasses only.
     // External systems must interact through scene behavior, not manager state.
-    protected IEngineContext getContext() {
+    protected PlatformContext getContext() {
         return context;
     }
 

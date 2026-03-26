@@ -1,7 +1,7 @@
 package com.sit.recyclingpinball;
 
 import com.badlogic.gdx.Game;
-import com.sit.recyclingpinball.engine.platform.libgdx.LibGdxContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
 import com.sit.recyclingpinball.engine.managers.AssetManager;
 
@@ -11,19 +11,19 @@ import com.sit.recyclingpinball.logic.factories.StateFactory;
 
 public class Main extends Game {
     private SceneManager sceneManager;
-    private LibGdxContext context;
+    private PlatformContext context;
     private AssetManager assetManager;
 
     @Override
     public void create() {
         // ARCHITECTURE JUSTIFICATION: Composition Root Pattern
         // Main.java serves as the "Composition Root" for the entire application.
-        // It is the only location where concrete implementations (LibGdxContext)
+        // It is the only location where concrete implementations (PlatformContext)
         // are instantiated and wired to their respective managers. This keeps
         // the core game engine and logic layers completely decoupled from
         // platform-specific bootstrapping.
         assetManager = new AssetManager();
-        context = new LibGdxContext(assetManager);
+        context = new PlatformContext();
 
         // PERFORMANCE OPTIMIZATION: Asset Preloading & Flyweight Pattern
         // We initialize the AssetManager and explicitly load all resources upfront.
@@ -31,7 +31,7 @@ public class Main extends Game {
         // objects (e.g., trash, pinball) share single memory references for their
         // textures and sounds. Preloading also eliminates disk I/O "hitching"
         // during the gameplay loop, ensuring a consistent 60FPS render cycle.
-        assetManager.initialize(context.getAudio(), context.getGraphics());
+        assetManager.initialize(context.getAudio(), context.getAssets());
 
         // Load Sounds
         for (String sound : LogicConstants.SOUND_ASSETS) {

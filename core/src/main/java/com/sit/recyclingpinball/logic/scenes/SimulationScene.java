@@ -1,9 +1,15 @@
 package com.sit.recyclingpinball.logic.scenes;
 
-import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
+/* ARCHITECTURE JUSTIFICATION: Primitive Data Transfer Object (DTO).
+ * The Logic layer imports PlatformKey from the platform package. This is a
+ * safe traversal because PlatformKey is a pure Java enum DTO that fully
+ * insulates Logic from com.badlogic.gdx.Input.Keys while preserving framework
+ * independence.
+ */
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
 
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
-import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
@@ -36,7 +42,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     private final SceneFactory sceneFactory;
     private final StateFactory stateFactory;
 
-    public SimulationScene(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+    public SimulationScene(PlatformContext context, SceneManager sceneManager, SceneFactory sceneFactory,
             StateFactory stateFactory, ILevelBlueprint blueprint, IEntityManager entityManager,
             ICollisionManager collisionManager, IInputManager inputManager, IMovementManager movementManager) {
         super(context, entityManager, collisionManager, inputManager, movementManager);
@@ -145,8 +151,8 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     }
 
     @Override
-    public boolean onKeyDown(EngineKey keycode) {
-        if (keycode == EngineKey.ESCAPE) {
+    public boolean onKeyDown(PlatformKey keycode) {
+        if (keycode == PlatformKey.ESCAPE) {
             sceneManager.pushOverlay(sceneFactory.createPauseOverlay());
             return true;
         }

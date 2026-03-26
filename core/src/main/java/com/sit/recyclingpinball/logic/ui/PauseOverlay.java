@@ -1,8 +1,8 @@
 package com.sit.recyclingpinball.logic.ui;
 
-import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
-import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
@@ -20,7 +20,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     private final List<Button> buttons = new ArrayList<>();
     private final SceneFactory sceneFactory;
 
-    public PauseOverlay(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+    public PauseOverlay(PlatformContext context, SceneManager sceneManager, SceneFactory sceneFactory,
             IEntityManager entityManager, ICollisionManager collisionManager, IInputManager inputManager,
             IMovementManager movementManager) {
         super(context, entityManager, collisionManager, inputManager, movementManager);
@@ -71,12 +71,12 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     }
 
     @Override
-    public boolean onKeyDown(EngineKey keycode) {
-        if (keycode == EngineKey.ESCAPE) {
+    public boolean onKeyDown(PlatformKey keycode) {
+        if (keycode == PlatformKey.ESCAPE) {
             getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
             sceneManager.popScene();
             return true;
-        } else if (keycode == EngineKey.M) {
+        } else if (keycode == PlatformKey.M) {
             getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
             sceneManager.setScene(sceneFactory.createMenuScene());
             return true;

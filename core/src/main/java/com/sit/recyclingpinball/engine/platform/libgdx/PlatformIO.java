@@ -3,21 +3,18 @@ package com.sit.recyclingpinball.engine.platform.libgdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Json;
-import com.sit.recyclingpinball.engine.interfaces.providers.IIOProvider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-/**
- * libGDX implementation of IIOProvider.
- */
-public class LibGdxIOProvider implements IIOProvider {
+public class PlatformIO {
     private final Json json = new Json();
 
-    @Override
-    public java.util.List<String> listInternalFiles(String directory, String extension) {
-        java.util.List<String> list = new java.util.ArrayList<>();
+    public List<String> listInternalFiles(String directory, String extension) {
+        List<String> list = new ArrayList<>();
         try {
-            com.badlogic.gdx.files.FileHandle dir = com.badlogic.gdx.Gdx.files.internal(directory);
+            com.badlogic.gdx.files.FileHandle dir = Gdx.files.internal(directory);
             if (dir.exists() && dir.isDirectory()) {
                 for (com.badlogic.gdx.files.FileHandle file : dir.list()) {
                     if (file.name().endsWith(extension)) {
@@ -25,12 +22,11 @@ public class LibGdxIOProvider implements IIOProvider {
                     }
                 }
             }
-        } catch (com.badlogic.gdx.utils.GdxRuntimeException e) {
+        } catch (GdxRuntimeException e) {
         }
         return list;
     }
 
-    @Override
     public Optional<String> readInternalText(String internalPath) {
         try {
             com.badlogic.gdx.files.FileHandle file = Gdx.files.internal(internalPath);
@@ -43,9 +39,7 @@ public class LibGdxIOProvider implements IIOProvider {
         }
     }
 
-    @Override
     public <T> T fromJson(String jsonStr, Class<T> type) {
-        return this.json.fromJson(type, jsonStr);
+        return json.fromJson(type, jsonStr);
     }
-
 }

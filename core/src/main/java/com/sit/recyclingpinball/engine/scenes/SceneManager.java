@@ -5,11 +5,12 @@ import java.util.Deque;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformInputProcessor;
 
 /**
  * Owns the scene stack and global services, single entry point for scene
- * transitions and overlays. Now depends on IEngineContext for platform
+ * transitions and overlays. Now depends on PlatformContext for platform
  * independence.
  */
 public class SceneManager {
@@ -17,9 +18,9 @@ public class SceneManager {
     private static final Logger LOGGER = Logger.getLogger(SceneManager.class.getName());
 
     private final Deque<AbstractScene> sceneStack;
-    private final IEngineContext context;
+    private final PlatformContext context;
 
-    public SceneManager(IEngineContext context) {
+    public SceneManager(PlatformContext context) {
         if (context == null) {
             throw new IllegalArgumentException("EngineContext cannot be null");
         }
@@ -37,7 +38,7 @@ public class SceneManager {
         try {
             scene.create();
             sceneStack.push(scene);
-            context.getInput().setActiveProcessor(scene.getInputManager());
+            bindActiveInput(scene);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to push overlay scene", e);
         }
@@ -51,9 +52,18 @@ public class SceneManager {
             s.dispose();
         }
         if (!sceneStack.isEmpty()) {
-            context.getInput().setActiveProcessor(sceneStack.peek().getInputManager());
+            bindActiveInput(sceneStack.peek());
         } else {
             context.getInput().clearActiveProcessor();
+        }
+    }
+
+    private void bindActiveInput(AbstractScene scene) {
+        if (scene.getInputManager() instanceof PlatformInputProcessor processor) {
+            context.getInput().setActiveProcessor(processor);
+        } else {
+            context.getInput().clearActiveProcessor();
+            LOGGER.log(Level.WARNING, "Scene input manager does not implement PlatformInputProcessor");
         }
     }
 
@@ -96,7 +106,7 @@ public class SceneManager {
         }
     }
 
-    public IEngineContext getContext() {
+    public PlatformContext getContext() {
         return context;
     }
 

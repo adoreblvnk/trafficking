@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.logic.level;
 
-import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.factories.TrashType;
 
@@ -13,7 +13,7 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
     private final LevelConfig mergedConfig;
     private String name = "Unknown Level";
 
-    public DataDrivenLevelBlueprint(String filepath, IEngineContext context) {
+    public DataDrivenLevelBlueprint(String filepath, PlatformContext context) {
         String baseContent = context.getIO()
                 .readInternalText(com.sit.recyclingpinball.logic.LogicConstants.PATH_BASE_LEVEL).orElse("{}");
         LevelConfig baseConfig = context.getIO().fromJson(baseContent, LevelConfig.class);

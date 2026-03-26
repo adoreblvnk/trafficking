@@ -2,7 +2,7 @@ package com.sit.recyclingpinball.logic.scenes;
 
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
-import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
@@ -18,7 +18,7 @@ import java.util.List;
 public class MenuScene extends AbstractScene implements InputListener {
     private final List<Button> buttons = new ArrayList<>();
 
-    public MenuScene(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+    public MenuScene(PlatformContext context, SceneManager sceneManager, SceneFactory sceneFactory,
             IEntityManager entityManager, ICollisionManager collisionManager, IInputManager inputManager,
             IMovementManager movementManager) {
         super(context, entityManager, collisionManager, inputManager, movementManager);

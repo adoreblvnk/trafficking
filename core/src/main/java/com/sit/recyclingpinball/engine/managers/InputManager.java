@@ -6,13 +6,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
-import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformInputProcessor;
 
 /**
  * Distributes input events to registered listeners in subscription order.
  * Swallows exceptions to prevent input pipeline crashes.
  */
-public class InputManager implements com.sit.recyclingpinball.engine.interfaces.IInputManager {
+public class InputManager
+    implements com.sit.recyclingpinball.engine.interfaces.IInputManager, PlatformInputProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(InputManager.class.getName());
 
@@ -65,7 +67,7 @@ public class InputManager implements com.sit.recyclingpinball.engine.interfaces.
     }
 
     // Implemented to satisfy UML even if Interface doesn't use it yet
-    public boolean keyDown(EngineKey keycode) {
+    public boolean keyDown(PlatformKey keycode) {
         for (InputListener l : listeners) {
             try {
                 if (l.onKeyDown(keycode))
@@ -77,7 +79,7 @@ public class InputManager implements com.sit.recyclingpinball.engine.interfaces.
         return false;
     }
 
-    public boolean keyUp(EngineKey keycode) {
+    public boolean keyUp(PlatformKey keycode) {
         for (InputListener l : listeners) {
             try {
                 if (l.onKeyUp(keycode))

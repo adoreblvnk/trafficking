@@ -1,11 +1,11 @@
 package com.sit.recyclingpinball.logic.entities;
 
 import com.sit.recyclingpinball.engine.components.SpriteComponent;
-import com.sit.recyclingpinball.engine.interfaces.providers.EngineKey;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
 import com.sit.recyclingpinball.engine.entities.AbstractEntity;
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
-import com.sit.recyclingpinball.engine.interfaces.providers.IGraphicsProvider;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
 import com.sit.recyclingpinball.engine.physics.BoxCollider;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
 import com.sit.recyclingpinball.logic.events.BallRestedOnRodEvent;
@@ -60,7 +60,7 @@ public class ShooterRodEntity extends AbstractEntity implements InputListener {
     }
 
     @Override
-    public void render(IGraphicsProvider graphics) {
+    public void render(PlatformGraphics graphics) {
         graphics.drawTexture(shaftSprite.textureId(), getPosition().getX() + LogicConstants.SHOOTER_SHAFT_OFFSET[0],
                 getPosition().getY() + LogicConstants.SHOOTER_SHAFT_OFFSET[1], shaftSprite.width(),
                 shaftSprite.height());
@@ -130,8 +130,8 @@ public class ShooterRodEntity extends AbstractEntity implements InputListener {
     }
 
     @Override
-    public boolean onKeyDown(EngineKey keycode) {
-        if (keycode == EngineKey.DOWN || keycode == EngineKey.S) {
+    public boolean onKeyDown(PlatformKey keycode) {
+        if (keycode == PlatformKey.DOWN || keycode == PlatformKey.S) {
             isKeyPulling = true;
             return true;
         }
@@ -139,8 +139,8 @@ public class ShooterRodEntity extends AbstractEntity implements InputListener {
     }
 
     @Override
-    public boolean onKeyUp(EngineKey keycode) {
-        if (keycode == EngineKey.DOWN || keycode == EngineKey.S) {
+    public boolean onKeyUp(PlatformKey keycode) {
+        if (keycode == PlatformKey.DOWN || keycode == PlatformKey.S) {
             if (isKeyPulling) {
                 isKeyPulling = false;
                 float pullDistance = anchorY - getPosition().getY();

@@ -1,7 +1,7 @@
 package com.sit.recyclingpinball.logic.ui;
 
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
-import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
@@ -21,7 +21,7 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
     private final int totalTrash;
     private final List<Button> buttons = new ArrayList<>();
 
-    public SimulationResultOverlay(IEngineContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+    public SimulationResultOverlay(PlatformContext context, SceneManager sceneManager, SceneFactory sceneFactory,
             boolean isWin, int score, int totalTrash, ILevelBlueprint blueprint, IEntityManager entityManager,
             ICollisionManager collisionManager, IInputManager inputManager, IMovementManager movementManager) {
         super(context, entityManager, collisionManager, inputManager, movementManager);

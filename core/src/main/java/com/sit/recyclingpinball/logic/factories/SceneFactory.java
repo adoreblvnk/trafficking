@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.logic.factories;
 
-import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
 import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
@@ -20,11 +20,11 @@ import com.sit.recyclingpinball.logic.ui.SimulationResultOverlay;
 
 public class SceneFactory {
 
-    private final IEngineContext context;
+    private final PlatformContext context;
     private final SceneManager sceneManager;
     private final StateFactory stateFactory;
 
-    public SceneFactory(IEngineContext context, SceneManager sceneManager, StateFactory stateFactory) {
+    public SceneFactory(PlatformContext context, SceneManager sceneManager, StateFactory stateFactory) {
         this.context = context;
         this.sceneManager = sceneManager;
         this.stateFactory = stateFactory;

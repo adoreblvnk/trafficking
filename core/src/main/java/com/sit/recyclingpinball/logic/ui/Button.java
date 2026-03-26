@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.logic.ui;
 
-import com.sit.recyclingpinball.engine.interfaces.providers.IEngineContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.logic.LogicConstants;
 
 public class Button {
@@ -20,7 +20,7 @@ public class Button {
         this.action = action;
     }
 
-    public void render(IEngineContext context) {
+    public void render(PlatformContext context) {
         context.getGraphics().setTextColor(LogicConstants.COLOR_TEXT_DARK[0], LogicConstants.COLOR_TEXT_DARK[1],
                 LogicConstants.COLOR_TEXT_DARK[2], LogicConstants.COLOR_TEXT_DARK[3]);
 
@@ -31,7 +31,7 @@ public class Button {
                 LogicConstants.COLOR_TEXT_LIGHT[2], LogicConstants.COLOR_TEXT_LIGHT[3]);
     }
 
-    public boolean handleTouch(int screenX, int screenY, IEngineContext context) {
+    public boolean handleTouch(int screenX, int screenY, PlatformContext context) {
         if (action == null) {
             return false;
         }
