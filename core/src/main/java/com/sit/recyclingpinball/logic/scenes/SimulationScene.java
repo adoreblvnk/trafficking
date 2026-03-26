@@ -36,9 +36,9 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     private final SceneFactory sceneFactory;
     private final StateFactory stateFactory;
 
-    public SimulationScene(SceneManager sceneManager, SceneFactory sceneFactory,
-            StateFactory stateFactory, ILevelBlueprint blueprint, IEntityManager entityManager,
-            ICollisionManager collisionManager, IInputManager inputManager, IMovementManager movementManager) {
+    public SimulationScene(SceneManager sceneManager, SceneFactory sceneFactory, StateFactory stateFactory,
+            ILevelBlueprint blueprint, IEntityManager entityManager, ICollisionManager collisionManager,
+            IInputManager inputManager, IMovementManager movementManager) {
         super(sceneManager, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
         this.sceneFactory = sceneFactory;
@@ -125,8 +125,8 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
                 LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_SCORE_POS[0], LogicConstants.UI_SCORE_POS[1]);
         getGraphics().drawText(LogicConstants.TEXT_BALLS_PREFIX + scoreManager.getBallsLeft(),
                 LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_BALLS_POS[0], LogicConstants.UI_BALLS_POS[1]);
-        getGraphics().drawText(blueprint.getText(), LogicConstants.FONT_GEIST_BOLD,
-                LogicConstants.UI_DESC_POS[0], LogicConstants.UI_DESC_POS[1], LogicConstants.UI_DESC_WIDTH);
+        getGraphics().drawText(blueprint.getText(), LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_DESC_POS[0],
+                LogicConstants.UI_DESC_POS[1], LogicConstants.UI_DESC_WIDTH);
 
         // 4. Draw star icons for collected trash
         int collected = scoreManager.getScore();

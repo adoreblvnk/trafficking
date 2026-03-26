@@ -17,9 +17,8 @@ import java.util.List;
 public class MenuScene extends AbstractScene implements InputListener {
     private final List<Button> buttons = new ArrayList<>();
 
-    public MenuScene(SceneManager sceneManager, SceneFactory sceneFactory,
-            IEntityManager entityManager, ICollisionManager collisionManager, IInputManager inputManager,
-            IMovementManager movementManager) {
+    public MenuScene(SceneManager sceneManager, SceneFactory sceneFactory, IEntityManager entityManager,
+            ICollisionManager collisionManager, IInputManager inputManager, IMovementManager movementManager) {
         super(sceneManager, entityManager, collisionManager, inputManager, movementManager);
 
         float titleBtnW = LogicConstants.UI_BTN_WIDTH_DEFAULT;
@@ -54,8 +53,7 @@ public class MenuScene extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        getGraphics().clearScreen(LogicConstants.COLOR_BG[0], LogicConstants.COLOR_BG[1],
-                LogicConstants.COLOR_BG[2]);
+        getGraphics().clearScreen(LogicConstants.COLOR_BG[0], LogicConstants.COLOR_BG[1], LogicConstants.COLOR_BG[2]);
 
         // Full-screen dirty beach background
         getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_SIZE[0],

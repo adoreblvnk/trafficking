@@ -21,9 +21,8 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     private final List<Button> buttons = new ArrayList<>();
     private final SceneFactory sceneFactory;
 
-    public LevelSelectScene(SceneManager sceneManager, SceneFactory sceneFactory,
-            IEntityManager entityManager, ICollisionManager collisionManager, IInputManager inputManager,
-            IMovementManager movementManager) {
+    public LevelSelectScene(SceneManager sceneManager, SceneFactory sceneFactory, IEntityManager entityManager,
+            ICollisionManager collisionManager, IInputManager inputManager, IMovementManager movementManager) {
         super(sceneManager, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
         this.sceneFactory = sceneFactory;
@@ -48,8 +47,8 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
             float btnY = LogicConstants.UI_LEVEL_SELECT_BTN_START_POS[1]
                     - (i * LogicConstants.UI_LEVEL_SELECT_BTN_SPACING);
             buttons.add(new Button(btnX, btnY, btnW, btnH, bp.getLevelName(), () -> {
-                sceneManager.setScene(
-                        this.sceneFactory.createSimulationScene(new DataDrivenLevelBlueprint(path, getIO())));
+                sceneManager
+                        .setScene(this.sceneFactory.createSimulationScene(new DataDrivenLevelBlueprint(path, getIO())));
             }));
         }
 
@@ -67,8 +66,7 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        getGraphics().clearScreen(LogicConstants.COLOR_BG[0], LogicConstants.COLOR_BG[1],
-                LogicConstants.COLOR_BG[2]);
+        getGraphics().clearScreen(LogicConstants.COLOR_BG[0], LogicConstants.COLOR_BG[1], LogicConstants.COLOR_BG[2]);
 
         // Full-screen dirty beach background
         getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_SIZE[0],

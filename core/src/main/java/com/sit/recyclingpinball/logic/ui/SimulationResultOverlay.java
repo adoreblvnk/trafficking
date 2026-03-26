@@ -20,9 +20,9 @@ public class SimulationResultOverlay extends AbstractScene implements InputListe
     private final int totalTrash;
     private final List<Button> buttons = new ArrayList<>();
 
-    public SimulationResultOverlay(SceneManager sceneManager, SceneFactory sceneFactory,
-            boolean isWin, int score, int totalTrash, ILevelBlueprint blueprint, IEntityManager entityManager,
-            ICollisionManager collisionManager, IInputManager inputManager, IMovementManager movementManager) {
+    public SimulationResultOverlay(SceneManager sceneManager, SceneFactory sceneFactory, boolean isWin, int score,
+            int totalTrash, ILevelBlueprint blueprint, IEntityManager entityManager, ICollisionManager collisionManager,
+            IInputManager inputManager, IMovementManager movementManager) {
         super(sceneManager, entityManager, collisionManager, inputManager, movementManager);
         this.isWin = isWin;
         this.score = score;

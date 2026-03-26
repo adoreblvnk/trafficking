@@ -19,9 +19,8 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     private final List<Button> buttons = new ArrayList<>();
     private final SceneFactory sceneFactory;
 
-    public PauseOverlay(SceneManager sceneManager, SceneFactory sceneFactory,
-            IEntityManager entityManager, ICollisionManager collisionManager, IInputManager inputManager,
-            IMovementManager movementManager) {
+    public PauseOverlay(SceneManager sceneManager, SceneFactory sceneFactory, IEntityManager entityManager,
+            ICollisionManager collisionManager, IInputManager inputManager, IMovementManager movementManager) {
         super(sceneManager, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
         this.sceneFactory = sceneFactory;

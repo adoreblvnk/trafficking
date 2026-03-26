@@ -21,7 +21,8 @@ public class Button {
         this.action = action;
     }
 
-        // Passes specific platform providers instead of the full context to keep coupling low.
+    // Passes specific platform providers instead of the full context to keep
+    // coupling low.
     public void render(PlatformGraphics graphics) {
         graphics.setTextColor(LogicConstants.COLOR_TEXT_DARK[0], LogicConstants.COLOR_TEXT_DARK[1],
                 LogicConstants.COLOR_TEXT_DARK[2], LogicConstants.COLOR_TEXT_DARK[3]);
