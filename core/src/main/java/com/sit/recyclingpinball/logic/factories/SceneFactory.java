@@ -19,7 +19,7 @@ import com.sit.recyclingpinball.logic.ui.SimulationResultOverlay;
 
 public class SceneFactory {
 
-        private final SceneManager sceneManager;
+    private final SceneManager sceneManager;
     private final StateFactory stateFactory;
 
     public SceneFactory(SceneManager sceneManager, StateFactory stateFactory) {
@@ -27,59 +27,44 @@ public class SceneFactory {
         this.stateFactory = stateFactory;
     }
 
-    public MenuScene createMenuScene() {
-        IEntityManager entityManager = new EntityManager();
-        ICollisionManager collisionManager = new CollisionManager(LogicConstants.SCENE_SIZE[0],
-                LogicConstants.SCENE_SIZE[1]);
-        IInputManager inputManager = new InputManager();
-        IMovementManager movementManager = new MovementManager();
+    private record ManagerContext(
+            IEntityManager entityManager,
+            ICollisionManager collisionManager,
+            IInputManager inputManager,
+            IMovementManager movementManager) {}
 
-        return new MenuScene(sceneManager, this, entityManager, collisionManager, inputManager,
-                movementManager);
+    private ManagerContext createManagers() {
+        return new ManagerContext(
+                new EntityManager(),
+                new CollisionManager(LogicConstants.SCENE_SIZE[0], LogicConstants.SCENE_SIZE[1]),
+                new InputManager(),
+                new MovementManager()
+        );
+    }
+
+    public MenuScene createMenuScene() {
+        ManagerContext ctx = createManagers();
+        return new MenuScene(sceneManager, this, ctx.entityManager(), ctx.collisionManager(), ctx.inputManager(), ctx.movementManager());
     }
 
     public LevelSelectScene createLevelSelectScene() {
-        IEntityManager entityManager = new EntityManager();
-        ICollisionManager collisionManager = new CollisionManager(LogicConstants.SCENE_SIZE[0],
-                LogicConstants.SCENE_SIZE[1]);
-        IInputManager inputManager = new InputManager();
-        IMovementManager movementManager = new MovementManager();
-
-        return new LevelSelectScene(sceneManager, this, entityManager, collisionManager, inputManager,
-                movementManager);
+        ManagerContext ctx = createManagers();
+        return new LevelSelectScene(sceneManager, this, ctx.entityManager(), ctx.collisionManager(), ctx.inputManager(), ctx.movementManager());
     }
 
     public SimulationScene createSimulationScene(ILevelBlueprint blueprint) {
-        IEntityManager entityManager = new EntityManager();
-        ICollisionManager collisionManager = new CollisionManager(LogicConstants.SCENE_SIZE[0],
-                LogicConstants.SCENE_SIZE[1]);
-        IInputManager inputManager = new InputManager();
-        IMovementManager movementManager = new MovementManager();
-
-        return new SimulationScene(sceneManager, this, stateFactory, blueprint, entityManager,
-                collisionManager, inputManager, movementManager);
+        ManagerContext ctx = createManagers();
+        return new SimulationScene(sceneManager, this, stateFactory, blueprint, ctx.entityManager(), ctx.collisionManager(), ctx.inputManager(), ctx.movementManager());
     }
 
     public PauseOverlay createPauseOverlay() {
-        IEntityManager entityManager = new EntityManager();
-        ICollisionManager collisionManager = new CollisionManager(LogicConstants.SCENE_SIZE[0],
-                LogicConstants.SCENE_SIZE[1]);
-        IInputManager inputManager = new InputManager();
-        IMovementManager movementManager = new MovementManager();
-
-        return new PauseOverlay(sceneManager, this, entityManager, collisionManager, inputManager,
-                movementManager);
+        ManagerContext ctx = createManagers();
+        return new PauseOverlay(sceneManager, this, ctx.entityManager(), ctx.collisionManager(), ctx.inputManager(), ctx.movementManager());
     }
 
-    public SimulationResultOverlay createSimulationResultOverlay(boolean won, int score, int totalTrash,
-            ILevelBlueprint blueprint) {
-        IEntityManager entityManager = new EntityManager();
-        ICollisionManager collisionManager = new CollisionManager(LogicConstants.SCENE_SIZE[0],
-                LogicConstants.SCENE_SIZE[1]);
-        IInputManager inputManager = new InputManager();
-        IMovementManager movementManager = new MovementManager();
-
-        return new SimulationResultOverlay(sceneManager, this, won, score, totalTrash, blueprint,
-                entityManager, collisionManager, inputManager, movementManager);
+    public SimulationResultOverlay createSimulationResultOverlay(boolean won, int score, int totalTrash, ILevelBlueprint blueprint) {
+        ManagerContext ctx = createManagers();
+        return new SimulationResultOverlay(sceneManager, this, won, score, totalTrash, blueprint, ctx.entityManager(), ctx.collisionManager(), ctx.inputManager(), ctx.movementManager());
     }
 }
+
