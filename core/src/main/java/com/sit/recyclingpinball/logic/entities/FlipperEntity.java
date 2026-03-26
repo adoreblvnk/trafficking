@@ -1,12 +1,7 @@
 package com.sit.recyclingpinball.logic.entities;
 
 import com.sit.recyclingpinball.engine.components.SpriteComponent;
-/* ARCHITECTURE JUSTIFICATION: Primitive Data Transfer Object (DTO).
- * The Logic layer imports PlatformKey from the platform package. This is a
- * safe traversal because PlatformKey is a pure Java enum DTO that fully
- * insulates Logic from com.badlogic.gdx.Input.Keys while preserving framework
- * independence.
- */
+// Using this enum avoids coupling the logic directly to LibGDX input classes.
 import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
 
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;

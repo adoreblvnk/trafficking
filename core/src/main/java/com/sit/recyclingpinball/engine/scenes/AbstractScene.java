@@ -45,13 +45,7 @@ public abstract class AbstractScene {
         return sceneManager;
     }
 
-    /* ARCHITECTURE JUSTIFICATION: Layer Strictness & Dependency Inversion.
-     * The Engine layer (AbstractScene) encapsulates the PlatformContext.
-     * Logic scenes extending this class must not import PlatformContext directly.
-     * Instead, they access specific capabilities (Graphics, Audio, IO) through
-     * these protected getter methods, ensuring the Logic layer remains decoupled
-     * from the monolithic platform context.
-     */
+        // Exposes specific capabilities to scenes without leaking the full platform context.
     protected PlatformGraphics getGraphics() {
         return context.getGraphics();
     }

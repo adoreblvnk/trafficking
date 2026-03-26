@@ -2,13 +2,7 @@ package com.sit.recyclingpinball.engine.entities;
 
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
-/* ARCHITECTURE JUSTIFICATION: Concrete Delegation Wrapper.
- * We intentionally import PlatformGraphics instead of an interface to prevent
- * circular package dependencies (Engine <-> Platform). PlatformGraphics is a
- * pure Thin Facade with zero game logic, isolating LibGDX imports from Engine
- * Core without adding polymorphic dispatch overhead on high-frequency render
- * loops.
- */
+// Imported directly to avoid forcing the Platform layer to implement Engine interfaces.
 import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
 import com.sit.recyclingpinball.engine.physics.ICollider;
 import com.sit.recyclingpinball.engine.physics.BoxCollider;
@@ -24,6 +18,7 @@ import com.sit.recyclingpinball.engine.physics.BoxCollider;
  * project scope we prioritize a stable, simple baseline with less boilerplate
  * and faster feature delivery.
  */
+// Keeps basic render state (dimensions, color) here instead of a pure ECS to simplify the project scope.
 public abstract class AbstractEntity implements ICollidable {
 
     private String id;

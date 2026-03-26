@@ -16,23 +16,10 @@ public class Main extends Game {
 
     @Override
     public void create() {
-        // ARCHITECTURE JUSTIFICATION: Composition Root Pattern
-        // Main.java serves as the "Composition Root" for the entire application.
-        // It is the only location where concrete implementations (PlatformContext)
-        // are instantiated and wired to their respective managers. This keeps
-        // the core game engine and logic layers completely decoupled from
-        // platform-specific bootstrapping.
+        // Wire platform dependencies at the root so the core engine remains framework-agnostic.
         context = new PlatformContext();
         assetManager = new AssetManager(context.getAudio(), context.getAssets());
-
-        // PERFORMANCE OPTIMIZATION: Asset Preloading & Flyweight Pattern
-        // We explicitly load all resources upfront.
-        // This ensures the Flyweight pattern is strictly enforced—multiple game
-        // objects (e.g., trash, pinball) share single memory references for their
-        // textures and sounds. Preloading also eliminates disk I/O "hitching"
-        // during the gameplay loop, ensuring a consistent 60FPS render cycle.
-
-        // Load Sounds
+        // Preload all assets upfront to enforce the Flyweight pattern and prevent gameplay hitching.
         for (String sound : LogicConstants.SOUND_ASSETS) {
             assetManager.loadSound(sound);
         }

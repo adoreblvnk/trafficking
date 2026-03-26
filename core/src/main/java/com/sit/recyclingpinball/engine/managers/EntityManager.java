@@ -29,6 +29,7 @@ import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
  * @see com.sit.recyclingpinball.engine.entities.AbstractEntity
  * @see com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics
  */
+// Uses concurrent collections to provide a thread-safe foundation for future scalability.
 public class EntityManager implements com.sit.recyclingpinball.engine.interfaces.IEntityManager {
 
     private final Map<String, AbstractEntity> entityMap;

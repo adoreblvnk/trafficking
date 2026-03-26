@@ -11,13 +11,8 @@ public interface ICollider {
     }
 
     /**
-        * ARCHITECTURE JUSTIFICATION: 100% Downcast-Free Double Dispatch.
-        *
-        * We avoid instanceof and reflection for collider type selection, preserving
-        * strictly polymorphic dispatch. This keeps the dispatcher closed for
-        * modification and open for extension (OCP): new collider families can be
-        * introduced without editing branching logic in collision dispatch paths.
      */
+    // Resolves collisions via double-dispatch to eliminate the need for instanceof checks.
     CollisionResult checkCollision(ICollider other);
 
     /**

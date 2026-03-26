@@ -4,13 +4,8 @@ import com.sit.recyclingpinball.engine.platform.libgdx.PlatformAudio;
 import com.sit.recyclingpinball.engine.platform.libgdx.PlatformAssetManager;
 
 /**
- * ARCHITECTURE JUSTIFICATION: Separation of API and Lifecycle.
- *
- * <p>This class delegates entirely to PlatformAssetManager. The Engine Core
- * exposes a unified, framework-agnostic API to the Logic layer, while the
- * Platform layer strictly owns memory lifecycle and disposal of native LibGDX
- * assets (SRP compliance).</p>
  */
+// Delegates to PlatformAssetManager to separate the engine API from platform memory lifecycle.
 public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.providers.IAssetProvider {
 
     private final PlatformAudio audioProvider;

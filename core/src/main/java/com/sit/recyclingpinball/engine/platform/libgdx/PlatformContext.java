@@ -3,12 +3,8 @@ package com.sit.recyclingpinball.engine.platform.libgdx;
 import com.badlogic.gdx.Gdx;
 
 /**
- * ARCHITECTURE JUSTIFICATION: Facade Pattern.
- *
- * <p>Centralizes all platform-specific subsystems behind a single entry point.
- * The Platform layer sits at the absolute bottom of the dependency tree and
- * imports nothing from Engine Core or Logic layers.</p>
  */
+// Centralizes platform subsystems. Kept concrete to enforce the strict Logic -> Engine -> Platform rule.
 public class PlatformContext {
 
     private final PlatformDisplay displayProvider;

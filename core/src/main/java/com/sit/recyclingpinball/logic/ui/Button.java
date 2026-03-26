@@ -21,12 +21,7 @@ public class Button {
         this.action = action;
     }
 
-    /* ARCHITECTURE JUSTIFICATION: Interface Segregation Principle (ISP).
-     * Instead of passing the monolithic PlatformContext to UI elements, we inject
-     * only the specific platform capabilities required (Graphics for rendering,
-     * Audio for interaction feedback). This prevents the Logic layer from
-     * becoming tightly coupled to the entire platform suite.
-     */
+        // Passes specific platform providers instead of the full context to keep coupling low.
     public void render(PlatformGraphics graphics) {
         graphics.setTextColor(LogicConstants.COLOR_TEXT_DARK[0], LogicConstants.COLOR_TEXT_DARK[1],
                 LogicConstants.COLOR_TEXT_DARK[2], LogicConstants.COLOR_TEXT_DARK[3]);

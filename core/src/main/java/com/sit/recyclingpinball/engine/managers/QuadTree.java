@@ -11,13 +11,8 @@ import java.util.List;
  * QuadTree for broad-phase spatial partitioning to optimize collision
  * detection.
  *
- * Design note: this class intentionally does not require a getBounds() method
- * on {@code ICollidable}. Instead, broad-phase bounds are obtained through the
- * polymorphic collider contract: {@code collidable.getCollider().getAABB()}.
- * This keeps {@code ICollidable} focused while still giving QuadTree the AABB
- * it needs, and avoids fragile {@code instanceof} or downcasting to concrete
- * entity classes.
  */
+// Uses the polymorphic collider contract (getAABB) to avoid downcasting entities.
 public class QuadTree {
 
     private int level;

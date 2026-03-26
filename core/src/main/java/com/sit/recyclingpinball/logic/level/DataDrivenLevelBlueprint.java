@@ -13,11 +13,7 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
     private final LevelConfig mergedConfig;
     private String name = "Unknown Level";
 
-    /* ARCHITECTURE JUSTIFICATION: Principle of Least Privilege.
-     * The blueprint only requires file I/O capabilities to parse JSON.
-     * By passing PlatformIO instead of the full PlatformContext, we adhere
-     * to a strict unidirectional dependency and avoid layer skipping.
-     */
+        // Requires only PlatformIO instead of the full context to follow the principle of least privilege.
     public DataDrivenLevelBlueprint(String filepath, PlatformIO io) {
         String baseContent = io
                 .readInternalText(com.sit.recyclingpinball.logic.LogicConstants.PATH_BASE_LEVEL).orElse("{}");
