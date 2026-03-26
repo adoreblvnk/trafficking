@@ -17,10 +17,10 @@ public abstract class AbstractScene {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractScene.class.getName());
 
-    private IEntityManager entityManager;
-    private ICollisionManager collisionManager;
-    private IInputManager inputManager;
-    private IMovementManager movementManager;
+    private final IEntityManager entityManager;
+    private final ICollisionManager collisionManager;
+    private final IInputManager inputManager;
+    private final IMovementManager movementManager;
     private final IEngineContext context;
 
     // Gives every scene its own manager instances for isolation and predictable
@@ -34,7 +34,9 @@ public abstract class AbstractScene {
         this.movementManager = movementManager;
     }
 
-    public IEngineContext getContext() {
+    // Protected access keeps scene internals available to subclasses only.
+    // External systems must interact through scene behavior, not manager state.
+    protected IEngineContext getContext() {
         return context;
     }
 
@@ -75,12 +77,22 @@ public abstract class AbstractScene {
     public void dispose() {
     }
 
-    public IEntityManager getEntityManager() {
+    // Exposed to inheriting scenes for composition, intentionally hidden from
+    // non-scene classes to reduce coupling to internal engine subsystems.
+    protected IEntityManager getEntityManager() {
         return entityManager;
     }
 
-    public IInputManager getInputManager() {
+    protected IInputManager getInputManager() {
         return inputManager;
+    }
+
+    protected ICollisionManager getCollisionManager() {
+        return collisionManager;
+    }
+
+    protected IMovementManager getMovementManager() {
+        return movementManager;
     }
 
     // Keeps rendering in screen coordinates when the window is resized.

@@ -50,7 +50,7 @@ public abstract class AbstractEntity implements ICollidable {
         this.collider = new BoxCollider(x, y, w, h);
     }
 
-    protected void setCollider(ICollider collider) {
+    protected final void setCollider(ICollider collider) {
         this.collider = collider;
     }
 
