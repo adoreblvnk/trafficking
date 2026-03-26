@@ -9,6 +9,12 @@ import java.util.Map;
  * Centralized manager for loading and tracking game assets (Sounds, Textures,
  * Fonts). Ensures assets are loaded once and shared across the engine
  * (Flyweight Pattern).
+ *
+ * <p>
+ * Texture/font maps intentionally store opaque {@code Object} handles to keep
+ * core modules framework-agnostic. Typed usage is restricted to the platform
+ * graphics adapter where concrete rendering classes are already in scope.
+ * </p>
  */
 public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.providers.IAssetProvider {
 
@@ -60,10 +66,12 @@ public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.
     }
 
     public Object getTexture(String id) {
+        // Returns opaque handle by ID; concrete type is resolved at render boundary.
         return loadedTextures.get(id);
     }
 
     public Object getFont(String id) {
+        // Returns opaque handle by ID; concrete type is resolved at render boundary.
         return loadedFonts.get(id);
     }
 

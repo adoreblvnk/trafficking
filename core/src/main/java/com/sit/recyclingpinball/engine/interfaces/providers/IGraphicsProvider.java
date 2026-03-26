@@ -95,13 +95,20 @@ public interface IGraphicsProvider {
     void setProjectionMatrix(float width, float height);
 
     /**
-     * Loads a texture from the given path and returns it as a generic handle. The
-     * manager is responsible for storing and reusing this handle.
+     * Loads a texture from the given path and returns it as an opaque handle.
+     *
+     * The {@code Object} type is intentional: it keeps framework-specific classes
+     * out of engine/logic modules. Concrete casting is handled only in the
+     * platform implementation.
      */
     Object loadTextureResource(String path);
 
     /**
-     * Loads a font from the given path and returns it as a generic handle.
+     * Loads a font from the given path and returns it as an opaque handle.
+     *
+     * The {@code Object} type is intentional: it keeps framework-specific classes
+     * out of engine/logic modules. Concrete casting is handled only in the
+     * platform implementation.
      */
     Object loadFontResource(String path, int size);
 
