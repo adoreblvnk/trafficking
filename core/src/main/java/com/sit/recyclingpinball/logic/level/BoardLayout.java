@@ -5,6 +5,7 @@ import com.sit.recyclingpinball.logic.entities.TrashEntity;
 import com.sit.recyclingpinball.logic.entities.WallEntity;
 import com.sit.recyclingpinball.logic.entities.ShooterRodEntity;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BoardLayout {
@@ -37,12 +38,12 @@ public class BoardLayout {
     }
 
     public List<WallEntity> getWalls() {
-        return walls;
+        return Collections.unmodifiableList(walls);
     }
     public List<FlipperEntity> getFlippers() {
-        return flippers;
+        return Collections.unmodifiableList(flippers);
     }
     public List<TrashEntity> getTrashes() {
-        return trashes;
+        return Collections.unmodifiableList(trashes);
     }
 }

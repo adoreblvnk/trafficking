@@ -2,7 +2,6 @@ package com.sit.recyclingpinball.logic.managers;
 
 import com.sit.recyclingpinball.logic.events.BallDrainedEvent;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
-import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.events.PinballEventVisitor;
 import com.sit.recyclingpinball.logic.events.TrashCollectedEvent;
 
@@ -12,9 +11,8 @@ public class GameScoreManager implements PinballEventVisitor {
     private final int totalTrash;
     private boolean ballInPlay = false;
 
-    public GameScoreManager(PinballEventBus bus, int totalTrash) {
+    public GameScoreManager(int totalTrash) {
         this.totalTrash = totalTrash;
-        bus.register(this);
     }
 
     @Override

@@ -57,7 +57,8 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
         BoardLayout layout = blueprint.construct(builder, eventBus);
 
         totalTrash = layout.getTrashes().size();
-        scoreManager = new GameScoreManager(eventBus, totalTrash);
+        scoreManager = new GameScoreManager(totalTrash);
+        eventBus.register(scoreManager);
         new GameAudioManager(getAudio(), eventBus);
 
         layout.getWalls().forEach(getEntityManager()::addEntity);
