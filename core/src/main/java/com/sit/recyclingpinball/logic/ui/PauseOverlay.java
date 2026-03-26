@@ -2,7 +2,6 @@ package com.sit.recyclingpinball.logic.ui;
 
 import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
@@ -20,10 +19,10 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     private final List<Button> buttons = new ArrayList<>();
     private final SceneFactory sceneFactory;
 
-    public PauseOverlay(PlatformContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+    public PauseOverlay(SceneManager sceneManager, SceneFactory sceneFactory,
             IEntityManager entityManager, ICollisionManager collisionManager, IInputManager inputManager,
             IMovementManager movementManager) {
-        super(context, entityManager, collisionManager, inputManager, movementManager);
+        super(sceneManager, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
         this.sceneFactory = sceneFactory;
 
@@ -61,23 +60,23 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     public void render() {
         // 60% opacity — dark enough to communicate "paused", light enough to see game
         // state.
-        getContext().getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_SIZE[0], LogicConstants.SCENE_SIZE[1],
+        getGraphics().fillRectangle(0, 0, LogicConstants.SCENE_SIZE[0], LogicConstants.SCENE_SIZE[1],
                 LogicConstants.COLOR_DIM[0], LogicConstants.COLOR_DIM[1], LogicConstants.COLOR_DIM[2],
                 LogicConstants.COLOR_DIM_PAUSED_A);
 
         for (Button button : buttons) {
-            button.render(getContext());
+            button.render(getGraphics());
         }
     }
 
     @Override
     public boolean onKeyDown(PlatformKey keycode) {
         if (keycode == PlatformKey.ESCAPE) {
-            getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
+            getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
             sceneManager.popScene();
             return true;
         } else if (keycode == PlatformKey.M) {
-            getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
+            getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
             sceneManager.setScene(sceneFactory.createMenuScene());
             return true;
         }
@@ -87,7 +86,7 @@ public class PauseOverlay extends AbstractScene implements InputListener {
     @Override
     public boolean onTouchDown(int x, int y, int ptr, int btn) {
         for (Button button : buttons) {
-            if (button.handleTouch(x, y, getContext()))
+            if (button.handleTouch(x, y, getAudio()))
                 return true;
         }
         return false;

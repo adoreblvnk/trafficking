@@ -8,6 +8,9 @@ import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
 import com.sit.recyclingpinball.engine.interfaces.IMovementManager;
 import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformAudio;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformIO;
 
 /**
  * Base for all game screens; provides shared managers and a consistent
@@ -21,13 +24,15 @@ public abstract class AbstractScene {
     private final ICollisionManager collisionManager;
     private final IInputManager inputManager;
     private final IMovementManager movementManager;
+    private final SceneManager sceneManager;
     private final PlatformContext context;
 
     // Gives every scene its own manager instances for isolation and predictable
     // teardown.
-    public AbstractScene(PlatformContext context, IEntityManager entityManager, ICollisionManager collisionManager,
+    public AbstractScene(SceneManager sceneManager, IEntityManager entityManager, ICollisionManager collisionManager,
             IInputManager inputManager, IMovementManager movementManager) {
-        this.context = context;
+        this.sceneManager = sceneManager;
+        this.context = sceneManager.getContext();
         this.entityManager = entityManager;
         this.collisionManager = collisionManager;
         this.inputManager = inputManager;
@@ -36,8 +41,27 @@ public abstract class AbstractScene {
 
     // Protected access keeps scene internals available to subclasses only.
     // External systems must interact through scene behavior, not manager state.
-    protected PlatformContext getContext() {
-        return context;
+    protected SceneManager getSceneManager() {
+        return sceneManager;
+    }
+
+    /* ARCHITECTURE JUSTIFICATION: Layer Strictness & Dependency Inversion.
+     * The Engine layer (AbstractScene) encapsulates the PlatformContext.
+     * Logic scenes extending this class must not import PlatformContext directly.
+     * Instead, they access specific capabilities (Graphics, Audio, IO) through
+     * these protected getter methods, ensuring the Logic layer remains decoupled
+     * from the monolithic platform context.
+     */
+    protected PlatformGraphics getGraphics() {
+        return context.getGraphics();
+    }
+
+    protected PlatformAudio getAudio() {
+        return context.getAudio();
+    }
+
+    protected PlatformIO getIO() {
+        return context.getIO();
     }
 
     public abstract void create();

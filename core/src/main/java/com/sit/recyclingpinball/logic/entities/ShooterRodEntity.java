@@ -5,7 +5,7 @@ import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
 import com.sit.recyclingpinball.engine.entities.AbstractEntity;
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
-import com.sit.recyclingpinball.engine.interfaces.IGraphics;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
 import com.sit.recyclingpinball.engine.physics.BoxCollider;
 import com.sit.recyclingpinball.logic.events.BallLaunchedEvent;
 import com.sit.recyclingpinball.logic.events.BallRestedOnRodEvent;
@@ -60,7 +60,7 @@ public class ShooterRodEntity extends AbstractEntity implements InputListener {
     }
 
     @Override
-    public void render(IGraphics graphics) {
+    public void render(PlatformGraphics graphics) {
         graphics.drawTexture(shaftSprite.textureId(), getPosition().getX() + LogicConstants.SHOOTER_SHAFT_OFFSET[0],
                 getPosition().getY() + LogicConstants.SHOOTER_SHAFT_OFFSET[1], shaftSprite.width(),
                 shaftSprite.height());

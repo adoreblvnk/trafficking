@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.logic.level;
 
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformIO;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
 import com.sit.recyclingpinball.logic.factories.TrashType;
 
@@ -13,13 +13,18 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
     private final LevelConfig mergedConfig;
     private String name = "Unknown Level";
 
-    public DataDrivenLevelBlueprint(String filepath, PlatformContext context) {
-        String baseContent = context.getIO()
+    /* ARCHITECTURE JUSTIFICATION: Principle of Least Privilege.
+     * The blueprint only requires file I/O capabilities to parse JSON.
+     * By passing PlatformIO instead of the full PlatformContext, we adhere
+     * to a strict unidirectional dependency and avoid layer skipping.
+     */
+    public DataDrivenLevelBlueprint(String filepath, PlatformIO io) {
+        String baseContent = io
                 .readInternalText(com.sit.recyclingpinball.logic.LogicConstants.PATH_BASE_LEVEL).orElse("{}");
-        LevelConfig baseConfig = context.getIO().fromJson(baseContent, LevelConfig.class);
+        LevelConfig baseConfig = io.fromJson(baseContent, LevelConfig.class);
 
-        String specificContent = context.getIO().readInternalText(filepath).orElse("{}");
-        LevelConfig specificConfig = context.getIO().fromJson(specificContent, LevelConfig.class);
+        String specificContent = io.readInternalText(filepath).orElse("{}");
+        LevelConfig specificConfig = io.fromJson(specificContent, LevelConfig.class);
 
         mergedConfig = merge(baseConfig, specificConfig);
         if (specificConfig != null) {

@@ -1,6 +1,7 @@
 package com.sit.recyclingpinball.logic.ui;
 
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformAudio;
 import com.sit.recyclingpinball.logic.LogicConstants;
 
 public class Button {
@@ -20,23 +21,29 @@ public class Button {
         this.action = action;
     }
 
-    public void render(PlatformContext context) {
-        context.getGraphics().setTextColor(LogicConstants.COLOR_TEXT_DARK[0], LogicConstants.COLOR_TEXT_DARK[1],
+    /* ARCHITECTURE JUSTIFICATION: Interface Segregation Principle (ISP).
+     * Instead of passing the monolithic PlatformContext to UI elements, we inject
+     * only the specific platform capabilities required (Graphics for rendering,
+     * Audio for interaction feedback). This prevents the Logic layer from
+     * becoming tightly coupled to the entire platform suite.
+     */
+    public void render(PlatformGraphics graphics) {
+        graphics.setTextColor(LogicConstants.COLOR_TEXT_DARK[0], LogicConstants.COLOR_TEXT_DARK[1],
                 LogicConstants.COLOR_TEXT_DARK[2], LogicConstants.COLOR_TEXT_DARK[3]);
 
-        context.getGraphics().drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, x, y, width, height);
-        context.getGraphics().drawTextCentered(text, LogicConstants.FONT_GEIST_BOLD, x, y, width, height);
+        graphics.drawTexture(LogicConstants.TEX_BUTTON_RECT_DEPTH_FLAT, x, y, width, height);
+        graphics.drawTextCentered(text, LogicConstants.FONT_GEIST_BOLD, x, y, width, height);
 
-        context.getGraphics().setTextColor(LogicConstants.COLOR_TEXT_LIGHT[0], LogicConstants.COLOR_TEXT_LIGHT[1],
+        graphics.setTextColor(LogicConstants.COLOR_TEXT_LIGHT[0], LogicConstants.COLOR_TEXT_LIGHT[1],
                 LogicConstants.COLOR_TEXT_LIGHT[2], LogicConstants.COLOR_TEXT_LIGHT[3]);
     }
 
-    public boolean handleTouch(int screenX, int screenY, PlatformContext context) {
+    public boolean handleTouch(int screenX, int screenY, PlatformAudio audio) {
         if (action == null) {
             return false;
         }
         if (screenX >= x && screenX <= x + width && screenY >= y && screenY <= y + height) {
-            context.getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
+            audio.playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
             action.run();
             return true;
         }

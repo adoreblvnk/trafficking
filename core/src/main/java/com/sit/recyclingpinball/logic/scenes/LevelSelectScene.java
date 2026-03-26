@@ -3,7 +3,6 @@ package com.sit.recyclingpinball.logic.scenes;
 import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
 import com.sit.recyclingpinball.engine.scenes.AbstractScene;
 import com.sit.recyclingpinball.engine.scenes.SceneManager;
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
@@ -22,10 +21,10 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     private final List<Button> buttons = new ArrayList<>();
     private final SceneFactory sceneFactory;
 
-    public LevelSelectScene(PlatformContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+    public LevelSelectScene(SceneManager sceneManager, SceneFactory sceneFactory,
             IEntityManager entityManager, ICollisionManager collisionManager, IInputManager inputManager,
             IMovementManager movementManager) {
-        super(context, entityManager, collisionManager, inputManager, movementManager);
+        super(sceneManager, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
         this.sceneFactory = sceneFactory;
 
@@ -39,18 +38,18 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
         float btnH = LogicConstants.UI_BTN_HEIGHT_DEFAULT;
         float btnX = LogicConstants.UI_LEVEL_SELECT_BTN_START_POS[0] - btnW / 2;
 
-        java.util.List<String> levelFiles = getContext().getIO().listInternalFiles(LogicConstants.DIR_LEVELS, ".json");
+        java.util.List<String> levelFiles = getIO().listInternalFiles(LogicConstants.DIR_LEVELS, ".json");
         levelFiles.remove(LogicConstants.PATH_BASE_LEVEL);
         levelFiles.sort(java.util.Comparator.naturalOrder());
 
         for (int i = 0; i < levelFiles.size(); i++) {
             String path = levelFiles.get(i);
-            DataDrivenLevelBlueprint bp = new DataDrivenLevelBlueprint(path, getContext());
+            DataDrivenLevelBlueprint bp = new DataDrivenLevelBlueprint(path, getIO());
             float btnY = LogicConstants.UI_LEVEL_SELECT_BTN_START_POS[1]
                     - (i * LogicConstants.UI_LEVEL_SELECT_BTN_SPACING);
             buttons.add(new Button(btnX, btnY, btnW, btnH, bp.getLevelName(), () -> {
                 sceneManager.setScene(
-                        this.sceneFactory.createSimulationScene(new DataDrivenLevelBlueprint(path, getContext())));
+                        this.sceneFactory.createSimulationScene(new DataDrivenLevelBlueprint(path, getIO())));
             }));
         }
 
@@ -68,15 +67,15 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
 
     @Override
     public void render() {
-        getContext().getGraphics().clearScreen(LogicConstants.COLOR_BG[0], LogicConstants.COLOR_BG[1],
+        getGraphics().clearScreen(LogicConstants.COLOR_BG[0], LogicConstants.COLOR_BG[1],
                 LogicConstants.COLOR_BG[2]);
 
         // Full-screen dirty beach background
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_SIZE[0],
+        getGraphics().drawTexture(LogicConstants.TEX_DIRTY_BEACH, 0, 0, LogicConstants.SCENE_SIZE[0],
                 LogicConstants.SCENE_SIZE[1]);
 
         for (Button button : buttons) {
-            button.render(getContext());
+            button.render(getGraphics());
         }
 
         super.render();
@@ -85,7 +84,7 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     @Override
     public boolean onKeyDown(PlatformKey keycode) {
         if (keycode == PlatformKey.ESCAPE) {
-            getContext().getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
+            getAudio().playSound(LogicConstants.SOUND_CLICK, LogicConstants.VOLUME_DEFAULT);
             sceneManager.setScene(this.sceneFactory.createMenuScene());
             return true;
         }
@@ -95,7 +94,7 @@ public class LevelSelectScene extends AbstractScene implements InputListener {
     @Override
     public boolean onTouchDown(int x, int y, int ptr, int btn) {
         for (Button button : buttons) {
-            if (button.handleTouch(x, y, getContext()))
+            if (button.handleTouch(x, y, getAudio()))
                 return true;
         }
         return false;

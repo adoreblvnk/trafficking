@@ -47,7 +47,7 @@ public class Main extends Game {
 
         sceneManager = new SceneManager(context);
         StateFactory stateFactory = new StateFactory();
-        SceneFactory sceneFactory = new SceneFactory(context, sceneManager, stateFactory);
+        SceneFactory sceneFactory = new SceneFactory(sceneManager, stateFactory);
         sceneManager.setScene(sceneFactory.createMenuScene());
     }
 

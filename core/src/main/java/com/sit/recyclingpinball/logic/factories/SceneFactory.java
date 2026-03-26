@@ -1,6 +1,5 @@
 package com.sit.recyclingpinball.logic.factories;
 
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
 import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
@@ -20,12 +19,10 @@ import com.sit.recyclingpinball.logic.ui.SimulationResultOverlay;
 
 public class SceneFactory {
 
-    private final PlatformContext context;
-    private final SceneManager sceneManager;
+        private final SceneManager sceneManager;
     private final StateFactory stateFactory;
 
-    public SceneFactory(PlatformContext context, SceneManager sceneManager, StateFactory stateFactory) {
-        this.context = context;
+    public SceneFactory(SceneManager sceneManager, StateFactory stateFactory) {
         this.sceneManager = sceneManager;
         this.stateFactory = stateFactory;
     }
@@ -37,7 +34,7 @@ public class SceneFactory {
         IInputManager inputManager = new InputManager();
         IMovementManager movementManager = new MovementManager();
 
-        return new MenuScene(context, sceneManager, this, entityManager, collisionManager, inputManager,
+        return new MenuScene(sceneManager, this, entityManager, collisionManager, inputManager,
                 movementManager);
     }
 
@@ -48,7 +45,7 @@ public class SceneFactory {
         IInputManager inputManager = new InputManager();
         IMovementManager movementManager = new MovementManager();
 
-        return new LevelSelectScene(context, sceneManager, this, entityManager, collisionManager, inputManager,
+        return new LevelSelectScene(sceneManager, this, entityManager, collisionManager, inputManager,
                 movementManager);
     }
 
@@ -59,7 +56,7 @@ public class SceneFactory {
         IInputManager inputManager = new InputManager();
         IMovementManager movementManager = new MovementManager();
 
-        return new SimulationScene(context, sceneManager, this, stateFactory, blueprint, entityManager,
+        return new SimulationScene(sceneManager, this, stateFactory, blueprint, entityManager,
                 collisionManager, inputManager, movementManager);
     }
 
@@ -70,7 +67,7 @@ public class SceneFactory {
         IInputManager inputManager = new InputManager();
         IMovementManager movementManager = new MovementManager();
 
-        return new PauseOverlay(context, sceneManager, this, entityManager, collisionManager, inputManager,
+        return new PauseOverlay(sceneManager, this, entityManager, collisionManager, inputManager,
                 movementManager);
     }
 
@@ -82,7 +79,7 @@ public class SceneFactory {
         IInputManager inputManager = new InputManager();
         IMovementManager movementManager = new MovementManager();
 
-        return new SimulationResultOverlay(context, sceneManager, this, won, score, totalTrash, blueprint,
+        return new SimulationResultOverlay(sceneManager, this, won, score, totalTrash, blueprint,
                 entityManager, collisionManager, inputManager, movementManager);
     }
 }

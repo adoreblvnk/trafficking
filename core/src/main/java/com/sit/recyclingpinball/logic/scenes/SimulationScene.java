@@ -9,7 +9,6 @@ package com.sit.recyclingpinball.logic.scenes;
 import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
 
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
 import com.sit.recyclingpinball.engine.interfaces.IEntityManager;
 import com.sit.recyclingpinball.engine.interfaces.ICollisionManager;
 import com.sit.recyclingpinball.engine.interfaces.IInputManager;
@@ -42,10 +41,10 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
     private final SceneFactory sceneFactory;
     private final StateFactory stateFactory;
 
-    public SimulationScene(PlatformContext context, SceneManager sceneManager, SceneFactory sceneFactory,
+    public SimulationScene(SceneManager sceneManager, SceneFactory sceneFactory,
             StateFactory stateFactory, ILevelBlueprint blueprint, IEntityManager entityManager,
             ICollisionManager collisionManager, IInputManager inputManager, IMovementManager movementManager) {
-        super(context, entityManager, collisionManager, inputManager, movementManager);
+        super(sceneManager, entityManager, collisionManager, inputManager, movementManager);
         this.sceneManager = sceneManager;
         this.sceneFactory = sceneFactory;
         this.stateFactory = stateFactory;
@@ -64,7 +63,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
 
         totalTrash = layout.getTrashes().size();
         scoreManager = new GameScoreManager(eventBus, totalTrash);
-        new GameAudioManager(getContext().getAudio(), eventBus);
+        new GameAudioManager(getAudio(), eventBus);
 
         layout.getWalls().forEach(getEntityManager()::addEntity);
         layout.getTrashes().forEach(getEntityManager()::addEntity);
@@ -115,23 +114,23 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
 
     @Override
     public void render() {
-        getContext().getGraphics().clearScreen(LogicConstants.COLOR_SIM_BG[0], LogicConstants.COLOR_SIM_BG[1],
+        getGraphics().clearScreen(LogicConstants.COLOR_SIM_BG[0], LogicConstants.COLOR_SIM_BG[1],
                 LogicConstants.COLOR_SIM_BG[2]);
 
         // 1. Draw Background
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_BEACH_BACKGROUND, 0, 0, LogicConstants.SCENE_SIZE[0],
+        getGraphics().drawTexture(LogicConstants.TEX_BEACH_BACKGROUND, 0, 0, LogicConstants.SCENE_SIZE[0],
                 LogicConstants.SCENE_SIZE[1]);
 
         // 2. Draw Game Entities (Walls, Flippers, Trash, Pinball)
         super.render();
 
         // 3. Draw UI Overlay
-        getContext().getGraphics().drawTexture(LogicConstants.TEX_UI_PANEL_BG, 0, 0, 400, LogicConstants.SCENE_SIZE[1]);
-        getContext().getGraphics().drawText(LogicConstants.TEXT_SCORE_PREFIX + scoreManager.getScore(),
+        getGraphics().drawTexture(LogicConstants.TEX_UI_PANEL_BG, 0, 0, 400, LogicConstants.SCENE_SIZE[1]);
+        getGraphics().drawText(LogicConstants.TEXT_SCORE_PREFIX + scoreManager.getScore(),
                 LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_SCORE_POS[0], LogicConstants.UI_SCORE_POS[1]);
-        getContext().getGraphics().drawText(LogicConstants.TEXT_BALLS_PREFIX + scoreManager.getBallsLeft(),
+        getGraphics().drawText(LogicConstants.TEXT_BALLS_PREFIX + scoreManager.getBallsLeft(),
                 LogicConstants.FONT_GEIST_BOLD, LogicConstants.UI_BALLS_POS[0], LogicConstants.UI_BALLS_POS[1]);
-        getContext().getGraphics().drawText(blueprint.getText(), LogicConstants.FONT_GEIST_BOLD,
+        getGraphics().drawText(blueprint.getText(), LogicConstants.FONT_GEIST_BOLD,
                 LogicConstants.UI_DESC_POS[0], LogicConstants.UI_DESC_POS[1], LogicConstants.UI_DESC_WIDTH);
 
         // 4. Draw star icons for collected trash
@@ -142,10 +141,10 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
             float starX = LogicConstants.UI_STAR_START[0] + col * LogicConstants.UI_STAR_SPACING;
             float starY = LogicConstants.UI_STAR_START[1] - row * LogicConstants.UI_STAR_SPACING;
             if (i < collected) {
-                getContext().getGraphics().drawTexture(LogicConstants.TEX_STAR, starX, starY, 64, 60);
+                getGraphics().drawTexture(LogicConstants.TEX_STAR, starX, starY, 64, 60);
             } else {
                 // Draw dimmed placeholder — dark rectangle behind unfilled star position
-                getContext().getGraphics().fillRectangle(starX + 16, starY + 14, 32, 32, 0.3f, 0.3f, 0.3f, 0.4f);
+                getGraphics().fillRectangle(starX + 16, starY + 14, 32, 32, 0.3f, 0.3f, 0.3f, 0.4f);
             }
         }
     }
