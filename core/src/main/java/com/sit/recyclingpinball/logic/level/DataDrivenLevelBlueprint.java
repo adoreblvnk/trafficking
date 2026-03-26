@@ -13,10 +13,11 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
     private final LevelConfig mergedConfig;
     private String name = "Unknown Level";
 
-        // Requires only PlatformIO instead of the full context to follow the principle of least privilege.
+    // Requires only PlatformIO instead of the full context to follow the principle
+    // of least privilege.
     public DataDrivenLevelBlueprint(String filepath, PlatformIO io) {
-        String baseContent = io
-                .readInternalText(com.sit.recyclingpinball.logic.LogicConstants.PATH_BASE_LEVEL).orElse("{}");
+        String baseContent = io.readInternalText(com.sit.recyclingpinball.logic.LogicConstants.PATH_BASE_LEVEL)
+                .orElse("{}");
         LevelConfig baseConfig = io.fromJson(baseContent, LevelConfig.class);
 
         String specificContent = io.readInternalText(filepath).orElse("{}");

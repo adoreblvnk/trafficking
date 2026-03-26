@@ -4,7 +4,8 @@ import com.badlogic.gdx.Gdx;
 
 /**
  */
-// Centralizes platform subsystems. Kept concrete to enforce the strict Logic -> Engine -> Platform rule.
+// Centralizes platform subsystems. Kept concrete to enforce the strict Logic ->
+// Engine -> Platform rule.
 public class PlatformContext {
 
     private final PlatformDisplay displayProvider;

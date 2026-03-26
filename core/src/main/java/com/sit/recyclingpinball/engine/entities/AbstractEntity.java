@@ -18,7 +18,8 @@ import com.sit.recyclingpinball.engine.physics.BoxCollider;
  * project scope we prioritize a stable, simple baseline with less boilerplate
  * and faster feature delivery.
  */
-// Keeps basic render state (dimensions, color) here instead of a pure ECS to simplify the project scope.
+// Keeps basic render state (dimensions, color) here instead of a pure ECS to
+// simplify the project scope.
 public abstract class AbstractEntity implements ICollidable {
 
     private String id;

@@ -12,7 +12,8 @@ public interface ICollider {
 
     /**
      */
-    // Resolves collisions via double-dispatch to eliminate the need for instanceof checks.
+    // Resolves collisions via double-dispatch to eliminate the need for instanceof
+    // checks.
     CollisionResult checkCollision(ICollider other);
 
     /**

@@ -10,7 +10,7 @@ public class PlatformInput {
         this.display = display;
     }
 
-    public void setActiveProcessor(com.sit.recyclingpinball.engine.interfaces.IInputManager inputProcessor) {
+    public void setActiveProcessor(IPlatformInputHandler inputProcessor) {
         Gdx.input.setInputProcessor(new PlatformInputAdapter(inputProcessor, display));
     }
 

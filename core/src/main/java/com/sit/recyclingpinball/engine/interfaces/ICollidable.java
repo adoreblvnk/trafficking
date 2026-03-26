@@ -22,13 +22,13 @@ public interface ICollidable {
     /**
      * Resolves a collision with a `DynamicEntity` using double dispatch.
      *
-     * This method is intentionally coupled to `DynamicEntity` instead of
-     * accepting a generic `ICollidable`. In this engine, gameplay collisions
-     * are designed around the pinball (dynamic body) interacting with static or
-     * scripted objects. Keeping this contract narrow avoids introducing a fully
-     * generalized two-body impulse solver (mass-vs-mass, restitution blending,
-     * iterative stabilization), which is outside project scope and can reduce
-     * gameplay stability when implemented incorrectly.
+     * This method is intentionally coupled to `DynamicEntity` instead of accepting
+     * a generic `ICollidable`. In this engine, gameplay collisions are designed
+     * around the pinball (dynamic body) interacting with static or scripted
+     * objects. Keeping this contract narrow avoids introducing a fully generalized
+     * two-body impulse solver (mass-vs-mass, restitution blending, iterative
+     * stabilization), which is outside project scope and can reduce gameplay
+     * stability when implemented incorrectly.
      *
      * The trade-off is deliberate: prioritize robust, predictable, and testable
      * collision response for the current game architecture.

@@ -16,7 +16,8 @@ import com.badlogic.gdx.math.Matrix4;
  * draw state and render commands instead of cache ownership.
  */
 
-// Acts as a concrete facade to prevent circular dependencies between Platform and Engine.
+// Acts as a concrete facade to prevent circular dependencies between Platform
+// and Engine.
 public class PlatformGraphics {
 
     private final ShapeRenderer shapeRenderer;

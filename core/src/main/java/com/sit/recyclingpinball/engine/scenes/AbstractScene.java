@@ -45,7 +45,8 @@ public abstract class AbstractScene {
         return sceneManager;
     }
 
-        // Exposes specific capabilities to scenes without leaking the full platform context.
+    // Exposes specific capabilities to scenes without leaking the full platform
+    // context.
     protected PlatformGraphics getGraphics() {
         return context.getGraphics();
     }

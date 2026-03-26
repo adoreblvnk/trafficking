@@ -5,14 +5,16 @@ import com.sit.recyclingpinball.engine.platform.libgdx.PlatformAssetManager;
 
 /**
  */
-// Delegates to PlatformAssetManager to separate the engine API from platform memory lifecycle.
+// Delegates to PlatformAssetManager to separate the engine API from platform
+// memory lifecycle.
 public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.providers.IAssetProvider {
 
     private final PlatformAudio audioProvider;
     private final PlatformAssetManager assetProvider;
 
     /**
-     * Initializes the AssetManager with the required providers via constructor injection.
+     * Initializes the AssetManager with the required providers via constructor
+     * injection.
      */
     public AssetManager(PlatformAudio audioProvider, PlatformAssetManager assetProvider) {
         if (audioProvider == null || assetProvider == null) {
@@ -37,7 +39,8 @@ public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.
     }
 
     /**
-     * Loads a texture and stores it in the platform cache using a caller-provided ID.
+     * Loads a texture and stores it in the platform cache using a caller-provided
+     * ID.
      */
     public void loadTexture(String path, String id) {
         assetProvider.loadTextureResource(path, id);

@@ -16,10 +16,12 @@ public class Main extends Game {
 
     @Override
     public void create() {
-        // Wire platform dependencies at the root so the core engine remains framework-agnostic.
+        // Wire platform dependencies at the root so the core engine remains
+        // framework-agnostic.
         context = new PlatformContext();
         assetManager = new AssetManager(context.getAudio(), context.getAssets());
-        // Preload all assets upfront to enforce the Flyweight pattern and prevent gameplay hitching.
+        // Preload all assets upfront to enforce the Flyweight pattern and prevent
+        // gameplay hitching.
         for (String sound : LogicConstants.SOUND_ASSETS) {
             assetManager.loadSound(sound);
         }

@@ -12,7 +12,8 @@ import java.util.List;
  * detection.
  *
  */
-// Uses the polymorphic collider contract (getAABB) to avoid downcasting entities.
+// Uses the polymorphic collider contract (getAABB) to avoid downcasting
+// entities.
 public class QuadTree {
 
     private int level;

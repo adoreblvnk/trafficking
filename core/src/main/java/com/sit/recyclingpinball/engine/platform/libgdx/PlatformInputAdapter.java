@@ -5,10 +5,10 @@ import com.badlogic.gdx.InputAdapter;
 
 public class PlatformInputAdapter extends InputAdapter {
 
-    private final com.sit.recyclingpinball.engine.interfaces.IInputManager inputProcessor;
+    private final IPlatformInputHandler inputProcessor;
     private final PlatformDisplay display;
 
-    public PlatformInputAdapter(com.sit.recyclingpinball.engine.interfaces.IInputManager inputProcessor, PlatformDisplay display) {
+    public PlatformInputAdapter(IPlatformInputHandler inputProcessor, PlatformDisplay display) {
         this.inputProcessor = inputProcessor;
         this.display = display;
     }

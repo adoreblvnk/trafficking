@@ -2,6 +2,5 @@ package com.sit.recyclingpinball.engine.platform.libgdx;
 
 // Maps LibGDX keys to a pure Java enum, keeping the logic layer free of framework imports.
 public enum PlatformKey {
-    LEFT, RIGHT, UP, DOWN, SPACE, ENTER, ESCAPE, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V,
-    W, X, Y, Z, NUM_0, NUM_1, NUM_2, NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9, ANY_KEY, UNKNOWN
+    LEFT, RIGHT, UP, DOWN, SPACE, ENTER, ESCAPE, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, NUM_0, NUM_1, NUM_2, NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9, ANY_KEY, UNKNOWN
 }

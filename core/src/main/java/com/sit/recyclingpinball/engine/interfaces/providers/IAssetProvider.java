@@ -4,7 +4,8 @@ package com.sit.recyclingpinball.engine.interfaces.providers;
  * Platform-independent asset provider interface for retrieving cached assets.
  *
  */
-// Exposes assets as opaque Object handles to decouple logic from concrete LibGDX types.
+// Exposes assets as opaque Object handles to decouple logic from concrete
+// LibGDX types.
 public interface IAssetProvider {
 
     /**
