@@ -8,14 +8,6 @@ public final class SATMathUtils {
     private SATMathUtils() {
     }
 
-    public static float dotProduct(PlatformVector2 a, PlatformVector2 b) {
-        return a.dot(b);
-    }
-
-    public static PlatformVector2 normalize(PlatformVector2 v) {
-        return v.cpy().nor();
-    }
-
     public static float[] projectPolygon(PlatformVector2 axis, PlatformVector2[] vertices) {
         float min = axis.dot(vertices[0]);
         float max = min;

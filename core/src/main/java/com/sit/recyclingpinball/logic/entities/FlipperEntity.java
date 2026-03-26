@@ -11,7 +11,7 @@ import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
 
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.physics.OBBCollider;
-import com.sit.recyclingpinball.engine.interfaces.IGraphics;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.logic.LogicConstants;
 
@@ -98,7 +98,7 @@ public class FlipperEntity extends DynamicEntity implements InputListener {
     }
 
     @Override
-    public void render(IGraphics graphics) {
+    public void render(PlatformGraphics graphics) {
         graphics.drawTexture(sprite.textureId(), getPosition().getX(), getPosition().getY(), sprite.width(),
                 sprite.height(), LogicConstants.FLIPPER_PIVOT[0], LogicConstants.FLIPPER_PIVOT[1], currentAngle);
     }

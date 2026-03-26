@@ -1,7 +1,7 @@
 package com.sit.recyclingpinball.logic.entities;
 
 import com.sit.recyclingpinball.engine.physics.OBBCollider;
-import com.sit.recyclingpinball.engine.interfaces.IGraphics;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 
 public class OBBWallEntity extends WallEntity {
@@ -15,7 +15,7 @@ public class OBBWallEntity extends WallEntity {
     }
 
     @Override
-    public void render(IGraphics graphics) {
+    public void render(PlatformGraphics graphics) {
         PlatformVector2[] verts = this.obbCollider.getVertices();
 
         graphics.setColor(getRed(), getGreen(), getBlue(), getAlpha());

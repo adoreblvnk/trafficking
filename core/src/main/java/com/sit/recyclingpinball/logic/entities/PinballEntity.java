@@ -4,7 +4,7 @@ import com.sit.recyclingpinball.engine.components.SpriteComponent;
 import com.sit.recyclingpinball.engine.entities.DynamicEntity;
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
-import com.sit.recyclingpinball.engine.interfaces.IGraphics;
+import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
 import com.sit.recyclingpinball.engine.physics.CircleCollider;
 import com.sit.recyclingpinball.logic.states.IPinballState;
 import com.sit.recyclingpinball.logic.events.PinballEventBus;
@@ -56,7 +56,7 @@ public class PinballEntity extends DynamicEntity implements InputListener, Pinba
     }
 
     @Override
-    public void render(IGraphics graphics) {
+    public void render(PlatformGraphics graphics) {
         graphics.drawTexture(sprite.textureId(), getPosition().getX() - (sprite.width() / 2f),
                 getPosition().getY() - (sprite.height() / 2f), sprite.width(), sprite.height());
     }
