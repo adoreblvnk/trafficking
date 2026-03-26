@@ -2,21 +2,14 @@ package com.sit.recyclingpinball.engine.entities;
 
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 import com.sit.recyclingpinball.engine.interfaces.ICollidable;
-/* ARCHITECTURE JUSTIFICATION: Concrete Delegation Wrapper.
- * We intentionally import PlatformGraphics instead of an interface to prevent
- * circular package dependencies (Engine <-> Platform). PlatformGraphics is a
- * pure Thin Facade with zero game logic, isolating LibGDX imports from Engine
- * Core without adding polymorphic dispatch overhead on high-frequency render
- * loops.
- */
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
+import com.sit.recyclingpinball.engine.interfaces.IGraphics;
 import com.sit.recyclingpinball.engine.physics.ICollider;
 import com.sit.recyclingpinball.engine.physics.BoxCollider;
 
 /**
  * Abstract base class for all game entities. Defines common properties like
  * position, size, rendering, and collision behavior. Rendering is now
- * platform-independent via PlatformGraphics.
+ * platform-independent via IGraphics.
  *
  * Design trade-off: this class intentionally keeps basic render-facing state
  * (dimensions and RGBA tint) together with core entity state. A fully
@@ -75,7 +68,7 @@ public abstract class AbstractEntity implements ICollidable {
      * @param graphics
      *            the graphics provider
      */
-    public abstract void render(PlatformGraphics graphics);
+    public abstract void render(IGraphics graphics);
 
     // shows current AABB for collision checks
     @Override

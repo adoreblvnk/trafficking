@@ -13,16 +13,13 @@ import com.sit.recyclingpinball.engine.platform.libgdx.PlatformAssetManager;
  */
 public class AssetManager implements com.sit.recyclingpinball.engine.interfaces.providers.IAssetProvider {
 
-    private PlatformAudio audioProvider;
-    private PlatformAssetManager assetProvider;
-
-    public AssetManager() {
-    }
+    private final PlatformAudio audioProvider;
+    private final PlatformAssetManager assetProvider;
 
     /**
-     * Initializes the AssetManager with the required providers.
+     * Initializes the AssetManager with the required providers via constructor injection.
      */
-    public void initialize(PlatformAudio audioProvider, PlatformAssetManager assetProvider) {
+    public AssetManager(PlatformAudio audioProvider, PlatformAssetManager assetProvider) {
         if (audioProvider == null || assetProvider == null) {
             throw new IllegalArgumentException("Providers cannot be null");
         }

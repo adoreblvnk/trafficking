@@ -22,16 +22,15 @@ public class Main extends Game {
         // are instantiated and wired to their respective managers. This keeps
         // the core game engine and logic layers completely decoupled from
         // platform-specific bootstrapping.
-        assetManager = new AssetManager();
         context = new PlatformContext();
+        assetManager = new AssetManager(context.getAudio(), context.getAssets());
 
         // PERFORMANCE OPTIMIZATION: Asset Preloading & Flyweight Pattern
-        // We initialize the AssetManager and explicitly load all resources upfront.
+        // We explicitly load all resources upfront.
         // This ensures the Flyweight pattern is strictly enforced—multiple game
         // objects (e.g., trash, pinball) share single memory references for their
         // textures and sounds. Preloading also eliminates disk I/O "hitching"
         // during the gameplay loop, ensuring a consistent 60FPS render cycle.
-        assetManager.initialize(context.getAudio(), context.getAssets());
 
         // Load Sounds
         for (String sound : LogicConstants.SOUND_ASSETS) {

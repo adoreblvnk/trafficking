@@ -1,5 +1,6 @@
 package com.sit.recyclingpinball.engine.platform.libgdx;
 
+import com.sit.recyclingpinball.engine.interfaces.IGraphics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,7 +16,8 @@ import com.badlogic.gdx.math.Matrix4;
  * <p>Asset lookup is delegated to PlatformAssetManager so this class focuses on
  * draw state and render commands instead of cache ownership.</p>
  */
-public class PlatformGraphics {
+
+public class PlatformGraphics implements IGraphics {
 
     private final ShapeRenderer shapeRenderer;
     private final SpriteBatch spriteBatch;

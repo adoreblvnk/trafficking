@@ -1,6 +1,6 @@
 package com.sit.recyclingpinball.engine.entities;
 
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
+import com.sit.recyclingpinball.engine.interfaces.IGraphics;
 
 /**
  * Static entity that does not move or update. Renders as a filled rectangle
@@ -21,7 +21,7 @@ public class StaticEntity extends AbstractEntity {
 
     // default rendering - subclasses can override
     @Override
-    public void render(PlatformGraphics graphics) {
+    public void render(IGraphics graphics) {
         graphics.setColor(getRed(), getGreen(), getBlue(), getAlpha());
         graphics.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
     }

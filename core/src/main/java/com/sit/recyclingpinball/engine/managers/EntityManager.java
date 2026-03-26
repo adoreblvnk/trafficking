@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.sit.recyclingpinball.engine.entities.AbstractEntity;
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
+import com.sit.recyclingpinball.engine.interfaces.IGraphics;
 
 /**
  * Registry for game entities providing lifecycle management and ordered
@@ -27,7 +27,7 @@ import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
  * ConcurrentModificationException.
  *
  * @see com.sit.recyclingpinball.engine.entities.AbstractEntity
- * @see com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics
+ * @see com.sit.recyclingpinball.engine.platform.libgdx.IGraphics
  */
 public class EntityManager implements com.sit.recyclingpinball.engine.interfaces.IEntityManager {
 
@@ -89,7 +89,7 @@ public class EntityManager implements com.sit.recyclingpinball.engine.interfaces
      * @param graphics
      *            the graphics provider for platform-independent rendering
      */
-    public void render(PlatformGraphics graphics) {
+    public void render(IGraphics graphics) {
         if (isZIndexDirty) {
             sortIfDirty();
         }

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Owns platform-native asset lifecycle and lookup tables.
  *
- * <p>This keeps caching/disposal out of PlatformGraphics so rendering and
+ * <p>This keeps caching/disposal out of IGraphics so rendering and
  * resource management remain separate responsibilities.</p>
  */
 public class PlatformAssetManager {

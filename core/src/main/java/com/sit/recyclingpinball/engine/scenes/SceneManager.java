@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sit.recyclingpinball.engine.platform.libgdx.PlatformContext;
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformInputProcessor;
 
 /**
  * Owns the scene stack and global services, single entry point for scene
@@ -59,12 +58,7 @@ public class SceneManager {
     }
 
     private void bindActiveInput(AbstractScene scene) {
-        if (scene.getInputManager() instanceof PlatformInputProcessor processor) {
-            context.getInput().setActiveProcessor(processor);
-        } else {
-            context.getInput().clearActiveProcessor();
-            LOGGER.log(Level.WARNING, "Scene input manager does not implement PlatformInputProcessor");
-        }
+        context.getInput().setActiveProcessor(scene.getInputManager());
     }
 
     // Replaces the entire stack with one scene for full transitions (e.g. from menu

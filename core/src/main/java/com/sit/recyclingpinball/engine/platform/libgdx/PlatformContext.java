@@ -41,7 +41,7 @@ public class PlatformContext {
         return audioProvider;
     }
 
-    public PlatformGraphics getGraphics() {
+    public com.sit.recyclingpinball.engine.interfaces.IGraphics getGraphics() {
         return graphicsProvider;
     }
 

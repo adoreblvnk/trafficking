@@ -3,7 +3,7 @@ package com.sit.recyclingpinball.engine.entities;
 import com.sit.recyclingpinball.engine.platform.libgdx.math.PlatformVector2;
 import com.sit.recyclingpinball.engine.EngineConstants;
 import com.sit.recyclingpinball.engine.interfaces.Movable;
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformGraphics;
+import com.sit.recyclingpinball.engine.interfaces.IGraphics;
 
 /**
  * Dynamic entity that moves with velocity-based motion. Automatically applies
@@ -39,7 +39,7 @@ public class DynamicEntity extends AbstractEntity implements Movable {
 
     // default rendering - subclasses can override
     @Override
-    public void render(PlatformGraphics graphics) {
+    public void render(IGraphics graphics) {
         graphics.setColor(getRed(), getGreen(), getBlue(), getAlpha());
         graphics.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
     }

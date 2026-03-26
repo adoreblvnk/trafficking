@@ -7,14 +7,13 @@ import java.util.logging.Logger;
 
 import com.sit.recyclingpinball.engine.interfaces.InputListener;
 import com.sit.recyclingpinball.engine.platform.libgdx.PlatformKey;
-import com.sit.recyclingpinball.engine.platform.libgdx.PlatformInputProcessor;
 
 /**
  * Distributes input events to registered listeners in subscription order.
  * Swallows exceptions to prevent input pipeline crashes.
  */
 public class InputManager
-    implements com.sit.recyclingpinball.engine.interfaces.IInputManager, PlatformInputProcessor {
+    implements com.sit.recyclingpinball.engine.interfaces.IInputManager{
 
     private static final Logger LOGGER = Logger.getLogger(InputManager.class.getName());
 
