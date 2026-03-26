@@ -33,56 +33,56 @@ public class SceneFactory {
     public MenuScene createMenuScene() {
         IEntityManager entityManager = new EntityManager();
         ICollisionManager collisionManager = new CollisionManager(LogicConstants.SCENE_SIZE[0],
-            LogicConstants.SCENE_SIZE[1]);
+                LogicConstants.SCENE_SIZE[1]);
         IInputManager inputManager = new InputManager();
         IMovementManager movementManager = new MovementManager();
 
         return new MenuScene(context, sceneManager, this, entityManager, collisionManager, inputManager,
-            movementManager);
+                movementManager);
     }
 
     public LevelSelectScene createLevelSelectScene() {
         IEntityManager entityManager = new EntityManager();
         ICollisionManager collisionManager = new CollisionManager(LogicConstants.SCENE_SIZE[0],
-            LogicConstants.SCENE_SIZE[1]);
+                LogicConstants.SCENE_SIZE[1]);
         IInputManager inputManager = new InputManager();
         IMovementManager movementManager = new MovementManager();
 
         return new LevelSelectScene(context, sceneManager, this, entityManager, collisionManager, inputManager,
-            movementManager);
+                movementManager);
     }
 
     public SimulationScene createSimulationScene(ILevelBlueprint blueprint) {
         IEntityManager entityManager = new EntityManager();
         ICollisionManager collisionManager = new CollisionManager(LogicConstants.SCENE_SIZE[0],
-            LogicConstants.SCENE_SIZE[1]);
+                LogicConstants.SCENE_SIZE[1]);
         IInputManager inputManager = new InputManager();
         IMovementManager movementManager = new MovementManager();
 
         return new SimulationScene(context, sceneManager, this, stateFactory, blueprint, entityManager,
-            collisionManager, inputManager, movementManager);
+                collisionManager, inputManager, movementManager);
     }
 
     public PauseOverlay createPauseOverlay() {
         IEntityManager entityManager = new EntityManager();
         ICollisionManager collisionManager = new CollisionManager(LogicConstants.SCENE_SIZE[0],
-            LogicConstants.SCENE_SIZE[1]);
+                LogicConstants.SCENE_SIZE[1]);
         IInputManager inputManager = new InputManager();
         IMovementManager movementManager = new MovementManager();
 
         return new PauseOverlay(context, sceneManager, this, entityManager, collisionManager, inputManager,
-            movementManager);
+                movementManager);
     }
 
     public SimulationResultOverlay createSimulationResultOverlay(boolean won, int score, int totalTrash,
             ILevelBlueprint blueprint) {
         IEntityManager entityManager = new EntityManager();
         ICollisionManager collisionManager = new CollisionManager(LogicConstants.SCENE_SIZE[0],
-            LogicConstants.SCENE_SIZE[1]);
+                LogicConstants.SCENE_SIZE[1]);
         IInputManager inputManager = new InputManager();
         IMovementManager movementManager = new MovementManager();
 
         return new SimulationResultOverlay(context, sceneManager, this, won, score, totalTrash, blueprint,
-            entityManager, collisionManager, inputManager, movementManager);
+                entityManager, collisionManager, inputManager, movementManager);
     }
 }

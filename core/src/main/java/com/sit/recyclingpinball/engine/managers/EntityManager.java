@@ -118,9 +118,6 @@ public class EntityManager implements com.sit.recyclingpinball.engine.interfaces
      * @return a list of entities cast to the specified type
      */
     public <T> List<T> getEntitiesByType(Class<T> type) {
-        return entityList.stream()
-                .filter(type::isInstance)
-                .map(type::cast)
-                .toList();
+        return entityList.stream().filter(type::isInstance).map(type::cast).toList();
     }
 }

@@ -140,10 +140,18 @@ public abstract class AbstractEntity implements ICollidable {
         this.a = Math.max(0, Math.min(1, a));
     }
 
-    public float getRed() { return r; }
-    public float getGreen() { return g; }
-    public float getBlue() { return b; }
-    public float getAlpha() { return a; }
+    public float getRed() {
+        return r;
+    }
+    public float getGreen() {
+        return g;
+    }
+    public float getBlue() {
+        return b;
+    }
+    public float getAlpha() {
+        return a;
+    }
 
     public int getZIndex() {
         return zIndex;

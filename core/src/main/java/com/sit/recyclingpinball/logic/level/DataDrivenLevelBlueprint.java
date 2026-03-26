@@ -53,10 +53,8 @@ public class DataDrivenLevelBlueprint implements ILevelBlueprint {
     }
 
     private static <T> List<T> concat(List<T> first, List<T> second) {
-        return Stream.concat(
-                (first == null ? Stream.<T>empty() : first.stream()),
-                (second == null ? Stream.<T>empty() : second.stream())
-        ).toList();
+        return Stream.concat((first == null ? Stream.<T>empty() : first.stream()),
+                (second == null ? Stream.<T>empty() : second.stream())).toList();
     }
 
     @Override

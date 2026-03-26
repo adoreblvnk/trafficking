@@ -98,8 +98,8 @@ public interface IGraphicsProvider {
      * Loads a texture from the given path and returns it as an opaque handle.
      *
      * The {@code Object} type is intentional: it keeps framework-specific classes
-     * out of engine/logic modules. Concrete casting is handled only in the
-     * platform implementation.
+     * out of engine/logic modules. Concrete casting is handled only in the platform
+     * implementation.
      */
     Object loadTextureResource(String path);
 
@@ -107,8 +107,8 @@ public interface IGraphicsProvider {
      * Loads a font from the given path and returns it as an opaque handle.
      *
      * The {@code Object} type is intentional: it keeps framework-specific classes
-     * out of engine/logic modules. Concrete casting is handled only in the
-     * platform implementation.
+     * out of engine/logic modules. Concrete casting is handled only in the platform
+     * implementation.
      */
     Object loadFontResource(String path, int size);
 

@@ -17,7 +17,8 @@ public class BoardBuilder {
     }
 
     public BoardBuilder addSlantedWall(float x, float y, float w, float h, float rotationDegrees) {
-        layout.addWall(new OBBWallEntity(LogicConstants.ID_WALL_PREFIX + System.nanoTime(), x, y, w, h, rotationDegrees));
+        layout.addWall(
+                new OBBWallEntity(LogicConstants.ID_WALL_PREFIX + System.nanoTime(), x, y, w, h, rotationDegrees));
         return this;
     }
 

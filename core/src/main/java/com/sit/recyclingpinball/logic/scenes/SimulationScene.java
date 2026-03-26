@@ -62,7 +62,7 @@ public class SimulationScene extends AbstractScene implements InputListener, Pin
 
         layout.getWalls().forEach(getEntityManager()::addEntity);
         layout.getTrashes().forEach(getEntityManager()::addEntity);
-        
+
         layout.getFlippers().forEach(f -> {
             getEntityManager().addEntity(f);
             getInputManager().addListener(f);

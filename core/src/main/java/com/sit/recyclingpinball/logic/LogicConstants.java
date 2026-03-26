@@ -48,8 +48,7 @@ public class LogicConstants {
     public static final String SOUND_STRETCH = "sounds/stretch.mp3";
     public static final String SOUND_COLLECT = "sounds/collect.mp3";
 
-    public static final String[] SOUND_ASSETS = {SOUND_CLICK, SOUND_COLLECT, SOUND_LOSE, SOUND_WIN,
-            SOUND_STRETCH};
+    public static final String[] SOUND_ASSETS = {SOUND_CLICK, SOUND_COLLECT, SOUND_LOSE, SOUND_WIN, SOUND_STRETCH};
     public static final float VOLUME_DEFAULT = 1.0f;
 
     // ASSETS (Fonts)

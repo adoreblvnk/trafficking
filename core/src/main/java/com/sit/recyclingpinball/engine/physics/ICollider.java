@@ -13,10 +13,10 @@ public interface ICollider {
     /**
      * Resolves collision through double dispatch without downcasting.
      *
-     * This project treats collider primitives as a practically closed set
-     * (circle, AABB, OBB). We accept the theoretical OCP trade-off of adding
-     * one new overload per new collider type so collision resolution remains
-     * fully polymorphic and type-safe at compile time.
+     * This project treats collider primitives as a practically closed set (circle,
+     * AABB, OBB). We accept the theoretical OCP trade-off of adding one new
+     * overload per new collider type so collision resolution remains fully
+     * polymorphic and type-safe at compile time.
      */
     CollisionResult checkCollision(ICollider other);
 
