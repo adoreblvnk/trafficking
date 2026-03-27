@@ -166,6 +166,5 @@ Thumbs.db
 # recyclingpinball
 .agents/
 skills-lock.json
-assignments/
 code.md
 generate_uml.py
