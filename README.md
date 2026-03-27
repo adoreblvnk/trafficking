@@ -1,118 +1,77 @@
-# Traffic Simulation Game
+# Recycling Pinball
 
-A 2D traffic simulation game built with libGDX demonstrating Object-Oriented Programming principles including inheritance, interfaces, polymorphism, encapsulation, and design patterns.
+An educational, physics-based 2D arcade game built with a custom Java engine on top of libGDX. The game teaches waste sorting and sustainable living through satisfying pinball mechanics.
 
 ## Quick Start
 
 ### Running the Application
-Use _"CTRL + SHIFT + B"_ for keyboard shortcut to run the application.
+Ensure you have Java 21 installed.
 
 **Mac/Linux:**
-
 ```bash
-./gradlew lwjgl3:run
-# ALSOFT_DRIVERS=pulse ./gradlew lwjgl3:run
-# ./gradlew lwjgl3:headlessTest # test
-# ./gradlew --stop # if audio is not working, force lwjgl3 restart
-./gradlew spotlessApply # format w eclipse code style
+ALSOFT_DRIVERS=pulse ./gradlew lwjgl3:run
 ```
 
 **Windows:**
-
 ```bash
 .\gradlew.bat lwjgl3:run
 ```
 
-## GDX Liftoff Setup
-
-- Project Name: recyclingpinball
-- Package: com.sit.recyclingpinball
-- Main Class: Main
-- Platforms Selected:
-  - Core
-  - Desktop (LWJGL3)
-- Extensions:
-  - Freetype
-- Template: Game
-- libGDX Version: 1.14.0
-- Java Version: 21
-
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+## Game Mechanics & Controls
 
 ### Controls
+*   **A / Left Arrow**: Left flipper
+*   **D / Right Arrow**: Right flipper
+*   **Mouse Drag (Down)**: Pull shooter rod (release to launch)
+*   **S / Down Arrow**: Pull shooter rod via keyboard
+*   **ESC**: Pause/Resume game
 
-- **Right-click**: Spawn a new vehicle
-- **Left-click + Drag**: Move vehicles
-- **ESC**: Pause menu
-- **F5**: Quick save
-- **F9**: Quick load
-- **ENTER**: Start game (from menu)
+### Core Loop
+1.  **Launch**: Use the shooter rod to launch the pinball into the "dirty" beach environment.
+2.  **Interact**: Use flippers to maintain momentum and aim for targets. Flipper speed affects launch force!
+3.  **Collect**: Strike recyclable trash (Plastic, Paper, Glass) to earn points and "clean" the beach.
+4.  **Win**: Collect all required trash targets before exhausting your 3 balls.
 
 ## Architecture
 
-### Project Structure
+The project follows a strict **3-tier Layered Architecture** to ensure framework independence and scalability.
 
+### Project Structure
 ```
 core/src/main/java/com/sit/recyclingpinball/
-├── engine/              # Reusable game engine
+├── engine/              # Reusable framework-agnostic game engine
 │   ├── entities/        # Entity hierarchy (AbstractEntity → Static/Dynamic)
-│   ├── interfaces/      # Contracts (ICollidable, Movable, InputListener)
-│   ├── managers/        # System managers (Entity, Collision, Input, Movement)
-│   └── scenes/          # Scene system (AbstractScene, SceneManager)
-└── logic/               # Game-specific implementation
-    ├── scenes/          # Concrete scenes (MenuScene, SimulationScene)
-    ├── factories/       # World factory for save/load
-    └── LogicConstants.java
+│   ├── interfaces/      # System contracts (ICollidable, Movable, InputListener)
+│   ├── managers/        # Core systems (Collision via QuadTree, EntityManager, Input)
+│   ├── physics/         # SAT-based collision math (Circle, Box, OBB)
+│   └── platform/        # LibGDX adapters (The ONLY layer importing com.badlogic.gdx)
+└── logic/               # Pinball-specific game implementation
+    ├── entities/        # Game objects (Pinball, Flipper, Trash, ShooterRod)
+    ├── events/          # Visitor-based event bus for decoupled policy
+    ├── factories/       # Scene, State, and Trash factories
+    ├── level/           # Data-driven JSON level pipeline
+    ├── scenes/          # Concrete scenes (Menu, LevelSelect, Simulation)
+    └── states/          # State pattern for Pinball behavior
 ```
 
-## Testing
+## Key Engineering Highlights
 
-Run automated integration tests:
-
-```bash
-./gradlew lwjgl3:run -PmainClass=com.sit.recyclingpinball.testing.HeadlessTestLauncher
-```
-
-Tests cover entity management, collision detection, movement processing, and manager integration.
-
-## Technical Details
-
-- **Framework**: [libGDX](https://libgdx.com/) 1.14.0
-- **Java Version**: 21
-- **Build Tool**: Gradle
-- **Platform**: Desktop (LWJGL3)
-
-## Key Files to Review
-
-### Core Architecture
-
-- `engine/scenes/AbstractScene.java` - Base scene with lifecycle management
-- `engine/scenes/SceneManager.java` - Scene stack management (Singleton pattern)
-- `engine/entities/AbstractEntity.java` - Entity base class with collision support
-- `engine/managers/EntityManager.java` - Thread-safe entity registry
-
-### Game Logic
-
-- `logic/scenes/SimulationScene.java` - Main game scene with vehicle simulation
-- `logic/factories/World.java` - Save/load system (Factory pattern)
-- `Main.java` - Application entry point
-
-### Interfaces
-
-- `engine/interfaces/ICollidable.java` - Collision detection contract
-- `engine/interfaces/Movable.java` - Movement contract
-- `engine/interfaces/InputListener.java` - Input handling contract
+*   **Custom Physics Engine**: Implements the **Separating Axis Theorem (SAT)** for precise collision detection between Circles, Boxes, and **Oriented Bounding Boxes (OBB)**.
+*   **Performance Scaling**: Utilizes a **QuadTree** for broad-phase spatial partitioning, reducing collision checks from $O(n^2)$ to $O(n \log n)$.
+*   **Data-Driven Levels**: Levels are defined in external JSON files, allowing for rapid iteration of layouts without recompiling code.
+*   **Decoupled Policy**: A hybrid **Observer/Visitor** event bus separates physics triggers from gameplay rules (scoring, audio).
+*   **Platform Abstraction**: All LibGDX-specific logic is encapsulated behind delegation wrappers, making the core engine and game logic strictly Java-pure.
 
 ## Build & Development
 
 ### Useful Gradle Commands
+*   `./gradlew lwjgl3:run`: Run the application
+*   `./gradlew build`: Build all modules
+*   `./gradlew clean`: Clean build artifacts
+*   `./gradlew spotlessApply`: Format code to project standards
 
-- `./gradlew lwjgl3:run` - Run the application
-- `./gradlew lwjgl3:jar` - Build executable JAR
-- `./gradlew build` - Build all modules
-- `./gradlew clean` - Clean build artifacts
-
-### Project Modules
-
-- `core`: Main module with game engine and logic
-- `lwjgl3`: Desktop platform launcher
+## Technical Details
+*   **Java Version**: 21
+*   **Framework**: [libGDX](https://libgdx.com/) 1.14.0
+*   **Build Tool**: Gradle 9.2.1
+*   **Patterns Used**: Factory, State, Builder, Adapter, Facade, Observer, Visitor, Double Dispatch.
